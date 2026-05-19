@@ -1085,7 +1085,10 @@ function handleFontFileSelect() {
     
     try {
       const customName = 'ArabicPoetryCustomUpload';
-      const font = new FontFace(customName, arrayBuffer);
+      const font = new FontFace(customName, arrayBuffer, {
+        weight: '100 900',
+        style: 'normal'
+      });
       
       updateFontStatus(null, "جاري تسجيل الخط بالمتصفح...");
       const loaded = await font.load();
@@ -1662,7 +1665,7 @@ const uiTranslations = {
     font_loader_title: "تحميل خط مخصص",
     font_loader_desc: "اسحب ملف الخط الخاص بك هنا أو اضغط للاختيار لتخصيص البطاقة تماماً.",
     drag_font_hint: "اختر ملف الخط أو اسحبه هنا",
-    font_format_hint: "يدعم ملفات الخطوط بصيغة OTF أو TTF (عربية أو إنجليزية)",
+    font_format_hint: "يدعم صيغ OTF, TTF, WOFF, WOFF2",
     font_status_default: "لم يتم تحميل خط خارجي بعد",
     card_dimensions: "أبعاد وتناسب البطاقة",
     card_dimensions_desc: "اختر أبعاد البطاقة لتناسب المشاركة عبر وسائل التواصل.",
@@ -1775,10 +1778,10 @@ const uiTranslations = {
     writing_lang_title: "Writing Language",
     writing_lang_ar: "Arabic",
     writing_lang_en: "English",
-    font_loader_title: "Load Custom Font (OTF / TTF)",
-    font_loader_desc: "Drag your font file here or click to browse for custom calligraphy.",
+    font_loader_title: "Load Custom Font",
+    font_loader_desc: "Drag your font file here or click to browse to load custom typography.",
     drag_font_hint: "Choose a font file or drag it here",
-    font_format_hint: "Supports OTF/TTF files (either Arabic or English)",
+    font_format_hint: "Supports OTF, TTF, WOFF, WOFF2 formats",
     font_status_default: "No external font loaded yet",
     card_dimensions: "Card Dimensions",
     card_dimensions_desc: "Choose card aspect ratio suitable for social media.",
