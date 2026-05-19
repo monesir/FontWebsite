@@ -93,6 +93,7 @@ const btnDeletePage = document.getElementById('btnDeletePage');
 const btnLangAr = document.getElementById('btnLangAr');
 const btnLangEn = document.getElementById('btnLangEn');
 const selectFontStyle = document.getElementById('selectFontStyle');
+const selectFontWeight = document.getElementById('selectFontWeight');
 const grpFontStyle = document.getElementById('grpFontStyle');
 const samplesListAr = document.getElementById('samplesListAr');
 const samplesListEn = document.getElementById('samplesListEn');
@@ -909,6 +910,12 @@ function setupEventListeners() {
       }
     });
   }
+  if (selectFontWeight) {
+    selectFontWeight.addEventListener('change', () => {
+      const weight = selectFontWeight.value;
+      document.documentElement.style.setProperty('--card-font-weight', weight);
+    });
+  }
 
   // Expose updateOrnaments helper to the window scope for access by other functions (like applyDefaults)
   window.updateOrnaments = updateOrnaments;
@@ -1177,6 +1184,11 @@ function applyDefaults() {
   sliderLetterSpacing.value = DEFAULTS.letterSpacing;
   document.documentElement.style.setProperty('--card-letter-spacing', `${DEFAULTS.letterSpacing}px`);
   valLetterSpacing.textContent = `${DEFAULTS.letterSpacing}px`;
+
+  if (selectFontWeight) {
+    selectFontWeight.value = '400';
+  }
+  document.documentElement.style.setProperty('--card-font-weight', '400');
 
   alignButtons.forEach(btn => {
     if (btn.dataset.align === DEFAULTS.align) {
@@ -1659,9 +1671,16 @@ const uiTranslations = {
     ratio_story: "طولي (9:16)",
     ratio_landscape: "عرضي (16:9)",
     typography_settings: "تنسيق وحجم الخطوط",
-    font_style_label: "نوع ونمط الخط",
-    font_size_label: "حجم الخط الأساسي",
-    line_height_label: "تباعد الأسطر (ارتفاع السطر)",
+    font_style_label: "نوع الخط",
+    font_weight_label: "سمك الخط",
+    weight_light: "خفيف",
+    weight_regular: "عادي",
+    weight_medium: "متوسط",
+    weight_semibold: "شبه سميك",
+    weight_bold: "سميك",
+    weight_black: "سميك جداً",
+    font_size_label: "حجم الخط",
+    line_height_label: "تباعد الأسطر",
     letter_spacing_label: "تباعد الحروف للإنجليزية",
     text_alignment: "محاذاة النص",
     top_ornament_label: "الزخرفة العلوية",
@@ -1769,6 +1788,13 @@ const uiTranslations = {
     ratio_landscape: "Landscape (16:9)",
     typography_settings: "Typography Settings",
     font_style_label: "Font Style",
+    font_weight_label: "Font Weight",
+    weight_light: "Light (300)",
+    weight_regular: "Regular (400)",
+    weight_medium: "Medium (500)",
+    weight_semibold: "Semi-Bold (600)",
+    weight_bold: "Bold (700)",
+    weight_black: "Black (900)",
     font_size_label: "Base Font Size",
     line_height_label: "Line Height",
     letter_spacing_label: "Letter Spacing (English)",

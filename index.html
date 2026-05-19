@@ -139,15 +139,28 @@
         <h2 class="section-title"><i class="fa-solid fa-sliders icon"></i><span data-i18n="typography_settings">تنسيق النصوص</span></h2>
         
         <div class="control-group" id="grpFontStyle">
-          <div class="control-label" data-i18n="font_style_label">نمط الخط (Font Style)</div>
+          <div class="control-label" data-i18n="font_style_label">نمط الخط</div>
           <select id="selectFontStyle" class="styled-select">
             <!-- Populated dynamically via JS -->
           </select>
         </div>
 
+        <!-- Font Weight Selector (Advanced Only) -->
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="font_weight_label">سمك الخط</div>
+          <select id="selectFontWeight" class="styled-select">
+            <option value="300" data-i18n="weight_light">خفيف</option>
+            <option value="400" selected data-i18n="weight_regular">عادي</option>
+            <option value="500" data-i18n="weight_medium">متوسط</option>
+            <option value="600" data-i18n="weight_semibold">شبه سميك</option>
+            <option value="700" data-i18n="weight_bold">سميك</option>
+            <option value="900" data-i18n="weight_black">سميك جداً</option>
+          </select>
+        </div>
+
         <div class="control-group">
           <div class="control-label">
-            <span data-i18n="font_size_label">حجم الخط (Size)</span>
+            <span data-i18n="font_size_label">حجم الخط</span>
             <span id="valFontSize" class="val-badge">42px</span>
           </div>
           <input type="range" id="sliderFontSize" min="20" max="100" value="42" class="range-slider">
@@ -155,7 +168,7 @@
 
         <div class="control-group">
           <div class="control-label">
-            <span data-i18n="line_height_label">تباعد الأسطر (Line Height)</span>
+            <span data-i18n="line_height_label">تباعد الأسطر</span>
             <span id="valLineHeight" class="val-badge">1.8</span>
           </div>
           <input type="range" id="sliderLineHeight" min="1.0" max="3.0" step="0.1" value="1.8" class="range-slider">
@@ -163,7 +176,7 @@
 
         <div class="control-group advanced-only">
           <div class="control-label">
-            <span data-i18n="letter_spacing_label">تباعد الحروف (Spacing)</span>
+            <span data-i18n="letter_spacing_label">تباعد الحروف</span>
             <span id="valLetterSpacing" class="val-badge">0px</span>
           </div>
           <input type="range" id="sliderLetterSpacing" min="-2" max="10" step="0.5" value="0" class="range-slider">

@@ -853,6 +853,7 @@ body {
   outline: none;
   font-family: var(--font-poetry);
   font-size: var(--card-font-size);
+  font-weight: var(--card-font-weight, normal);
   line-height: var(--card-line-height);
   letter-spacing: var(--card-letter-spacing);
   text-align: var(--card-text-align);
