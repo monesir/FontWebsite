@@ -1094,6 +1094,27 @@ function handleFontFileSelect() {
       const loaded = await font.load();
       document.fonts.add(loaded);
       
+      // Also inject a dynamic <style> block with base64 for html-to-image export compatibility
+      const base64Reader = new FileReader();
+      base64Reader.onload = function(evt) {
+        const base64DataUrl = evt.target.result;
+        let styleEl = document.getElementById('custom-font-style');
+        if (!styleEl) {
+          styleEl = document.createElement('style');
+          styleEl.id = 'custom-font-style';
+          document.head.appendChild(styleEl);
+        }
+        styleEl.innerHTML = `
+          @font-face {
+            font-family: 'ArabicPoetryCustomUpload';
+            src: url('${base64DataUrl}') format('opentype');
+            font-weight: 100 900;
+            font-style: normal;
+          }
+        `;
+      };
+      base64Reader.readAsDataURL(file);
+
       customFontLoaded = true;
       customFontName = file.name;
       populateFontStyles(currentLang, 'ArabicPoetryCustomUpload');
