@@ -343,7 +343,7 @@ const DEFAULTS = {
   textColor: '#c5a880',
   bgColor: '#141416',
   ornamentColor: '#c5a880',
-  watermark: 'ديوان الخط العربي',
+  watermark: 'محرر الخطوط',
   bgScale: 1,
   bgPosY: 0,
   bgPosX: 0,
@@ -1464,7 +1464,7 @@ async function exportPoetryCard() {
       const downloadLink = document.createElement('a');
       const date = new Date();
       const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-      downloadLink.download = `ديوان_الخط_${timeStr}.png`;
+      downloadLink.download = `محرر_الخطوط_${timeStr}.png`;
       downloadLink.href = dataUrl;
       document.body.appendChild(downloadLink);
       downloadLink.click();
@@ -1488,7 +1488,7 @@ async function exportPoetryCard() {
         const downloadLink = document.createElement('a');
         const date = new Date();
         const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-        downloadLink.download = `ديوان_الخط_صفحة_${i + 1}_${timeStr}.png`;
+        downloadLink.download = `محرر_الخطوط_صفحة_${i + 1}_${timeStr}.png`;
         downloadLink.href = dataUrl;
         document.body.appendChild(downloadLink);
         downloadLink.click();
@@ -1640,8 +1640,8 @@ function switchLanguage(lang) {
 // Translation mapping for English and Arabic interface
 const uiTranslations = {
   ar: {
-    logo_title: "ديوان الخط العربي",
-    logo_subtitle: "منصة كتابة وتصميم لوحات الخط العربي",
+    logo_title: "محرر الخطوط",
+    logo_subtitle: "أداة كتابة واختبار وتصميم الخطوط العربية والإنجليزية",
     mode_simple: "الوضع المبسط",
     mode_advanced: "الوضع المتقدم",
     writing_lang_title: "لغة الكتابة",
@@ -1733,7 +1733,7 @@ const uiTranslations = {
     default_font_name: "الخط العربي الافتراضي",
     clear_btn_text: "مسح",
     reset_btn_text: "ضبط",
-    app_footer_desc: "ديوان الخط العربي - صمم بطاقتك ولوحتك الفنية وشاركها مع أصدقائك. انقر في وسط البطاقة لبدء الكتابة.",
+    app_footer_desc: "محرر الخطوط - أداة تفاعلية لتصميم واختبار الخطوط العربية والإنجليزية. اكتب نصوصك، جرب مختلف الأنماط، ونسق تصاميمك بدقة واحترافية.",
     align_center: "محاذاة للوسط",
     align_right: "محاذاة لليمين",
     align_justify: "ضبط الهوامش (موزع)",
@@ -1749,8 +1749,8 @@ const uiTranslations = {
     export_error: "حدث خطأ أثناء استخراج الصورة. الرجاء إعادة المحاولة."
   },
   en: {
-    logo_title: "Diwan Calligraphy",
-    logo_subtitle: "Arabic Calligraphy Card & Canvas Designer",
+    logo_title: "Font Editor",
+    logo_subtitle: "Arabic & English Font Editor & Tester",
     mode_simple: "Simple Mode",
     mode_advanced: "Advanced Mode",
     writing_lang_title: "Writing Language",
@@ -1842,7 +1842,7 @@ const uiTranslations = {
     default_font_name: "Arabic Calligraphy (Default Loaded)",
     clear_btn_text: "Clear",
     reset_btn_text: "Reset",
-    app_footer_desc: "Diwan Arabic Calligraphy - Design your calligraphy card and share it. Click inside the card to start writing.",
+    app_footer_desc: "Font Editor - Write, test, and style Arabic and English fonts easily.",
     align_center: "Align Center",
     align_right: "Align Right",
     align_justify: "Justify Text",
@@ -1903,8 +1903,8 @@ function updateUISiteLanguage(lang) {
 
   // 5. Watermark input default sync
   if (inputWatermark) {
-    if (inputWatermark.value === 'ديوان الخط العربي' || inputWatermark.value === 'Diwan Calligraphy') {
-      inputWatermark.value = lang === 'ar' ? 'ديوان الخط العربي' : 'Diwan Calligraphy';
+    if (inputWatermark.value === 'محرر الخطوط' || inputWatermark.value === 'Font Editor' || inputWatermark.value === 'ديوان الخط العربي' || inputWatermark.value === 'Diwan Calligraphy') {
+      inputWatermark.value = lang === 'ar' ? 'محرر الخطوط' : 'Font Editor';
       if (cardWatermark) cardWatermark.textContent = inputWatermark.value;
     }
   }
