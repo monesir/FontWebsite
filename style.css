@@ -1,0 +1,1474 @@
+/* ==========================================================================
+   Arabic Poetry Font Playground - Production Style Sheet
+   ========================================================================== */
+
+/* 1. Bundled Font Declaration (Autoloads for all users) */
+@font-face {
+  font-family: 'ArabicPoetry';
+  src: url('/fonts/ArabicPoetry.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-ui: 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-poetry-fallback: 'Amiri', serif;
+  --font-poetry: 'ArabicPoetry', var(--font-poetry-fallback);
+  
+  /* UI Colors */
+  --bg-app: #08080a;
+  --bg-sidebar: rgba(15, 15, 18, 0.9);
+  --border-ui: rgba(255, 255, 255, 0.06);
+  --border-ui-hover: rgba(255, 255, 255, 0.15);
+  --text-muted: #888890;
+  --text-light: #f1f1f3;
+  --accent: #c5a880;
+  --accent-hover: #d8be99;
+  --danger: #f87171;
+  --success: #4ade80;
+  --warning: #facc15;
+  
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Poetry Card Dynamic Styles (Default Values, Updated via JS) */
+  --card-font-size: 42px;
+  --card-line-height: 1.8;
+  --card-letter-spacing: 0px;
+  --card-text-align: center;
+  
+  --card-text-color: #c5a880;
+  --card-bg-color: #141416;
+  --card-ornament-color: #c5a880;
+  --card-border-color: rgba(197, 168, 128, 0.3);
+  
+  --bg-blur: 0px;
+  --overlay-opacity: 0.4;
+  --bg-scale: 1;
+  --bg-pos-x: 50%;
+  --bg-pos-y: 50%;
+}
+
+/* Disable user selection globally when adjusting card/sliders to prevent cursor shifts */
+body.is-adjusting,
+body.is-adjusting * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
+/* Resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--bg-app);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow: hidden;
+  direction: rtl;
+  display: flex;
+}
+
+.app-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* ==========================================================================
+   Mobile Navigation Header (Visible on Mobile only)
+   ========================================================================== */
+.mobile-header {
+  display: none;
+  height: 60px;
+  background-color: #0f0f12;
+  border-bottom: 1px solid var(--border-ui);
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 15;
+}
+
+.btn-menu, .btn-menu-close {
+  background: transparent;
+  border: none;
+  color: var(--text-light);
+  font-size: 20px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-logo-text {
+  font-family: 'Amiri', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   Sidebar Panel
+   ========================================================================== */
+.sidebar {
+  width: 360px;
+  background-color: var(--bg-sidebar);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-left: 1px solid var(--border-ui);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  z-index: 10;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  overflow-y: auto;
+  transition: transform var(--transition-normal);
+  position: relative;
+}
+
+.sidebar-header {
+  padding: 52px 20px 16px;
+  border-bottom: 1px solid var(--border-ui);
+  text-align: center;
+}
+
+.logo-text {
+  font-family: 'Amiri', serif;
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ebdcb9 0%, #c5a880 55%, #9e7f55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+  text-shadow: 0 0 20px rgba(197, 168, 128, 0.1);
+}
+
+.logo-subtext {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+.control-section {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-ui);
+}
+
+.section-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title .icon {
+  color: var(--accent);
+  font-size: 14px;
+}
+
+.section-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+/* Aspect Ratio Buttons Grid */
+.ratio-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.ratio-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+
+.ratio-btn i {
+  font-size: 14px;
+}
+
+.ratio-btn span {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.ratio-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-light);
+}
+
+.ratio-btn.active {
+  background: rgba(197, 168, 128, 0.15);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Drag and Drop Zone */
+.dropzone {
+  border: 1.5px dashed var(--border-ui);
+  border-radius: 8px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.01);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--accent);
+  background: rgba(197, 168, 128, 0.04);
+}
+
+.drop-icon {
+  font-size: 20px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  transition: transform var(--transition-fast);
+}
+
+.dropzone:hover .drop-icon {
+  transform: translateY(-2px);
+  color: var(--accent);
+}
+
+.dropzone span {
+  font-size: 11.5px;
+  color: var(--text-light);
+}
+
+.font-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 11px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+
+/* Color Pickers Grid */
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.color-picker-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.picker-label {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.picker-wrapper {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  border-radius: 6px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.picker-wrapper input[type="color"] {
+  -webkit-appearance: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: transparent;
+  flex-shrink: 0;
+}
+
+.picker-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.picker-wrapper input[type="color"]::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.hex-label {
+  font-size: 10px;
+  color: var(--text-light);
+  font-family: monospace;
+}
+
+/* Background Image Uploader Style */
+.bg-upload-zone {
+  border: 1.5px dashed var(--border-ui);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.01);
+  transition: all var(--transition-fast);
+}
+
+.bg-upload-zone:hover {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.icon-upload {
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.bg-upload-zone span {
+  font-size: 11.5px;
+  display: block;
+}
+
+.btn-danger-sm {
+  background: rgba(248, 113, 113, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: 8px;
+  width: 100%;
+}
+
+.btn-danger-sm:hover {
+  background: var(--danger);
+  color: #121214;
+}
+
+/* Custom Text Input for Watermark */
+.text-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-light);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.text-input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Styled Dropdown Border Selection */
+.styled-select {
+  width: 100%;
+  background: rgba(25, 25, 28, 0.9);
+  border: 1px solid var(--border-ui);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--text-light);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border var(--transition-fast);
+}
+
+.styled-select:focus {
+  border-color: var(--accent);
+}
+
+/* Controls CSS (Sync with former sliders) */
+.control-group {
+  margin-bottom: 14px;
+}
+
+.styled-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  color: var(--text-light);
+  padding: 8px 12px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  box-sizing: border-box;
+  transition: all var(--transition-fast);
+}
+
+.styled-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(197, 168, 128, 0.15);
+}
+
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.range-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  transition: transform var(--transition-fast);
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.align-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.btn-align {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  color: var(--text-muted);
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-align.active {
+  background: rgba(197, 168, 128, 0.15);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.toggle-switch input {
+  display: none;
+}
+
+.slider-toggle {
+  width: 34px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  position: relative;
+  flex-shrink: 0;
+  transition: background-color var(--transition-fast);
+}
+
+.slider-toggle::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: white;
+  top: 3px;
+  right: 3px;
+  transition: transform var(--transition-fast);
+}
+
+.toggle-switch input:checked + .slider-toggle {
+  background-color: var(--accent);
+}
+
+.toggle-switch input:checked + .slider-toggle::before {
+  transform: translateX(-16px);
+}
+
+.toggle-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.themes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.themes-library-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.theme-lib-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: right;
+  transition: all var(--transition-fast);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.theme-lib-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.theme-lib-card.active {
+  background: rgba(197, 168, 128, 0.08);
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px rgba(197, 168, 128, 0.15) !important;
+}
+
+.theme-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  gap: 2px;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+}
+
+.theme-name {
+  font-size: 11px;
+  color: var(--text-light);
+  font-family: var(--font-ui);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.samples-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sample-btn {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--border-ui);
+  color: var(--text-muted);
+  text-align: right;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all var(--transition-fast);
+}
+
+.sample-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+#samplesListEn {
+  direction: ltr;
+}
+
+#samplesListEn .sample-btn {
+  text-align: left;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  margin-top: auto;
+  border-top: 1px solid var(--border-ui);
+}
+
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent), #ad906a);
+  color: #121214;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(197, 168, 128, 0.4);
+}
+
+/* ==========================================================================
+   Main Content Layout
+   ========================================================================== */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--bg-app);
+  position: relative;
+}
+
+.top-nav {
+  height: 60px;
+  border-bottom: 1px solid var(--border-ui);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(15, 15, 18, 0.3);
+}
+
+.font-indicator {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.font-indicator strong {
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+.app-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border-ui);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-light);
+}
+
+.canvas-wrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: radial-gradient(circle at center, rgba(197, 168, 128, 0.03) 0%, transparent 75%);
+}
+
+/* ==========================================================================
+   Poetry Card Core Layout
+   ========================================================================== */
+.poetry-card {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 2;
+  border-radius: 20px;
+  padding: 45px;
+  
+  /* Apply the pickers dynamic colors */
+  color: var(--card-text-color);
+  background-color: var(--card-bg-color);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Custom Text Selection styled dynamically based on theme variables */
+.poetry-card ::selection {
+  background-color: var(--card-ornament-color);
+  color: var(--card-bg-color);
+}
+.poetry-card ::-moz-selection {
+  background-color: var(--card-ornament-color);
+  color: var(--card-bg-color);
+}
+
+/* Background image overlay */
+.card-bg-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: var(--bg-pos-x, 50%) var(--bg-pos-y, 50%);
+  z-index: 0;
+  filter: blur(var(--bg-blur, 0px));
+  transform: scale(var(--bg-scale, 1));
+  transition: filter var(--transition-fast), transform 0.05s ease-out;
+  pointer-events: none;
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+}
+
+.poetry-card.has-bg-image .card-overlay {
+  opacity: var(--overlay-opacity, 0.4);
+}
+
+/* Z-indexing card elements above custom background image overlays */
+.card-ornament, .card-body, .card-watermark {
+  z-index: 2;
+  position: relative;
+}
+
+.card-ornament {
+  text-align: center;
+  user-select: none;
+  pointer-events: none;
+  padding: 10px 0;
+}
+
+.ornament-shape {
+  font-family: var(--font-poetry-fallback);
+  font-size: 15px;
+  letter-spacing: 4px;
+  opacity: 0.85;
+  color: var(--card-ornament-color);
+  transition: color var(--transition-fast);
+}
+
+.card-body {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.writing-canvas {
+  width: 100%;
+  outline: none;
+  font-family: var(--font-poetry);
+  font-size: var(--card-font-size);
+  line-height: var(--card-line-height);
+  letter-spacing: var(--card-letter-spacing);
+  text-align: var(--card-text-align);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  padding: 10px;
+  transition: color var(--transition-fast);
+}
+
+.card-watermark {
+  font-size: 10.5px;
+  opacity: 0.35;
+  font-weight: 300;
+  letter-spacing: 1px;
+  padding: 10px 0 0;
+  width: 100%;
+  text-align: left;
+  transition: color var(--transition-fast);
+}
+
+/* ==========================================================================
+   Luxury Inset Border Frames
+   ========================================================================== */
+.poetry-card::after {
+  content: "";
+  position: absolute;
+  inset: 20px;
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 3;
+  transition: border var(--transition-fast), opacity var(--transition-fast);
+  opacity: 0.7;
+}
+
+.poetry-card.has-border-none::after {
+  border: none;
+}
+
+.poetry-card.has-border-classic::after {
+  border: 1.5px dashed var(--card-border-color);
+}
+
+.poetry-card.has-border-double::after {
+  border: 4px double var(--card-border-color);
+  inset: 16px;
+  border-radius: 14px;
+}
+
+.poetry-card.has-border-ornate::after {
+  border: 1px solid var(--card-border-color);
+  inset: 22px;
+  border-radius: 8px;
+}
+
+/* Outer secondary thin line for Ornate style */
+.poetry-card.has-border-ornate::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 0.5px solid var(--card-border-color);
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: 3;
+  transition: border var(--transition-fast), opacity var(--transition-fast);
+}
+
+/* Corner Ornaments positioning and styling */
+.card-corners {
+  display: none;
+}
+
+.poetry-card.has-border-ornate .card-corners {
+  display: block;
+}
+
+.corner {
+  position: absolute;
+  color: var(--card-ornament-color);
+  font-size: 14px;
+  z-index: 4;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: color var(--transition-fast);
+}
+
+.corner.top-right { top: 15px; right: 15px; }
+.corner.top-left { top: 15px; left: 15px; }
+.corner.bottom-right { bottom: 15px; right: 15px; }
+.corner.bottom-left { bottom: 15px; left: 15px; }
+
+/* ==========================================================================
+   Aspect Ratio Classes (Desktop)
+   ========================================================================== */
+.poetry-card.ratio-auto {
+  max-width: 720px;
+  min-height: 420px;
+}
+
+.poetry-card.ratio-1-1 {
+  aspect-ratio: 1 / 1;
+  max-width: 540px;
+  min-height: auto;
+}
+
+.poetry-card.ratio-9-16 {
+  aspect-ratio: 9 / 16;
+  max-width: 350px;
+  min-height: auto;
+}
+
+.poetry-card.ratio-16-9 {
+  aspect-ratio: 16 / 9;
+  max-width: 720px;
+  min-height: auto;
+}
+
+/* Glow/Shadow on text */
+.poetry-card.has-shadow .writing-canvas {
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Soften shadows on lighter themes dynamically */
+.poetry-card.ancient-papyrus.has-shadow .writing-canvas,
+.poetry-card.minimal-light.has-shadow .writing-canvas {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.poetry-card.has-shadow .ornament-shape, 
+.poetry-card.has-shadow .corner,
+.poetry-card.has-shadow .card-watermark {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.app-footer {
+  height: 40px;
+  border-top: 1px solid var(--border-ui);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(15, 15, 18, 0.2);
+}
+
+/* Custom Resize Handle for Poetry Card */
+.card-resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  cursor: se-resize;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 4px;
+  color: var(--card-ornament-color);
+  opacity: 0.5;
+  transition: opacity 0.2s, transform 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card-resize-handle:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.card-resize-handle::after {
+  content: "◢";
+  font-size: 16px;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .card-resize-handle {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+}
+
+/* ==========================================================================
+   Responsive Adaptations & Collapsible Mobile Sidebar Drawer
+   ========================================================================== */
+@media (max-width: 1024px) {
+  body {
+    padding-top: 60px; /* Spacing for the top bar */
+  }
+  
+  .mobile-header {
+    display: flex;
+  }
+  
+  .app-container {
+    height: calc(100vh - 60px);
+    width: 100vw;
+  }
+  
+  /* Sidebar behaves as a slide-out drawer */
+  .sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 320px;
+    height: 100%;
+    transform: translateX(100%);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.6);
+  }
+  
+  .sidebar.active {
+    transform: translateX(0);
+  }
+  
+  /* Dark overlay background for mobile */
+  .sidebar-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9;
+  }
+  
+  .sidebar-overlay.active {
+    display: block;
+  }
+  
+  .main-content {
+    width: 100vw;
+  }
+  
+  .top-nav {
+    padding: 0 16px;
+    height: 50px;
+  }
+  
+  .canvas-wrapper {
+    padding: 16px;
+  }
+  
+  .poetry-card {
+    min-height: auto;
+    padding: 30px;
+  }
+  
+  .poetry-card::after {
+    inset: 14px;
+  }
+  
+  .poetry-card.has-border-double::after {
+    inset: 11px;
+  }
+  
+  .poetry-card.has-border-ornate::after {
+    inset: 16px;
+  }
+  
+  .poetry-card.has-border-ornate::before {
+    inset: 9px;
+  }
+  
+  .corner.top-right { top: 10px; right: 10px; }
+  .corner.top-left { top: 10px; left: 10px; }
+  .corner.bottom-right { bottom: 10px; right: 10px; }
+  .corner.bottom-left { bottom: 10px; left: 10px; }
+  
+  .poetry-card.ratio-auto {
+    max-width: 100%;
+    min-height: 320px;
+  }
+  
+  .poetry-card.ratio-1-1, .poetry-card.ratio-9-16, .poetry-card.ratio-16-9 {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .card-ornament {
+    padding: 6px 0;
+  }
+}
+
+/* ==========================================================================
+   UI Level Control Switch, Textures, and Ornaments
+   ========================================================================== */
+
+/* Hiding class for simple mode active */
+.sidebar.mode-simple .advanced-only {
+  display: none !important;
+}
+
+/* Mode Switcher Container */
+.ui-mode-toggle-wrapper {
+  padding: 2px 16px 14px 16px;
+  border-bottom: 1px solid var(--border-ui);
+  margin-bottom: 14px;
+}
+
+.ui-mode-toggle-wrapper.mode-switcher-wrapper {
+  padding: 2px 16px 4px 16px;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.ui-mode-toggle-wrapper.lang-switcher-wrapper {
+  padding: 4px 16px 16px 16px;
+  border-bottom: 1px solid var(--border-ui);
+  margin-bottom: 16px;
+}
+
+.ui-mode-toggle-wrapper .select-label {
+  margin-bottom: 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.ui-mode-toggle {
+  display: flex;
+  background: rgba(16, 16, 20, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2px;
+  gap: 2px;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.mode-toggle-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mode-toggle-btn i {
+  font-size: 11px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mode-toggle-btn:hover {
+  color: var(--text-light);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mode-toggle-btn.active {
+  background: rgba(197, 168, 128, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(197, 168, 128, 0.25);
+  box-shadow: 0 2px 10px rgba(197, 168, 128, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+}
+
+.mode-toggle-btn.active i {
+  transform: scale(1.1);
+}
+
+/* Card Font family dynamic binding */
+#editableText {
+  font-family: var(--font-poetry, 'ArabicPoetry'), var(--font-poetry-fallback);
+}
+
+/* Card Texture Layer */
+.card-texture {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2; /* Between background overlay (1) and card-body (normal stacked) */
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  background-repeat: repeat;
+}
+
+/* Parchment Texture */
+.poetry-card.texture-parchment .card-texture {
+  background: 
+    radial-gradient(circle at center, transparent 35%, rgba(139, 101, 53, 0.18) 100%),
+    repeating-linear-gradient(0deg, rgba(160, 130, 90, 0.06) 0px, rgba(160, 130, 90, 0.06) 1px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(90deg, rgba(160, 130, 90, 0.04) 0px, rgba(160, 130, 90, 0.04) 1px, transparent 1px, transparent 6px);
+  opacity: var(--texture-opacity, 1); /* dynamic opacity controlled by user */
+}
+
+/* Islamic Star/Geometric Tile Pattern (uses inline vector SVG) */
+.poetry-card.texture-islamic .card-texture {
+  background-image: url("data:image/svg+xml;utf8,<svg width='50' height='50' viewBox='0 0 50 50' xmlns='http://www.w3.org/2000/svg'><path d='M25 0 L50 25 L25 50 L0 25 Z M25 12 L38 25 L25 38 L12 25 Z' fill='none' stroke='%23c5a880' stroke-width='0.8' stroke-opacity='0.22'/></svg>");
+  background-size: 50px 50px;
+  opacity: var(--texture-opacity, 1); /* dynamic opacity controlled by user */
+}
+
+/* Silk Linen Texture */
+.poetry-card.texture-silk .card-texture {
+  background: 
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 50%, transparent 50%),
+    linear-gradient(rgba(0, 0, 0, 0.04) 50%, transparent 50%);
+  background-size: 4px 4px;
+  opacity: var(--texture-opacity, 1); /* dynamic opacity controlled by user */
+}
+
+/* Ornament Presets Grid */
+.ornament-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.orn-preset-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-ui);
+  border-radius: 6px;
+  color: var(--text-muted);
+  padding: 5px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.orn-preset-btn:hover {
+  background: rgba(197, 168, 128, 0.12);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Verse Segment Dividers styling */
+.verse-divider {
+  display: block;
+  margin: 16px auto;
+  text-align: center;
+  font-size: var(--verse-divider-size, 16px);
+  color: var(--card-ornament-color);
+  opacity: 0.8;
+  user-select: none;
+  transition: font-size 0.2s ease, color var(--transition-normal);
+  line-height: 1;
+}
+
+/* Carousel Manager styling */
+.carousel-manager {
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.carousel-pages-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.carousel-page-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.carousel-btn-page {
+  min-width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border-ui);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.carousel-btn-page:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.carousel-btn-page.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(197, 168, 128, 0.3);
+}
+
+.btn-icon-add {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px dashed var(--accent);
+  background: rgba(197, 168, 128, 0.05);
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon-add:hover {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+/* Card Page Indicator overlay styling */
+.card-page-indicator {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: system-ui, -apple-system, sans-serif;
+  letter-spacing: 1px;
+  color: var(--card-text-color);
+  opacity: 0.45;
+  z-index: 10;
+  transition: color var(--transition-normal);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Site Language Switcher (Multilingual Toggle)
+   ========================================================================== */
+
+.site-lang-btn {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  right: auto;
+  z-index: 100;
+  background: rgba(16, 16, 20, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.site-lang-btn i {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.site-lang-btn:hover {
+  background: rgba(197, 168, 128, 0.08);
+  border-color: rgba(197, 168, 128, 0.3);
+  color: var(--accent);
+  box-shadow: 0 4px 16px rgba(197, 168, 128, 0.08);
+}
+
+.site-lang-btn:hover i {
+  color: var(--accent);
+}
+
+/* LTR specific layout adjustments */
+html[dir="ltr"] body {
+  direction: ltr;
+}
+
+html[dir="ltr"] .site-lang-btn {
+  left: auto;
+  right: 16px;
+}
+
+html[dir="ltr"] .sidebar {
+  border-left: none;
+  border-right: 1px solid var(--border-ui);
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 900px) {
+  html[dir="ltr"] .sidebar {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.6);
+  }
+  html[dir="ltr"] .sidebar.active {
+    transform: translateX(0);
+  }
+}
+
+
+

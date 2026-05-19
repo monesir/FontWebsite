@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO & Social Meta Tags -->
+  <title>ديوان الخط العربي | مصمم لوحات وبطاقات الخط العربي التفاعلي</title>
+  <meta name="description" content="ديوان الخط العربي هو منصة تفاعلية راقية لتصميم وتنسيق بطاقات ولوحات الخط العربي بخطوط أصيلة ومميزة وتصديرها كصور عالية الدقة.">
+  <meta name="keywords" content="خط عربي, خطوط عربية, ديوان الخط, كتابة خط عربي, تصميم بطاقات الخط العربي, لوحات الخط العربي, المتنبي, اقتباسات">
+  <meta name="author" content="ديوان الخط العربي">
+  
+  <!-- OpenGraph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ديوان الخط العربي | مصمم لوحات وبطاقات الخط العربي التفاعلي">
+  <meta property="og:description" content="صمم نصوصك المفضلة بجمالية الخط العربي وبطاقات راقية ملونة. حمل تصميمك كصورة فوراً.">
+  <meta property="og:image" content="/og-preview.png">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ديوان الخط العربي | مصمم لوحات وبطاقات الخط العربي التفاعلي">
+  <meta name="twitter:description" content="صمم نصوصك المفضلة بجمالية الخط العربي وبطاقات راقية ملونة. حمل تصميمك كصورة فوراً.">
+  <meta name="twitter:image" content="/og-preview.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✒️</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  
+  <!-- Mobile Header (Visible on Mobile only) -->
+  <header class="mobile-header">
+    <button id="btnMobileToggle" class="btn-menu" aria-label="القائمة الجانبية">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="mobile-logo-text">ديوان الخط</div>
+    <button id="btnMobileClose" class="btn-menu-close" style="display: none;">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </header>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar mode-simple" id="sidebarPanel">
+      <!-- Floating Site Language Toggle inside Sidebar -->
+      <button class="site-lang-btn" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle Site Language">
+        <i class="fa-solid fa-globe"></i>
+        <span class="lang-text">English</span>
+      </button>
+      
+      <div class="sidebar-header">
+        <h1 class="logo-text" data-i18n="logo_title">ديوان الخط</h1>
+        <span class="logo-subtext" data-i18n="logo_subtitle">Arabic Calligraphy Card & Canvas Designer</span>
+      </div>
+      
+      <!-- UI Control Mode Switcher -->
+      <div class="ui-mode-toggle-wrapper mode-switcher-wrapper">
+        <div class="ui-mode-toggle">
+          <button class="mode-toggle-btn active" id="btnModeSimple" data-mode="simple">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="mode_simple">الوضع البسيط</span>
+          </button>
+          <button class="mode-toggle-btn" id="btnModeAdvanced" data-mode="advanced">
+            <i class="fa-solid fa-sliders"></i> <span data-i18n="mode_advanced">الوضع المتقدم</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Language Switcher -->
+      <div class="ui-mode-toggle-wrapper lang-switcher-wrapper">
+        <div class="control-label select-label">
+          <i class="fa-solid fa-globe"></i> <span data-i18n="writing_lang_title">لغة الكتابة / Language</span>
+        </div>
+        <div class="ui-mode-toggle">
+          <button class="mode-toggle-btn active" id="btnLangAr" data-lang="ar" data-i18n="writing_lang_ar">
+            العربية
+          </button>
+          <button class="mode-toggle-btn" id="btnLangEn" data-lang="en" data-i18n="writing_lang_en">
+            English / Other
+          </button>
+        </div>
+      </div>
+      
+      <!-- Font Loader Section -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-file-font icon"></i><span data-i18n="font_loader_title">تحميل خط مخصص (.otf)</span></h2>
+        <p class="section-desc" data-i18n="font_loader_desc">الخط الافتراضي محمل تلقائياً. لتحميل خط آخر لديك (.otf, .ttf)، اسحبه هنا أو انقر للاختيار.</p>
+        
+        <div class="dropzone" id="fontDropzone">
+          <input type="file" id="fontFileInput" accept=".otf,.ttf" style="display: none;">
+          <div class="dropzone-content">
+            <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+            <span data-i18n="drag_font_hint">اسحب خطاً آخر هنا</span>
+            <span class="file-hint" data-i18n="font_format_hint">صيغة OTF أو TTF</span>
+          </div>
+        </div>
+        
+        <div class="font-status" id="fontStatus">
+          <span class="status-indicator success"></span>
+          <span class="status-text" id="valFontStatusText" data-i18n="font_status_default">تم تحميل الخط الافتراضي تلقائياً</span>
+        </div>
+      </div>
+
+      <!-- Card Sizing & Dimensions -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-up-right-and-down-left-from-center icon"></i><span data-i18n="card_dimensions">أبعاد البطاقة (Aspect Ratio)</span></h2>
+        <p class="section-desc" data-i18n="card_dimensions_desc">حدد حجم الإطار المناسب للنشر على شبكات التواصل الاجتماعي.</p>
+        <div class="ratio-grid">
+          <button class="ratio-btn active" data-ratio="auto">
+            <i class="fa-solid fa-compress-arrows-alt"></i>
+            <span data-i18n="ratio_auto">تلقائي</span>
+          </button>
+          <button class="ratio-btn" data-ratio="1-1">
+            <i class="fa-regular fa-square"></i>
+            <span data-i18n="ratio_square">مربع 1:1</span>
+          </button>
+          <button class="ratio-btn" data-ratio="9-16">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <span data-i18n="ratio_story">طولي 9:16</span>
+          </button>
+          <button class="ratio-btn" data-ratio="16-9">
+            <i class="fa-solid fa-tv"></i>
+            <span data-i18n="ratio_landscape">عرضي 16:9</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Typography Settings -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-sliders icon"></i><span data-i18n="typography_settings">تنسيق النصوص</span></h2>
+        
+        <div class="control-group" id="grpFontStyle">
+          <div class="control-label" data-i18n="font_style_label">نمط الخط (Font Style)</div>
+          <select id="selectFontStyle" class="styled-select">
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span data-i18n="font_size_label">حجم الخط (Size)</span>
+            <span id="valFontSize" class="val-badge">42px</span>
+          </div>
+          <input type="range" id="sliderFontSize" min="20" max="100" value="42" class="range-slider">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span data-i18n="line_height_label">تباعد الأسطر (Line Height)</span>
+            <span id="valLineHeight" class="val-badge">1.8</span>
+          </div>
+          <input type="range" id="sliderLineHeight" min="1.0" max="3.0" step="0.1" value="1.8" class="range-slider">
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label">
+            <span data-i18n="letter_spacing_label">تباعد الحروف (Spacing)</span>
+            <span id="valLetterSpacing" class="val-badge">0px</span>
+          </div>
+          <input type="range" id="sliderLetterSpacing" min="-2" max="10" step="0.5" value="0" class="range-slider">
+        </div>
+        
+        <div class="control-group">
+          <div class="control-label" data-i18n="text_alignment">محاذاة النص</div>
+          <div class="align-buttons">
+            <button class="btn-align active" data-align="center" title="توسيط" data-i18n-title="align_center"><i class="fa-solid fa-align-center"></i></button>
+            <button class="btn-align" data-align="right" title="محاذاة لليمين" data-i18n-title="align_right"><i class="fa-solid fa-align-right"></i></button>
+            <button class="btn-align" data-align="justify" title="ضبط الأطراف" data-i18n-title="align_justify"><i class="fa-solid fa-align-justify"></i></button>
+          </div>
+        </div>
+        
+
+        <!-- Card Ornaments Inputs (Advanced Only) -->
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="top_ornament_label">الزخرفة العلوية (Top Ornament)</div>
+          <input type="text" id="inputTopOrnament" class="styled-input" value="❈ ❖ ❈" placeholder="مثال: ❈ ❖ ❈ (اتركه فارغاً للحذف)" data-i18n-placeholder="top_ornament_placeholder">
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="bottom_ornament_label">الزخرفة السفلية (Bottom Ornament)</div>
+          <input type="text" id="inputBottomOrnament" class="styled-input" value="❈ ❖ ❈" placeholder="مثال: ❈ ❖ ❈ (اتركه فارغاً للحذف)" data-i18n-placeholder="bottom_ornament_placeholder">
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="ornament_presets_label">أنماط زخارف جاهزة</div>
+          <div class="ornament-presets">
+            <button class="orn-preset-btn" data-preset="❈ ❖ ❈" data-i18n="preset_classic">الكلاسيكي</button>
+            <button class="orn-preset-btn" data-preset="❦ ⚜️ ❦" data-i18n="preset_royal">الملكي</button>
+            <button class="orn-preset-btn" data-preset="— ❖ —" data-i18n="preset_modern">الحديث</button>
+            <button class="orn-preset-btn" data-preset="✿ ❀ ✿" data-i18n="preset_flowers">الزهور</button>
+            <button class="orn-preset-btn" data-preset="★ ★ ★" data-i18n="preset_stars">النجوم</button>
+            <button class="orn-preset-btn" data-preset="• • •" data-i18n="preset_simple">بسيط</button>
+            <button class="orn-preset-btn" data-preset="" data-i18n="preset_clear">حذف الكل</button>
+          </div>
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="ornament_color_label">لون الزخارف (Color)</div>
+          <div class="picker-wrapper">
+            <input type="color" id="pickerOrnamentColor2" value="#c5a880">
+            <span id="hexOrnamentColor2" class="hex-label">#c5a880</span>
+          </div>
+        </div>
+
+        <!-- Verse Segment Dividers (Advanced Only) -->
+        <div class="control-group advanced-only border-top-divider" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.08);">
+          <div class="control-label" data-i18n="dividers_label">فواصل الأبيات البينية (Dividers)</div>
+          <select id="selectVerseDivider" class="styled-select">
+            <option value="none" selected data-i18n="divider_none">بدون فاصل (تلقائي)</option>
+            <option value="diamond" data-i18n="divider_diamond">❖ معين هندسي</option>
+            <option value="fan" data-i18n="divider_fan">❈ زخرفة مروحية</option>
+            <option value="star" data-i18n="divider_star">★ نجمة خماسية</option>
+            <option value="dot" data-i18n="divider_dot">• نقطة دائرية</option>
+            <option value="dash" data-i18n="divider_dash">— شرطة عريضة</option>
+          </select>
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label">
+            <span data-i18n="divider_size_label">حجم الفاصل البيني</span>
+            <span id="valDividerSize" class="val-badge">16px</span>
+          </div>
+          <input type="range" id="sliderDividerSize" min="10" max="30" step="1" value="16" class="range-slider">
+        </div>
+
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="card_effects_label">تأثيرات البطاقة</div>
+          <div class="toggle-buttons">
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggleShadow" checked>
+              <span class="slider-toggle"></span>
+              <span class="toggle-text" data-i18n="shadow_text_label">إضاءة وظل خفيف للخط</span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-border-none icon"></i><span data-i18n="card_style_section_title">إطار ونمط البطاقة</span></h2>
+        <div class="control-group">
+          <div class="control-label" data-i18n="card_border_label">نمط إطار البطاقة</div>
+          <select id="selectBorderPattern" class="styled-select">
+            <option value="none" data-i18n="border_none">بدون إطار</option>
+            <option value="classic" data-i18n="border_classic">إطار متقطع كلاسيكي</option>
+            <option value="double" selected data-i18n="border_double">إطار مزدوج أنيق</option>
+            <option value="ornate" data-i18n="border_ornate">إطار ملكي مع زوايا</option>
+          </select>
+        </div>
+        <!-- Card Texture Selector (Advanced Only) -->
+        <div class="control-group advanced-only">
+          <div class="control-label" data-i18n="card_texture_label">ملمس ونقش البطاقة</div>
+          <select id="selectCardTexture" class="styled-select">
+            <option value="none" selected data-i18n="texture_none">بدون ملمس ونقش</option>
+            <option value="parchment" data-i18n="texture_parchment">ورق البردي العتيق</option>
+            <option value="silk" data-i18n="texture_silk">الحرير الداكن</option>
+            <option value="islamic" data-i18n="texture_islamic">النقش الهندسي الإسلامي</option>
+          </select>
+        </div>
+        
+        <!-- Texture Opacity Slider (Advanced Only) -->
+        <div class="control-group advanced-only" id="textureOpacityGroup" style="display: none;">
+          <div class="control-label">
+            <span data-i18n="texture_opacity_label">وضوح وشدة النقش</span>
+            <span id="valTextureOpacity" class="val-badge">100%</span>
+          </div>
+          <input type="range" id="sliderTextureOpacity" min="10" max="100" value="100" class="range-slider">
+        </div>
+
+        <div class="color-picker-grid advanced-only">
+          <div class="color-picker-item">
+            <span class="picker-label" data-i18n="picker_text_label">النص</span>
+            <div class="picker-wrapper">
+              <input type="color" id="pickerTextColor" value="#c5a880">
+              <span id="hexTextColor" class="hex-label">#c5a880</span>
+            </div>
+          </div>
+          <div class="color-picker-item">
+            <span class="picker-label" data-i18n="picker_bg_label">الخلفية</span>
+            <div class="picker-wrapper">
+              <input type="color" id="pickerBgColor" value="#141416">
+              <span id="hexBgColor" class="hex-label">#141416</span>
+            </div>
+          </div>
+          <div class="color-picker-item">
+            <span class="picker-label" data-i18n="picker_ornament_label">الزخرفة</span>
+            <div class="picker-wrapper">
+              <input type="color" id="pickerOrnamentColor" value="#c5a880">
+              <span id="hexOrnamentColor" class="hex-label">#c5a880</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <div class="control-label" style="margin-top: 15px;" data-i18n="themes_library_label">مكتبة السمات الجاهزة (Themes Library)</div>
+          <div class="themes-library-grid">
+            <button class="theme-lib-card active" data-theme="royal-charcoal" data-txt="#c5a880" data-bg="#141416" data-orn="#c5a880">
+              <div class="theme-preview" style="background: #141416;">
+                <span style="color: #c5a880;">أ</span>
+                <span style="color: #c5a880;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_royal_charcoal">الملكي الكلاسيكي</div>
+            </button>
+            
+            <button class="theme-lib-card" data-theme="ancient-papyrus" data-txt="#3e3223" data-bg="#f7f3e8" data-orn="#8c7355">
+              <div class="theme-preview" style="background: #f7f3e8; border: 1px solid #d5ceb6;">
+                <span style="color: #3e3223;">أ</span>
+                <span style="color: #8c7355;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_ancient_papyrus">البردي العتيق</div>
+            </button>
+            
+            <button class="theme-lib-card" data-theme="imperial-emerald" data-txt="#ebdcb9" data-bg="#062b1e" data-orn="#ebdcb9">
+              <div class="theme-preview" style="background: #062b1e;">
+                <span style="color: #ebdcb9;">أ</span>
+                <span style="color: #ebdcb9;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_imperial_emerald">الزمردي الإمبراطوري</div>
+            </button>
+            
+            <button class="theme-lib-card" data-theme="luxurious-ruby" data-txt="#e3c58f" data-bg="#2c0c0e" data-orn="#e3c58f">
+              <div class="theme-preview" style="background: #2c0c0e;">
+                <span style="color: #e3c58f;">أ</span>
+                <span style="color: #e3c58f;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_luxurious_ruby">العقيقي الفاخر</div>
+            </button>
+
+            <button class="theme-lib-card" data-theme="najdi-lavender" data-txt="#e9dcf5" data-bg="#25143b" data-orn="#e9dcf5">
+              <div class="theme-preview" style="background: #25143b;">
+                <span style="color: #e9dcf5;">أ</span>
+                <span style="color: #e9dcf5;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_najdi_lavender">الخزامي النجدي</div>
+            </button>
+
+            <button class="theme-lib-card" data-theme="damascene-indigo" data-txt="#e2a275" data-bg="#0b1c33" data-orn="#e2a275">
+              <div class="theme-preview" style="background: #0b1c33;">
+                <span style="color: #e2a275;">أ</span>
+                <span style="color: #e2a275;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_damascene_indigo">الكحلي الدمشقي</div>
+            </button>
+
+            <button class="theme-lib-card" data-theme="antique-turquoise" data-txt="#f4f1ea" data-bg="#0b353a" data-orn="#cda97e">
+              <div class="theme-preview" style="background: #0b353a;">
+                <span style="color: #f4f1ea;">أ</span>
+                <span style="color: #cda97e;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_antique_turquoise">الفيروزي الأثري</div>
+            </button>
+            
+            <button class="theme-lib-card" data-theme="minimal-dark" data-txt="#ffffff" data-bg="#0d0d0f" data-orn="#666666">
+              <div class="theme-preview" style="background: #0d0d0f; border: 1px solid #222;">
+                <span style="color: #ffffff;">أ</span>
+                <span style="color: #666666;">❖</span>
+              </div>
+              <div class="theme-name" data-i18n="theme_minimal_dark">الداكن المبسط</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Background Image Section -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-image icon"></i><span data-i18n="bg_section_title">خلفية بطاقة مخصصة</span></h2>
+        <p class="section-desc" data-i18n="bg_section_desc">أضف صورتك الخاصة في الخلفية مع التحكم بالتعتيم والضبابية.</p>
+        
+        <div class="bg-upload-zone" id="bgDropzone">
+          <input type="file" id="bgFileInput" accept="image/*" style="display: none;">
+          <div class="bg-upload-content">
+            <i class="fa-solid fa-images icon-upload"></i>
+            <span id="bgUploadText" data-i18n="bg_upload_hint">اختر صورة أو اسحبها هنا</span>
+          </div>
+        </div>
+
+        <div class="bg-controls-group" id="bgControlsGroup" style="display: none; margin-top: 15px;">
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="bg_opacity_label">تعتيم الصورة (Overlay)</span>
+              <span id="valOverlayOpacity" class="val-badge">40%</span>
+            </div>
+            <input type="range" id="sliderOverlayOpacity" min="0" max="95" value="40" class="range-slider">
+          </div>
+          
+          <div class="control-group advanced-only">
+            <div class="control-label">
+              <span data-i18n="bg_blur_label">تغبيش الصورة (Blur)</span>
+              <span id="valBgBlur" class="val-badge">0px</span>
+            </div>
+            <input type="range" id="sliderBgBlur" min="0" max="25" value="0" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="bg_zoom_label">تكبير الخلفية (Zoom)</span>
+              <span id="valBgScale" class="val-badge">1x</span>
+            </div>
+            <input type="range" id="sliderBgScale" min="1" max="3" step="0.05" value="1" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="bg_pos_y_label">تحريك رأسي (Y Position)</span>
+              <span id="valBgPosY" class="val-badge">50%</span>
+            </div>
+            <input type="range" id="sliderBgPosY" min="0" max="100" value="50" class="range-slider">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span data-i18n="bg_pos_x_label">تحريك أفقي (X Position)</span>
+              <span id="valBgPosX" class="val-badge">50%</span>
+            </div>
+            <input type="range" id="sliderBgPosX" min="0" max="100" value="50" class="range-slider">
+          </div>
+          
+          <button id="btnRemoveBg" class="btn-danger-sm" style="margin-top: 5px;"><i class="fa-solid fa-trash-can"></i> <span data-i18n="remove_bg_btn">إزالة صورة الخلفية</span></button>
+        </div>
+      </div>
+
+
+      <!-- Carousel Page Manager Section -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-copy icon"></i><span data-i18n="pages_section_title">صفحات التصميم (الألبوم)</span></h2>
+        <p class="section-desc" data-i18n="pages_section_desc">أضف صفحات متعددة لتوليد ألبوم كامل بنفس التنسيق.</p>
+        
+        <div class="carousel-manager">
+          <div class="carousel-pages-row">
+            <div id="carouselPageList" class="carousel-page-list">
+              <!-- Dynamically populated buttons: Page 1, Page 2... -->
+            </div>
+            <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" data-i18n-title="add_page_title"><i class="fa-solid fa-plus"></i></button>
+          </div>
+          
+          <div class="carousel-actions-row" style="margin-top: 10px; display: flex; gap: 8px;">
+            <button id="btnDeletePage" class="btn-danger-sm" style="flex: 1; justify-content: center;" disabled>
+              <i class="fa-solid fa-trash-can"></i> <span data-i18n="delete_page_btn">حذف الصفحة الحالية</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Toggle to show/hide page numbers on card (Advanced Only) -->
+        <div class="control-group advanced-only" style="margin-top: 12px; margin-bottom: 0;">
+          <div class="toggle-buttons">
+            <label class="toggle-switch">
+              <input type="checkbox" id="togglePageIndicator" checked>
+              <span class="slider-toggle"></span>
+              <span class="toggle-text" data-i18n="show_page_numbers_label">إظهار أرقام الصفحات على الصورة</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Poetry Preset Samples -->
+      <div class="control-section">
+        <h2 class="section-title"><i class="fa-solid fa-scroll icon"></i><span id="titleSamples" data-i18n="samples_section_title">نماذج نصوص جاهزة</span></h2>
+        
+        <div class="samples-list" id="samplesListAr">
+          <button class="sample-btn" data-sample="mutanabbi" data-i18n="sample_mutanabbi">أبو الطيب المتنبي</button>
+          <button class="sample-btn" data-sample="shawqi" data-i18n="sample_shawqi">أمير الشعراء أحمد شوقي</button>
+          <button class="sample-btn" data-sample="antara" data-i18n="sample_antara">عنترة بن شداد</button>
+          <button class="sample-btn" data-sample="imru" data-i18n="sample_imru">امرؤ القيس</button>
+          <button class="sample-btn" data-sample="custom-poetry" data-i18n="sample_custom_poetry">نص منسق (شطرين)</button>
+        </div>
+        
+        <div class="samples-list" id="samplesListEn" style="display: none;">
+          <button class="sample-btn" data-sample="shakespeare">Sonnet 18 - Shakespeare</button>
+          <button class="sample-btn" data-sample="poe">The Raven - Edgar Allan Poe</button>
+          <button class="sample-btn" data-sample="byron">She Walks in Beauty - Byron</button>
+          <button class="sample-btn" data-sample="frost">The Road Not Taken - Frost</button>
+        </div>
+      </div>
+      
+      <!-- Primary Save Button -->
+      <div class="sidebar-footer">
+        <button id="btnExport" class="btn-primary"><i class="fa-solid fa-download icon"></i><span data-i18n="export_btn">تحميل كصورة (PNG)</span></button>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Action Navigation -->
+      <header class="top-nav">
+        <div class="font-indicator">
+          <span data-i18n="active_font_lbl">الخط النشط: </span>
+          <strong id="activeFontName" data-i18n="default_font_name">Arabic Calligraphy (الافتراضي محمل)</strong>
+        </div>
+        <div class="app-actions">
+          <button id="btnClear" class="btn-secondary" title="مسح النص" data-i18n-title="clear_btn_title"><i class="fa-solid fa-trash-can"></i> <span data-i18n="clear_btn_text">مسح</span></button>
+          <button id="btnReset" class="btn-secondary" title="إعادة تعيين" data-i18n-title="reset_btn_title"><i class="fa-solid fa-arrow-rotate-left"></i> <span data-i18n="reset_btn_text">تعيين</span></button>
+        </div>
+      </header>
+      
+      <!-- Centered Card Canvas Viewport -->
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <div class="poetry-card royal-charcoal has-shadow has-border-double ratio-auto" id="poetryCard">
+          <!-- Background image container for custom images -->
+          <div class="card-bg-image" id="cardBgImage"></div>
+          <!-- Semi-transparent overlay to ensure text contrast -->
+          <div class="card-overlay" id="cardOverlay"></div>
+          
+          <!-- Card Texture Overlay Layer -->
+          <div class="card-texture" id="cardTextureOverlay"></div>
+          
+          <!-- Corner ornaments for ornate style -->
+          <div class="card-corners">
+            <span class="corner top-right">❈</span>
+            <span class="corner top-left">❈</span>
+            <span class="corner bottom-right">❈</span>
+            <span class="corner bottom-left">❈</span>
+          </div>
+          
+          <!-- Top decorative element -->
+          <div class="card-ornament top-ornament" id="cardTopOrnament">
+            <span class="ornament-shape">❈ ❖ ❈</span>
+          </div>
+          
+          <div class="card-body">
+            <!-- Title editable directly on card -->
+            <div id="cardTitle" class="card-title" contenteditable="true" spellcheck="false" placeholder="العنوان (اختياري)" data-i18n-placeholder="title_placeholder"></div>
+            
+            <!-- Text area editable directly by user -->
+            <div id="editableText" class="writing-canvas" contenteditable="true" spellcheck="false">
+الخَيْلُ وَاللّيْلُ وَالبَيْدَاءُ تَعْرِفُني
+وَالسّيْفُ وَالرّمْحُ وَالقِرْطَاسُ وَالقَلَمُ
+
+أَنَا الَّذِي نَظَرَ الْأَعْمَى إِلَى أَدَبِي
+وَأَسْمَعَتْ كَلِمَاتِي مَنْ بِهِ صَمَمُ
+            </div>
+            
+            <!-- Author editable directly on card -->
+            <div id="cardAuthor" class="card-author" contenteditable="true" spellcheck="false" placeholder="الاسم/التوقيع (اختياري)" data-i18n-placeholder="author_placeholder"></div>
+          </div>
+          
+          <!-- Bottom decorative element -->
+          <div class="card-ornament bottom-ornament" id="cardBottomOrnament">
+            <span class="ornament-shape">❈ ❖ ❈</span>
+          </div>
+          <!-- Page indicator overlay -->
+          <div id="cardPageIndicator" class="card-page-indicator" style="display: none;">1 / 1</div>
+        </div>
+      </div>
+      
+      <footer class="app-footer">
+        <p data-i18n="app_footer_desc">ديوان الخط العربي - صمم بطاقتك ولوحتك الفنية وشاركها مع أصدقائك. انقر في وسط البطاقة لبدء الكتابة.</p>
+      </footer>
+    </main>
+    
+    <!-- Mobile overlay back drop for drawer -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  </div>
+  
+  <script src="./script.js" type="module"></script>
+</body>
+</html>

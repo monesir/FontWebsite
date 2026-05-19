@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Builds
+dist/
+
+# Logs and scratch files
+log_step_*.txt
+restored_from_*.html
+step_*.txt
+*.log
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.env
