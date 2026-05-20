@@ -229,7 +229,16 @@ const englishFonts = [
   { value: 'Montserrat', name: 'Montserrat (Modern Minimalist)' }
 ];
 
-/* ==========================================
+function getActiveFontFileName() {
+  if (!selectFontStyle) return 'file';
+  let fontText = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || 'file';
+  let name = fontText.split('(')[0].trim();
+  name = name.replace(/^مخصص:\s*/, '').replace(/^Custom:\s*/, '').trim();
+  name = name.replace(/[\/\\:*?"<>|%]/g, '').trim();
+  return name || 'file';
+}
+
+/* ==========================================================
    Arabic Diacritics (Harakat) Highlighter
    ========================================== */
 
@@ -1682,7 +1691,7 @@ function setupEventListeners() {
         const blob = new Blob([bodyText], { type: 'text/plain;charset=utf-8' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'document.txt';
+        link.download = `${getActiveFontFileName()}.txt`;
         link.click();
         URL.revokeObjectURL(link.href);
       });
@@ -1731,7 +1740,7 @@ function setupEventListeners() {
         const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'document.html';
+        link.download = `${getActiveFontFileName()}.html`;
         link.click();
         URL.revokeObjectURL(link.href);
       });
@@ -2545,9 +2554,7 @@ async function exportPoetryCard(format = 'png') {
       const content = await zip.generateAsync({type: 'blob'});
       
       const downloadLink = document.createElement('a');
-      const date = new Date();
-      const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-      downloadLink.download = `ألبوم_الخطوط_${timeStr}.zip`;
+      downloadLink.download = `${getActiveFontFileName()}.zip`;
       downloadLink.href = URL.createObjectURL(content);
       document.body.appendChild(downloadLink);
       downloadLink.click();
@@ -2557,7 +2564,7 @@ async function exportPoetryCard(format = 'png') {
       if (format === 'pdf') {
         const opt = {
           margin: 0,
-          filename: 'poetry_card.pdf',
+          filename: `${getActiveFontFileName()}.pdf`,
           image: { type: 'jpeg', quality: 1 },
           html2canvas: { scale: 2 },
           jsPDF: { unit: 'px', format: [poetryCard.offsetWidth, poetryCard.offsetHeight], orientation: poetryCard.offsetWidth > poetryCard.offsetHeight ? 'landscape' : 'portrait' }
@@ -2566,9 +2573,7 @@ async function exportPoetryCard(format = 'png') {
       } else {
         const dataUrl = await capturePage(format);
         const downloadLink = document.createElement('a');
-        const date = new Date();
-        const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-        downloadLink.download = `محرر_الخطوط_${timeStr}.${format}`;
+        downloadLink.download = `${getActiveFontFileName()}.${format}`;
         downloadLink.href = dataUrl;
         document.body.appendChild(downloadLink);
         downloadLink.click();
@@ -2579,7 +2584,7 @@ async function exportPoetryCard(format = 'png') {
       if (format === 'pdf') {
         const opt = {
           margin: 0,
-          filename: 'poetry_cards_album.pdf',
+          filename: `${getActiveFontFileName()}.pdf`,
           image: { type: 'jpeg', quality: 1 },
           html2canvas: { scale: 2 },
           jsPDF: { unit: 'px', format: [poetryCard.offsetWidth, poetryCard.offsetHeight], orientation: poetryCard.offsetWidth > poetryCard.offsetHeight ? 'landscape' : 'portrait' }
@@ -2616,9 +2621,7 @@ async function exportPoetryCard(format = 'png') {
           
           // Download
           const downloadLink = document.createElement('a');
-          const date = new Date();
-          const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-          downloadLink.download = `محرر_الخطوط_صفحة_${i + 1}_${timeStr}.${format}`;
+          downloadLink.download = `${getActiveFontFileName()}_صفحة_${i + 1}.${format}`;
           downloadLink.href = dataUrl;
           document.body.appendChild(downloadLink);
           downloadLink.click();
@@ -3223,7 +3226,7 @@ function exportDocAsDOCX() {
   const blob = new Blob(['\ufeff' + docHtml], { type: 'application/msword;charset=utf-8' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'document.doc'; // Works perfectly with MS Word natively!
+  link.download = `${getActiveFontFileName()}.doc`; // Works perfectly with MS Word natively!
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -3239,7 +3242,7 @@ function exportDocAsTXT() {
   const blob = new Blob([bodyText], { type: 'text/plain;charset=utf-8' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'document.txt';
+  link.download = `${getActiveFontFileName()}.txt`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -3287,7 +3290,7 @@ function exportDocAsHTML() {
   const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = 'document.html';
+  link.download = `${getActiveFontFileName()}.html`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -3331,7 +3334,7 @@ function exportDocAsPDF() {
   
   const opt = {
     margin:       10,
-    filename:     'document.pdf',
+    filename:     `${getActiveFontFileName()}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2, backgroundColor: bgColor },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
