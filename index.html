@@ -109,6 +109,12 @@
     
     <!-- Sidebar Control Panel -->
     <aside class="sidebar mode-simple" id="sidebarPanel">
+      <!-- Site Language Toggle Button -->
+      <button class="btn-secondary btn-icon-only language-switcher-sidebar" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language">
+        <i class="fa-solid fa-globe"></i>
+        <span class="lang-text" style="display: none;">English</span>
+      </button>
+
       <div class="sidebar-header">
         <div class="sidebar-logo-row">
           <h1 class="logo-text" data-i18n="logo_title">مُحَرِّرُ الخُطُوط</h1>
@@ -659,11 +665,7 @@
             </div>
           </div>
 
-          <!-- Site Language Toggle Button -->
-          <button class="btn-secondary" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language" style="border: 1px solid var(--border-ui);">
-            <i class="fa-solid fa-globe"></i>
-            <span class="lang-text desktop-only">English</span>
-          </button>
+
 
           <!-- Mobile Dropdown Kebab Menu Button -->
           <button id="btnMoreActions" class="btn-secondary btn-icon-only" title="خيارات إضافية / More Options" style="margin-inline-start: 8px;">

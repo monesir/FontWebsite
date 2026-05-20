@@ -162,6 +162,42 @@ body {
   direction: rtl; /* Restores content layout direction */
 }
 
+/* Sidebar Language Switcher - Far Top Corner */
+.language-switcher-sidebar {
+  position: absolute;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-ui) !important;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  padding: 0 !important;
+}
+
+.language-switcher-sidebar:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* logical placement based on direction */
+html[dir="rtl"] .language-switcher-sidebar {
+  right: 16px;
+  left: auto;
+}
+
+html[dir="ltr"] .language-switcher-sidebar {
+  left: 16px;
+  right: auto;
+}
+
 .sidebar-header {
   padding: 52px 20px 16px;
   border-bottom: 1px solid var(--border-ui);
