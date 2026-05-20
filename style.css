@@ -5055,9 +5055,39 @@ html[dir="rtl"] .web-tpl-store .store-cart-drawer {
    -------------------------------------------------------------------------- */
 
 /* Premium LIGHT Theme Specifics */
-.web-preview-wrapper.web-theme-light .web-tpl-store .web-preview-content {
+.web-preview-wrapper.web-theme-light.web-tpl-store .web-preview-content {
   background-color: #f5f6fa;
   color: #2e3440;
+}
+
+/* Light Theme Graphics and Hero button overrides */
+.web-preview-wrapper.web-theme-light .store-btn-shop-now {
+  background: #106b6b !important;
+  color: #fff !important;
+  box-shadow: 0 4px 15px rgba(16, 107, 107, 0.2);
+}
+
+.web-preview-wrapper.web-theme-light .store-btn-shop-now:hover {
+  background: #0d5252 !important;
+  box-shadow: 0 8px 25px rgba(16, 107, 107, 0.35);
+}
+
+.web-preview-wrapper.web-theme-light .mini-band {
+  border-color: #cbd5e1;
+}
+
+.web-preview-wrapper.web-theme-light .mini-cup-left,
+.web-preview-wrapper.web-theme-light .mini-cup-right {
+  background: linear-gradient(135deg, #e5e9f0, #cbd5e1);
+  border-color: #106b6b;
+}
+
+.web-preview-wrapper.web-theme-light .monitor-stand {
+  background: #cbd5e1;
+}
+
+.web-preview-wrapper.web-theme-light .monitor-base {
+  background: #cbd5e1;
 }
 
 .web-preview-wrapper.web-theme-light .store-glass {
@@ -5475,8 +5505,8 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-light .store-cart-drawer {
 }
 
 .web-preview-wrapper.web-theme-light .cart-item {
-  background: rgba(0,0,0,0.01);
-  border-color: rgba(0,0,0,0.04);
+  background: #f8fafc;
+  border-color: #e2e8f0;
 }
 
 .web-preview-wrapper.web-theme-light .cart-item-img-wrapper {
@@ -5493,8 +5523,8 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-light .store-cart-drawer {
 }
 
 .web-preview-wrapper.web-theme-light .cart-qty-selector {
-  background: rgba(0,0,0,0.03);
-  border-color: rgba(0,0,0,0.05);
+  background: #e2e8f0;
+  border-color: #cbd5e1;
 }
 
 .web-preview-wrapper.web-theme-light .qty-btn {
@@ -5558,9 +5588,39 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-light .store-cart-drawer {
 
 
 /* Premium AMBER Theme Specifics */
-.web-preview-wrapper.web-theme-amber .web-tpl-store .web-preview-content {
+.web-preview-wrapper.web-theme-amber.web-tpl-store .web-preview-content {
   background-color: #1e1610;
   color: #e0d0c0;
+}
+
+/* Amber Theme Graphics and button overrides */
+.web-preview-wrapper.web-theme-amber .store-btn-shop-now {
+  background: #d4af37 !important;
+  color: #1e1610 !important;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.web-preview-wrapper.web-theme-amber .store-btn-shop-now:hover {
+  background: #b8860b !important;
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
+}
+
+.web-preview-wrapper.web-theme-amber .mini-band {
+  border-color: #3a2e26;
+}
+
+.web-preview-wrapper.web-theme-amber .mini-cup-left,
+.web-preview-wrapper.web-theme-amber .mini-cup-right {
+  background: linear-gradient(135deg, #2a201a, #1e1610);
+  border-color: #d4af37;
+}
+
+.web-preview-wrapper.web-theme-amber .monitor-stand {
+  background: #3a2e26;
+}
+
+.web-preview-wrapper.web-theme-amber .monitor-base {
+  background: #3a2e26;
 }
 
 .web-preview-wrapper.web-theme-amber .store-glass {
