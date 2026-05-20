@@ -2818,6 +2818,8 @@ function setupEventListeners() {
     ctxResetFont.addEventListener('click', (e) => {
       e.stopPropagation();
       if (activeContextElement) {
+        const isMainEditor = activeContextElement.id === 'editableText';
+        
         activeContextElement.style.removeProperty('font-size');
         activeContextElement.style.removeProperty('font-weight');
         activeContextElement.style.removeProperty('color');
@@ -2827,24 +2829,27 @@ function setupEventListeners() {
         delete activeContextElement.dataset.customizedFontSizeVal;
         delete activeContextElement.dataset.originalFontSize;
         
-        const isMainEditor = activeContextElement.id === 'editableText';
         if (isMainEditor) {
           if (sliderFontSize && valFontSize) {
             sliderFontSize.value = DEFAULTS.fontSize;
             valFontSize.textContent = `${DEFAULTS.fontSize}px`;
           }
           document.documentElement.style.setProperty('--card-font-size', `${DEFAULTS.fontSize}px`);
-          document.documentElement.style.removeProperty('--card-font-color');
+          
+          document.documentElement.style.setProperty('--card-text-color', DEFAULTS.textColor);
+          if (pickerTextColor) pickerTextColor.value = DEFAULTS.textColor;
+          if (hexTextColor) hexTextColor.textContent = DEFAULTS.textColor.toUpperCase();
+          
+          document.documentElement.style.removeProperty('--card-font-weight');
+          if (selectFontWeight) selectFontWeight.value = '400';
+          
           document.documentElement.style.setProperty('--font-poetry', `"ArabicPoetry", sans-serif`);
           
           const selectFontStyle = document.getElementById('selectFontStyle');
-          if (selectFontStyle) {
-            selectFontStyle.value = 'ArabicPoetry';
-          }
+          if (selectFontStyle) selectFontStyle.value = 'ArabicPoetry';
           const selectWebFontSingle = document.getElementById('selectWebFontSingle');
-          if (selectWebFontSingle) {
-            selectWebFontSingle.value = 'ArabicPoetry';
-          }
+          if (selectWebFontSingle) selectWebFontSingle.value = 'ArabicPoetry';
+          
           localStorage.removeItem('diwan-poetry-font');
         } else {
           // Reapply global zoom to it if necessary
@@ -2873,15 +2878,28 @@ function setupEventListeners() {
     ctxBoldToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       if (activeContextElement) {
+        const isMainEditor = activeContextElement.id === 'editableText';
         const computedStyle = window.getComputedStyle(activeContextElement);
         const computedWeight = computedStyle.fontWeight;
         const isBold = computedWeight === 'bold' || parseInt(computedWeight) >= 700 || activeContextElement.style.fontWeight === 'bold';
         
         if (isBold) {
-          activeContextElement.style.setProperty('font-weight', 'normal', 'important');
+          if (isMainEditor) {
+            document.documentElement.style.setProperty('--card-font-weight', '400');
+            if (selectFontWeight) selectFontWeight.value = '400';
+            activeContextElement.style.removeProperty('font-weight');
+          } else {
+            activeContextElement.style.setProperty('font-weight', 'normal', 'important');
+          }
           ctxBoldToggle.classList.remove('active');
         } else {
-          activeContextElement.style.setProperty('font-weight', 'bold', 'important');
+          if (isMainEditor) {
+            document.documentElement.style.setProperty('--card-font-weight', '700');
+            if (selectFontWeight) selectFontWeight.value = '700';
+            activeContextElement.style.removeProperty('font-weight');
+          } else {
+            activeContextElement.style.setProperty('font-weight', 'bold', 'important');
+          }
           ctxBoldToggle.classList.add('active');
         }
         HistoryManager.saveState();
@@ -2896,16 +2914,19 @@ function setupEventListeners() {
     ctxResetColor.addEventListener('click', (e) => {
       e.stopPropagation();
       if (activeContextElement) {
-        activeContextElement.style.removeProperty('color');
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          document.documentElement.style.setProperty('--card-text-color', DEFAULTS.textColor);
+          if (pickerTextColor) pickerTextColor.value = DEFAULTS.textColor;
+          if (hexTextColor) hexTextColor.textContent = DEFAULTS.textColor.toUpperCase();
+          activeContextElement.style.removeProperty('color');
+        } else {
+          activeContextElement.style.removeProperty('color');
+        }
         
         const presetDots = document.querySelectorAll('.ctx-color-dot:not(.ctx-color-reset)');
         presetDots.forEach(d => d.classList.remove('active'));
         ctxResetColor.classList.add('active');
-        
-        const isMainEditor = activeContextElement.id === 'editableText';
-        if (isMainEditor) {
-          document.documentElement.style.removeProperty('--card-font-color');
-        }
         
         HistoryManager.saveState();
       }
@@ -2920,7 +2941,16 @@ function setupEventListeners() {
       e.stopPropagation();
       if (activeContextElement) {
         const selectedColor = dot.dataset.color;
-        activeContextElement.style.setProperty('color', selectedColor, 'important');
+        const isMainEditor = activeContextElement.id === 'editableText';
+        
+        if (isMainEditor) {
+          document.documentElement.style.setProperty('--card-text-color', selectedColor);
+          if (pickerTextColor) pickerTextColor.value = selectedColor;
+          if (hexTextColor) hexTextColor.textContent = selectedColor.toUpperCase();
+          activeContextElement.style.removeProperty('color');
+        } else {
+          activeContextElement.style.setProperty('color', selectedColor, 'important');
+        }
         
         colorDots.forEach(d => d.classList.remove('active'));
         if (ctxResetColor) ctxResetColor.classList.remove('active');
@@ -2929,11 +2959,6 @@ function setupEventListeners() {
         const ctxColorInput = document.getElementById('ctxColorInput');
         if (ctxColorInput) {
           ctxColorInput.value = selectedColor;
-        }
-        
-        const isMainEditor = activeContextElement.id === 'editableText';
-        if (isMainEditor) {
-          document.documentElement.style.setProperty('--card-font-color', selectedColor);
         }
         
         HistoryManager.saveState();
@@ -2952,7 +2977,16 @@ function setupEventListeners() {
     ctxColorInput.addEventListener('input', (e) => {
       if (activeContextElement) {
         const selectedColor = e.target.value;
-        activeContextElement.style.setProperty('color', selectedColor, 'important');
+        const isMainEditor = activeContextElement.id === 'editableText';
+        
+        if (isMainEditor) {
+          document.documentElement.style.setProperty('--card-text-color', selectedColor);
+          if (pickerTextColor) pickerTextColor.value = selectedColor;
+          if (hexTextColor) hexTextColor.textContent = selectedColor.toUpperCase();
+          activeContextElement.style.removeProperty('color');
+        } else {
+          activeContextElement.style.setProperty('color', selectedColor, 'important');
+        }
         
         if (ctxResetColor) ctxResetColor.classList.remove('active');
         colorDots.forEach(dot => {
@@ -2962,11 +2996,6 @@ function setupEventListeners() {
             dot.classList.remove('active');
           }
         });
-        
-        const isMainEditor = activeContextElement.id === 'editableText';
-        if (isMainEditor) {
-          document.documentElement.style.setProperty('--card-font-color', selectedColor);
-        }
       }
     });
 
@@ -2981,14 +3010,10 @@ function setupEventListeners() {
       e.stopPropagation();
       if (activeContextElement) {
         const val = ctxFontSelect.value;
-        if (val === 'inherit') {
-          activeContextElement.style.removeProperty('font-family');
-        } else {
-          activeContextElement.style.setProperty('font-family', `"${val}", sans-serif`, 'important');
-        }
-        
         const isMainEditor = activeContextElement.id === 'editableText';
+        
         if (isMainEditor) {
+          activeContextElement.style.removeProperty('font-family');
           if (val !== 'inherit') {
             document.documentElement.style.setProperty('--font-poetry', `"${val}", sans-serif`);
             const selectFontStyle = document.getElementById('selectFontStyle');
@@ -3003,6 +3028,12 @@ function setupEventListeners() {
           } else {
             document.documentElement.style.setProperty('--font-poetry', `"ArabicPoetry", sans-serif`);
             localStorage.removeItem('diwan-poetry-font');
+          }
+        } else {
+          if (val === 'inherit') {
+            activeContextElement.style.removeProperty('font-family');
+          } else {
+            activeContextElement.style.setProperty('font-family', `"${val}", sans-serif`, 'important');
           }
         }
         HistoryManager.saveState();
