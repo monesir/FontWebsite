@@ -5415,80 +5415,59 @@ function initStorefrontEvents() {
 
   // Scoped Event Delegation for Store interactions
   webContentStore.addEventListener('click', (e) => {
-    // 1. Add to Cart button
+    // 1. Add to Cart button (DISABLED - Non-interactive)
     const addBtn = e.target.closest('.store-add-cart-btn');
     if (addBtn) {
-      const productId = addBtn.dataset.id;
-      addToCart(productId);
-      openCart();
+      // Disabled to prevent adding to cart / interactive state change
     }
 
-    // 2. Quantity Plus button
+    // 2. Quantity Plus button (DISABLED)
     const plusBtn = e.target.closest('.qty-plus-btn');
     if (plusBtn) {
-      const productId = plusBtn.dataset.id;
-      changeQuantity(productId, 1);
+      // Disabled
     }
 
-    // 3. Quantity Minus button
+    // 3. Quantity Minus button (DISABLED)
     const minusBtn = e.target.closest('.qty-minus-btn');
     if (minusBtn) {
-      const productId = minusBtn.dataset.id;
-      changeQuantity(productId, -1);
+      // Disabled
     }
 
-    // 4. Remove Item button
+    // 4. Remove Item button (DISABLED)
     const removeBtn = e.target.closest('.cart-item-remove-btn');
     if (removeBtn) {
-      const productId = removeBtn.dataset.id;
-      removeFromCart(productId);
+      // Disabled
     }
 
-    // 5. Category filter tab clicks
+    // 5. Category filter tab clicks (DISABLED - Non-interactive)
     const filterTab = e.target.closest('.store-filter-tab');
     if (filterTab) {
-      const filter = filterTab.dataset.filter;
-      webContentStore.querySelectorAll('.store-filter-tab').forEach(t => t.classList.remove('active'));
-      filterTab.classList.add('active');
-      filterProducts(filter);
+      // Disabled category switching to allow text editing without state change
     }
 
-    // 6. Navigation link clicks
+    // 6. Navigation link clicks (DISABLED - Non-interactive)
     const navLink = e.target.closest('.store-nav-link');
     if (navLink) {
-      const filter = navLink.dataset.filter;
-      const matchingTab = webContentStore.querySelector(`.store-filter-tab[data-filter="${filter}"]`);
-      if (matchingTab) {
-        webContentStore.querySelectorAll('.store-filter-tab').forEach(t => t.classList.remove('active'));
-        matchingTab.classList.add('active');
-      }
-      filterProducts(filter);
+      // Disabled
     }
   });
 
-  // Newsletter Submit Listener
+  // Newsletter Submit Listener (DISABLED - Non-interactive)
   const newsForm = document.querySelector('.store-news-form');
   const newsSuccess = document.querySelector('.store-news-success-msg');
   if (newsForm && newsSuccess) {
     newsForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      newsForm.style.display = 'none';
-      newsSuccess.style.display = 'block';
+      // Disabled form submission action
     });
   }
 
-  // Checkout Button Listener
+  // Checkout Button Listener (DISABLED - Non-interactive)
   const btnCheckout = document.querySelector('.cart-checkout-btn');
   if (btnCheckout) {
-    btnCheckout.addEventListener('click', () => {
-      const lang = localStorage.getItem('siteLanguage') || 'ar';
-      const msg = lang === 'ar' 
-        ? 'شكراً لتسوقك معنا! تم محاكاة عملية الدفع بنجاح.' 
-        : 'Thank you for shopping with us! Checkout simulation completed successfully.';
-      alert(msg);
-      storeCart = [];
-      renderCart();
-      closeCart();
+    btnCheckout.addEventListener('click', (e) => {
+      // Disabled alert prompt and clearing of cart
+      e.preventDefault();
     });
   }
 
