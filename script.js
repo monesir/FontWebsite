@@ -1,5 +1,6 @@
 import * as htmlToImage from 'html-to-image';
 import html2pdf from 'html2pdf.js';
+import JSZip from 'jszip';
 
 /* ==========================================================================
    Arabic Poetry Font Playground - Production JavaScript Controller
@@ -1201,7 +1202,7 @@ function setupEventListeners() {
       item.addEventListener('click', (e) => {
         const format = e.currentTarget.getAttribute('data-format');
         exportCardDropdown.classList.remove('active');
-        if (format === 'png' || format === 'jpeg' || format === 'webp' || format === 'pdf') {
+        if (format === 'png' || format === 'jpeg' || format === 'webp' || format === 'pdf' || format === 'zip') {
           exportPoetryCard(format);
         }
       });
@@ -2520,7 +2521,38 @@ async function exportPoetryCard(format = 'png') {
   const originalPageIndex = currentPageIndex;
 
   try {
-    if (carouselPages.length <= 1) {
+    if (format === 'zip') {
+      const zip = new JSZip();
+      for (let i = 0; i < carouselPages.length; i++) {
+        const compressingText = uiTranslations[currentSiteLang]?.export_compressing || 'جاري ضغط صفحة';
+        btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin icon"></i> ${compressingText} ${i + 1}/${carouselPages.length}...`;
+        
+        // Temporarily switch page
+        currentPageIndex = i;
+        const targetText = carouselPages[i];
+        setEditableTextHTML(targetText);
+        updateCardPageIndicator();
+        applyDividers();
+        
+        // Capture page as PNG
+        const dataUrl = await capturePage('png');
+        const base64Data = dataUrl.split(',')[1];
+        zip.file(`poetry_card_${i + 1}.png`, base64Data, {base64: true});
+      }
+      
+      const finalCompressingText = currentSiteLang === 'ar' ? 'جاري إنشاء ملف ZIP...' : 'Generating ZIP...';
+      btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin icon"></i> ${finalCompressingText}`;
+      const content = await zip.generateAsync({type: 'blob'});
+      
+      const downloadLink = document.createElement('a');
+      const date = new Date();
+      const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
+      downloadLink.download = `ألبوم_الخطوط_${timeStr}.zip`;
+      downloadLink.href = URL.createObjectURL(content);
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } else if (carouselPages.length <= 1) {
       // Single page standard export
       if (format === 'pdf') {
         const opt = {
@@ -2894,7 +2926,13 @@ const uiTranslations = {
     save_txt_title: "ملف نصي عادي (TXT)",
     save_txt_desc: "حفظ الكلمات كملف نصي بسيط بدون تنسيقات",
     save_html_title: "تصدير كملف صفحة (HTML)",
-    save_html_desc: "تصدير بتنسيقات الـ HTML المتوافقة مع برامج النصوص"
+    save_html_desc: "تصدير بتنسيقات الـ HTML المتوافقة مع برامج النصوص",
+    format_png: "صورة PNG",
+    format_jpeg: "صورة JPEG",
+    format_webp: "صورة WebP",
+    format_pdf: "ملف PDF",
+    format_zip: "ألبوم صور (ZIP)",
+    export_compressing: "جاري ضغط صفحة"
   },
   en: {
     logo_title: "Font Editor",
@@ -3052,7 +3090,13 @@ const uiTranslations = {
     faq_q4: "Why do some Arabic fonts appear cut off or overlap with ornaments? How do I fix it?",
     faq_a4: "Some classical Arabic calligraphy styles (such as Diwani and Thuluth) have very tall ascenders and deep descenders. To resolve overlaps, increase the <strong>Line Height</strong> slider in the typography settings, or scale down the font size to fit your card's aspect ratio.",
     faq_q5: "Are my uploaded fonts saved or shared with anyone?",
-    faq_a5: "Your privacy is our top priority. All font processing and rendering happen entirely <strong>on your device (client-side)</strong>. We do not store or upload any files to our servers, ensuring your commercial and custom fonts remain completely private and secure."
+    faq_a5: "Your privacy is our top priority. All font processing and rendering happen entirely <strong>on your device (client-side)</strong>. We do not store or upload any files to our servers, ensuring your commercial and custom fonts remain completely private and secure.",
+    format_png: "PNG Image",
+    format_jpeg: "JPEG Image",
+    format_webp: "WebP Image",
+    format_pdf: "PDF Document",
+    format_zip: "Photo Album (ZIP)",
+    export_compressing: "Compressing page"
   }
 };
 
