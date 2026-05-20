@@ -7077,6 +7077,9 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
 }
 
 .web-tpl-saas .web-brands-ticker {
+  direction: ltr !important;
+  display: flex !important;
+  flex-direction: row !important;
   overflow: hidden;
   width: 100%;
   position: relative;
@@ -7087,7 +7090,9 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
 }
 
 .web-tpl-saas .web-brands-track {
-  display: flex;
+  direction: ltr !important;
+  display: flex !important;
+  flex-direction: row !important;
   width: max-content;
   gap: 80px;
   align-items: center;
