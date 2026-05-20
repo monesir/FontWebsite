@@ -3939,6 +3939,23 @@ function applyDefaults() {
   currentLang = 'ar';
   customFontLoaded = false;
   customFontName = '';
+  
+  // Remove dynamic style block for uploaded custom font
+  const styleEl = document.getElementById('custom-font-style');
+  if (styleEl) {
+    styleEl.remove();
+  }
+  if (fontFileInput) {
+    fontFileInput.value = '';
+  }
+
+  const isAr = (currentSiteLang === 'ar');
+  updateFontStatus(true, isAr ? "تم تحميل الخط الافتراضي تلقائياً" : "Default font loaded successfully");
+
+  if (activeFontName) {
+    activeFontName.textContent = isAr ? 'خط الشعر العربي (الافتراضي)' : 'Arabic Poetry (Default Loaded)';
+  }
+
   if (btnLangAr) btnLangAr.classList.add('active');
   if (btnLangEn) btnLangEn.classList.remove('active');
   updateWritingLangButtonText();
