@@ -919,6 +919,28 @@ function setupEventListeners() {
 
   // Expose updateOrnaments helper to the window scope for access by other functions (like applyDefaults)
   window.updateOrnaments = updateOrnaments;
+
+  // 15. FAQ Accordion Event Listeners
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const trigger = item.querySelector('.faq-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isActive = item.classList.contains('active');
+        
+        // Close all FAQ items
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('active');
+        });
+        
+        // If it wasn't active, open it
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    }
+  });
 }
 
 // Custom drag-to-resize logic for the poetry card
@@ -1789,7 +1811,19 @@ const uiTranslations = {
     author_placeholder: "الاسم/التوقيع (اختياري)",
     confirm_reset: "هل تريد بالتأكيد استعادة الإعدادات الافتراضية؟",
     confirm_delete_page: "هل تريد بالتأكيد حذف هذه الصفحة؟",
-    export_error: "حدث خطأ أثناء استخراج الصورة. الرجاء إعادة المحاولة."
+    export_error: "حدث خطأ أثناء استخراج الصورة. الرجاء إعادة المحاولة.",
+    faq_title: "الأسئلة الشائعة ودليل الاستخدام",
+    faq_subtitle: "كل ما تود معرفته عن كيفية استخدام محرر الخطوط لتحسين وتجربة خطوطك.",
+    faq_q1: "ما هو موقع محرر الخطوط؟ وكيف يساعدني؟",
+    faq_a1: "محرر الخطوط هو أداة مجانية تفاعلية متكاملة لتجربة واختبار الخطوط العربية والإنجليزية مباشرة عبر المتصفح. يتيح لك كتابة النصوص الشعرية، الاقتباسات، والعبارات وتنسيقها وتغيير أحجامها وسماكتها وإضافة نقوش وزخارف، ثم تصديرها كصورة عالية الدقة.",
+    faq_q2: "هل يمكنني رفع خطوطي الخاصة (OTF, TTF, WOFF) واختبارها هنا؟",
+    faq_a2: "نعم بالتأكيد! يدعم المحرر سحب وإفلات أو اختيار أي ملف خط مخصص من جهازك بالصيغ الشائعة: <strong>TTF, OTF, WOFF, WOFF2</strong>. يتم تحميل الخط محلياً في متصفحك بشكل آمن 100% دون أن يتم رفعه إلى خوادم خارجية.",
+    faq_q3: "ما هي الأوزان والخطوط المتغيرة (Variable Fonts)؟ وهل يدعمها الموقع؟",
+    faq_a3: "الخطوط المتغيرة هي خطوط ويب حديثة تدمج جميع الأوزان وسماكات الحروف في ملف واحد. يدعم موقعنا هذه التقنية بشكل كامل، حيث يتيح لك اختيار سمك الخط بدقة من الخفيف (300) إلى السميك جداً (900) عبر القائمة المنسدلة في الإعدادات المتقدمة.",
+    faq_q4: "لماذا تظهر بعض الخطوط العربية مقطوعة أو متداخلة مع الزخارف؟ وكيف أحل ذلك؟",
+    faq_a4: "بعض الخطوط العربية الكلاسيكية (مثل الديواني والثلث) تحتوي على حروف صاعدة أو هابطة ممتدة بشكل كبير. لحل تداخلها، يمكنك استخدام خيار <strong>تباعد الأسطر (Line Height)</strong> في قائمة التنسيق لزيادة المسافة الرأسية، أو ضبط حجم الخط ليتناسب تماماً مع أبعاد البطاقة.",
+    faq_q5: "هل الخطوط التي أرفعها يتم حفظها أو مشاركتها مع أي جهة؟",
+    faq_a5: "خصوصيتك هي أولويتنا القصوى. جميع عمليات معالجة وتحميل الخطوط والملفات التي تقوم برفعها تتم بالكامل <strong>داخل متصفح جهازك فقط (Client-side)</strong>. لا نقوم بحفظ أي ملفات على خوادمنا، مما يضمن أمان وخصوصية ملفاتك وخطوطك التجارية."
   },
   en: {
     logo_title: "Font Editor",
@@ -1905,7 +1939,19 @@ const uiTranslations = {
     author_placeholder: "Author / Signature (Optional)",
     confirm_reset: "Are you sure you want to restore default settings?",
     confirm_delete_page: "Are you sure you want to delete this page?",
-    export_error: "An error occurred during image export. Please try again."
+    export_error: "An error occurred during image export. Please try again.",
+    faq_title: "Frequently Asked Questions & Guide",
+    faq_subtitle: "Everything you need to know about using Font Editor to test and customize your typography.",
+    faq_q1: "What is Font Editor and how does it help me?",
+    faq_a1: "Font Editor is a free, interactive, and all-in-one web tool to test and preview Arabic and English fonts directly in your browser. It lets you write poetry, quotes, or phrases, customize font sizes, weights, line heights, add decorative ornaments, color effects, background textures, and then export your creations as high-resolution PNG images.",
+    faq_q2: "Can I upload and test my own custom fonts (OTF, TTF, WOFF)?",
+    faq_a2: "Yes, absolutely! The editor supports dragging and dropping or selecting custom font files from your device in the most popular formats: <strong>TTF, OTF, WOFF, and WOFF2</strong>. The font file is loaded locally in your browser and is 100% secure, never uploaded to any external servers.",
+    faq_q3: "What are Variable Fonts, and are they supported here?",
+    faq_a3: "Variable fonts are modern web fonts that contain all weights and styling variations within a single file. Our site fully supports variable fonts, enabling you to select specific weights from Light (300) to Black (900) dynamically using the dropdown in the advanced settings.",
+    faq_q4: "Why do some Arabic fonts appear cut off or overlap with ornaments? How do I fix it?",
+    faq_a4: "Some classical Arabic calligraphy styles (such as Diwani and Thuluth) have very tall ascenders and deep descenders. To resolve overlaps, increase the <strong>Line Height</strong> slider in the typography settings, or scale down the font size to fit your card's aspect ratio.",
+    faq_q5: "Are my uploaded fonts saved or shared with anyone?",
+    faq_a5: "Your privacy is our top priority. All font processing and rendering happen entirely <strong>on your device (client-side)</strong>. We do not store or upload any files to our servers, ensuring your commercial and custom fonts remain completely private and secure."
   }
 };
 
@@ -1942,6 +1988,15 @@ function updateUISiteLanguage(lang) {
     const key = el.getAttribute('data-i18n-placeholder');
     if (uiTranslations[lang] && uiTranslations[lang][key]) {
       el.setAttribute('placeholder', uiTranslations[lang][key]);
+    }
+  });
+
+  // 3.5 HTML elements translations (safe innerHTML updates)
+  const htmlElements = document.querySelectorAll('[data-i18n-html]');
+  htmlElements.forEach(el => {
+    const key = el.getAttribute('data-i18n-html');
+    if (uiTranslations[lang] && uiTranslations[lang][key]) {
+      el.innerHTML = uiTranslations[lang][key];
     }
   });
 

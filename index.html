@@ -541,7 +541,8 @@
       
       <!-- Centered Card Canvas Viewport -->
       <div class="canvas-wrapper" id="canvasWrapper">
-        <div class="poetry-card royal-charcoal has-shadow has-border-double ratio-auto" id="poetryCard">
+        <div class="canvas-inner">
+          <div class="poetry-card royal-charcoal has-shadow has-border-double ratio-auto" id="poetryCard">
           <!-- Background image container for custom images -->
           <div class="card-bg-image" id="cardBgImage"></div>
           <!-- Semi-transparent overlay to ensure text contrast -->
@@ -588,6 +589,82 @@
           <div id="cardPageIndicator" class="card-page-indicator" style="display: none;">1 / 1</div>
         </div>
       </div>
+
+      <!-- FAQ & SEO Section -->
+      <section class="faq-section">
+        <div class="faq-header">
+          <h2 class="faq-title" data-i18n="faq_title">الأسئلة الشائعة ودليل الاستخدام</h2>
+          <p class="faq-subtitle" data-i18n="faq_subtitle">كل ما تود معرفته عن كيفية استخدام محرر الخطوط لتحسين وتجربة خطوطك.</p>
+        </div>
+        
+        <div class="faq-list">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span class="faq-question" data-i18n="faq_q1">ما هو موقع محرر الخطوط؟ وكيف يساعدني؟</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-content">
+              <div class="faq-answer-inner" data-i18n-html="faq_a1">
+                محرر الخطوط هو أداة مجانية تفاعلية متكاملة لتجربة واختبار الخطوط العربية والإنجليزية مباشرة عبر المتصفح. يتيح لك كتابة النصوص الشعرية، الاقتباسات، والعبارات وتنسيقها وتغيير أحجامها وسماكتها وإضافة نقوش وزخارف، ثم تصديرها كصورة عالية الدقة.
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span class="faq-question" data-i18n="faq_q2">هل يمكنني رفع خطوطي الخاصة (OTF, TTF, WOFF) واختبارها هنا؟</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-content">
+              <div class="faq-answer-inner" data-i18n-html="faq_a2">
+                نعم بالتأكيد! يدعم المحرر سحب وإفلات أو اختيار أي ملف خط مخصص من جهازك بالصيغ الشائعة: <strong>TTF, OTF, WOFF, WOFF2</strong>. يتم تحميل الخط محلياً في متصفحك بشكل آمن 100% دون أن يتم رفعه إلى خوادم خارجية.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span class="faq-question" data-i18n="faq_q3">ما هي الأوزان والخطوط المتغيرة (Variable Fonts)؟ وهل يدعمها الموقع؟</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-content">
+              <div class="faq-answer-inner" data-i18n-html="faq_a3">
+                الخطوط المتغيرة هي خطوط ويب حديثة تدمج جميع الأوزان وسماكات الحروف في ملف واحد. يدعم موقعنا هذه التقنية بشكل كامل، حيث يتيح لك اختيار سمك الخط بدقة من الخفيف (300) إلى السميك جداً (900) عبر القائمة المنسدلة في الإعدادات المتقدمة.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span class="faq-question" data-i18n="faq_q4">لماذا تظهر بعض الخطوط العربية مقطوعة أو متداخلة مع الزخارف؟ وكيف أحل ذلك؟</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-content">
+              <div class="faq-answer-inner" data-i18n-html="faq_a4">
+                بعض الخطوط العربية الكلاسيكية (مثل الديواني والثلث) تحتوي على حروف صاعدة أو هابطة ممتدة بشكل كبير. لحل تداخلها، يمكنك استخدام خيار <strong>تباعد الأسطر (Line Height)</strong> في قائمة التنسيق لزيادة المسافة الرأسية، أو ضبط حجم الخط ليتناسب تماماً مع أبعاد البطاقة.
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item">
+            <button class="faq-trigger">
+              <span class="faq-question" data-i18n="faq_q5">هل الخطوط التي أرفعها يتم حفظها أو مشاركتها مع أي جهة؟</span>
+              <i class="fa-solid fa-chevron-down faq-icon"></i>
+            </button>
+            <div class="faq-content">
+              <div class="faq-answer-inner" data-i18n-html="faq_a5">
+                خصوصيتك هي أولويتنا القصوى. جميع عمليات معالجة وتحميل الخطوط والملفات التي تقوم برفعها تتم بالكامل <strong>داخل متصفح جهازك فقط (Client-side)</strong>. لا نقوم بحفظ أي ملفات على خوادمنا، مما يضمن أمان وخصوصية ملفاتك وخطوطك التجارية.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
       
       <footer class="app-footer">
         <p data-i18n="app_footer_desc">محرر الخطوط - أداة تفاعلية لتصميم واختبار الخطوط العربية والإنجليزية. اكتب نصوصك، جرب مختلف الأنماط، ونسق تصاميمك بدقة واحترافية.</p>
