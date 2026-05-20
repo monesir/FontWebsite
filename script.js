@@ -36,10 +36,12 @@ const pickerTextColor = document.getElementById('pickerTextColor');
 const pickerBgColor = document.getElementById('pickerBgColor');
 const pickerOrnamentColor = document.getElementById('pickerOrnamentColor');
 const pickerOrnamentColor2 = document.getElementById('pickerOrnamentColor2');
+const pickerDocTextColor = document.getElementById('pickerDocTextColor');
 const hexTextColor = document.getElementById('hexTextColor');
 const hexBgColor = document.getElementById('hexBgColor');
 const hexOrnamentColor = document.getElementById('hexOrnamentColor');
 const hexOrnamentColor2 = document.getElementById('hexOrnamentColor2');
+const hexDocTextColor = document.getElementById('hexDocTextColor');
 
 // Arabic Diacritics Controls
 const toggleHarakatColor = document.getElementById('toggleHarakatColor');
@@ -796,6 +798,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   wrapTashkeel(editableText);
 
+  // Restore saved document text color
+  const savedDocTextColor = localStorage.getItem('diwan-doc-text-color');
+  if (savedDocTextColor) {
+    updateDocTextColor(savedDocTextColor, false);
+  } else {
+    const savedTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+    let defaultColor = '#111111';
+    if (savedTheme === 'cream') defaultColor = '#2e261a';
+    else if (savedTheme === 'dark') defaultColor = '#f4f4f5';
+    updateDocTextColor(defaultColor, false);
+  }
+
   // Restore saved view mode
   const savedMode = localStorage.getItem('diwan-view-mode') || 'design';
   switchViewMode(savedMode);
@@ -1001,6 +1015,12 @@ function setupEventListeners() {
   });
 
   // 8. Color Pickers Binding
+  if (pickerDocTextColor) {
+    pickerDocTextColor.addEventListener('input', (e) => {
+      updateDocTextColor(e.target.value);
+    });
+  }
+
   pickerTextColor.addEventListener('input', (e) => {
     const val = e.target.value;
     document.documentElement.style.setProperty('--card-text-color', val);
@@ -1637,9 +1657,18 @@ function setupEventListeners() {
   if (btnPaperGrid) btnPaperGrid.addEventListener('click', () => setPaperStyle('grid'));
 
   // 19. Document Paper Color Themes
-  if (btnPaperThemeWhite) btnPaperThemeWhite.addEventListener('click', () => setPaperTheme('white'));
-  if (btnPaperThemeCream) btnPaperThemeCream.addEventListener('click', () => setPaperTheme('cream'));
-  if (btnPaperThemeDark) btnPaperThemeDark.addEventListener('click', () => setPaperTheme('dark'));
+  if (btnPaperThemeWhite) btnPaperThemeWhite.addEventListener('click', () => {
+    setPaperTheme('white');
+    updateDocTextColor('#111111');
+  });
+  if (btnPaperThemeCream) btnPaperThemeCream.addEventListener('click', () => {
+    setPaperTheme('cream');
+    updateDocTextColor('#2e261a');
+  });
+  if (btnPaperThemeDark) btnPaperThemeDark.addEventListener('click', () => {
+    setPaperTheme('dark');
+    updateDocTextColor('#f4f4f5');
+  });
 
   // 20. Save As Modal & Export Actions
   if (saveDocModal) {
@@ -1938,6 +1967,16 @@ function setPaperTheme(theme) {
   const activeBtn = document.getElementById(`btnPaperTheme${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
   if (activeBtn) activeBtn.classList.add('active');
   localStorage.setItem('diwan-paper-theme', theme);
+}
+
+// Update Document Text Color in DOM and localStorage
+function updateDocTextColor(color, saveToLocalStorage = true) {
+  if (pickerDocTextColor) pickerDocTextColor.value = color;
+  if (hexDocTextColor) hexDocTextColor.textContent = color.toUpperCase();
+  document.documentElement.style.setProperty('--doc-text-color', color);
+  if (saveToLocalStorage) {
+    localStorage.setItem('diwan-doc-text-color', color);
+  }
 }
 
 // Custom drag-to-resize logic for the poetry card
@@ -2935,7 +2974,8 @@ const uiTranslations = {
     format_webp: "صورة WebP",
     format_pdf: "ملف PDF",
     format_zip: "ألبوم صور (ZIP)",
-    export_compressing: "جاري ضغط صفحة"
+    export_compressing: "جاري ضغط صفحة",
+    doc_text_color_lbl: "لون النص"
   },
   en: {
     logo_title: "Font Editor",
@@ -2951,6 +2991,7 @@ const uiTranslations = {
     paper_theme_white: "White",
     paper_theme_cream: "Cream",
     paper_theme_dark: "Dark",
+    doc_text_color_lbl: "Text Color",
     print_btn: "Print or Export PDF",
     save_doc_as_btn: "Save As...",
     save_modal_title: "Save & Export Document",
@@ -3193,6 +3234,15 @@ function exportDocAsDOCX() {
   temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
   let bodyHtml = temp.innerHTML;
   
+  const savedDocTextColor = localStorage.getItem('diwan-doc-text-color');
+  let textColor = savedDocTextColor;
+  if (!textColor) {
+    const paperTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+    if (paperTheme === 'white') textColor = '#111111';
+    else if (paperTheme === 'cream') textColor = '#2e261a';
+    else textColor = '#f4f4f5';
+  }
+
   const docHtml = `
   <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
   <head>
@@ -3212,6 +3262,7 @@ function exportDocAsDOCX() {
         font-family: 'Cairo', 'Amiri', 'Segoe UI', Arial, sans-serif;
         line-height: 1.6;
         direction: rtl;
+        color: ${textColor};
       }
       p, div {
         margin: 0 0 10px 0;
@@ -3256,9 +3307,18 @@ function exportDocAsHTML() {
   temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
   let bodyHtml = temp.innerHTML;
   const paperTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
-  let bgStyle = 'background: #ffffff; color: #111111;';
-  if (paperTheme === 'cream') bgStyle = 'background: #fcf8f0; color: #2e261a;';
-  else if (paperTheme === 'dark') bgStyle = 'background: #18181b; color: #f4f4f5;';
+  
+  const savedDocTextColor = localStorage.getItem('diwan-doc-text-color');
+  let textColor = savedDocTextColor;
+  if (!textColor) {
+    if (paperTheme === 'white') textColor = '#111111';
+    else if (paperTheme === 'cream') textColor = '#2e261a';
+    else textColor = '#f4f4f5';
+  }
+
+  let bgStyle = `background: #ffffff; color: ${textColor};`;
+  if (paperTheme === 'cream') bgStyle = `background: #fcf8f0; color: ${textColor};`;
+  else if (paperTheme === 'dark') bgStyle = `background: #18181b; color: ${textColor};`;
   const lang = localStorage.getItem('siteLanguage') || 'ar';
   const dir = lang === 'en' ? 'ltr' : 'rtl';
 
@@ -3312,6 +3372,11 @@ function exportDocAsPDF() {
   let textColor = '#111111';
   if (paperTheme === 'cream') { bgColor = '#fcf8f0'; textColor = '#2e261a'; }
   else if (paperTheme === 'dark') { bgColor = '#18181b'; textColor = '#f4f4f5'; }
+  
+  const savedDocTextColor = localStorage.getItem('diwan-doc-text-color');
+  if (savedDocTextColor) {
+    textColor = savedDocTextColor;
+  }
   
   const computedStyles = window.getComputedStyle(document.documentElement);
   const currentFont = computedStyles.getPropertyValue('--font-poetry').trim() || "'Cairo', sans-serif";

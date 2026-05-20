@@ -2208,6 +2208,7 @@ body.view-mode-design button.design-only {
   cursor: text !important;
   text-align: start;
   text-shadow: none !important;
+  color: var(--doc-text-color, inherit) !important;
 }
 
 
