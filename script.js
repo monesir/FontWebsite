@@ -2536,13 +2536,6 @@ function setupEventListeners() {
   // ctxFontSelect is declared globally
   let activeContextElement = null;
 
-  const pxToPt = (px) => {
-    return Math.round((px * 0.75) * 10) / 10;
-  };
-  const ptToPx = (pt) => {
-    return pt / 0.75;
-  };
-
   const hideContextMenu = () => {
     if (previewContextMenu) {
       previewContextMenu.style.display = 'none';
@@ -2570,21 +2563,21 @@ function setupEventListeners() {
 
     const isAr = (currentSiteLang === 'ar');
     const computedStyle = window.getComputedStyle(target);
-    const sizeInPx = parseFloat(computedStyle.fontSize);
-    const sizeInPt = pxToPt(sizeInPx);
+    const sizeInPx = Math.round(parseFloat(computedStyle.fontSize));
 
     if (ctxCurrentSizeText) {
-      ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizeInPt}pt` : `Current Size: ${sizeInPt}pt`;
+      ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizeInPx}px` : `Current Size: ${sizeInPx}px`;
     }
     if (ctxFontSizeInput) {
-      ctxFontSizeInput.value = sizeInPt;
+      ctxFontSizeInput.value = sizeInPx;
     }
     if (ctxResetText) {
       let defaultSizeText = "";
       if (target.dataset.originalFontSize) {
-        defaultSizeText = `${pxToPt(parseFloat(target.dataset.originalFontSize))}pt`;
+        const origSize = parseFloat(target.dataset.originalFontSize);
+        defaultSizeText = `${Math.round(origSize)}px`;
       } else {
-        defaultSizeText = `${sizeInPt}pt`;
+        defaultSizeText = `${sizeInPx}px`;
       }
       ctxResetText.textContent = isAr ? `إعادة تعيين (${defaultSizeText})` : `Reset Size (${defaultSizeText})`;
     }
@@ -2746,32 +2739,32 @@ function setupEventListeners() {
     previewContextMenu.style.top = `${top}px`;
   });
 
-  const applyFontSize = (sizePt) => {
+  const applyFontSize = (sizePx) => {
     if (activeContextElement) {
-      const sizePx = ptToPx(sizePt);
       activeContextElement.dataset.customizedFontSize = "true";
       activeContextElement.dataset.customizedFontSizeVal = sizePx;
       
       const isMainEditor = activeContextElement.id === 'editableText';
-      const zoomFactor = isMainEditor ? 1.0 : webPreviewZoom;
       
-      const scaledSize = Math.round(sizePx * zoomFactor);
-      activeContextElement.style.setProperty('font-size', `${scaledSize}px`, 'important');
+      if (isMainEditor) {
+        // Update CSS variable and sidebar slider, don't set inline style
+        document.documentElement.style.setProperty('--card-font-size', `${sizePx}px`);
+        if (sliderFontSize && valFontSize) {
+          sliderFontSize.value = sizePx;
+          valFontSize.textContent = `${sizePx}px`;
+        }
+        activeContextElement.style.removeProperty('font-size');
+      } else {
+        const zoomFactor = webPreviewZoom;
+        const scaledSize = Math.round(sizePx * zoomFactor);
+        activeContextElement.style.setProperty('font-size', `${scaledSize}px`, 'important');
+      }
       
       // Update info text
       const ctxCurrentSizeText = document.getElementById('ctxCurrentSizeText');
       const isAr = (currentSiteLang === 'ar');
       if (ctxCurrentSizeText) {
-        ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizePt}pt` : `Current Size: ${sizePt}pt`;
-      }
-
-      // Also update the sidebar slider and CSS variable if it's the main editor!
-      if (isMainEditor) {
-        if (sliderFontSize && valFontSize) {
-          sliderFontSize.value = Math.round(sizePx);
-          valFontSize.textContent = `${Math.round(sizePx)}px`;
-        }
-        document.documentElement.style.setProperty('--card-font-size', `${Math.round(sizePx)}px`);
+        ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizePx}px` : `Current Size: ${sizePx}px`;
       }
     }
   };
@@ -2781,8 +2774,8 @@ function setupEventListeners() {
     ctxDecSize.addEventListener('click', (e) => {
       e.stopPropagation();
       if (ctxFontSizeInput) {
-        let val = parseFloat(ctxFontSizeInput.value) || 12;
-        val = Math.max(6, val - 1);
+        let val = parseFloat(ctxFontSizeInput.value) || 16;
+        val = Math.max(8, val - 2);
         ctxFontSizeInput.value = val;
         applyFontSize(val);
       }
@@ -2793,8 +2786,8 @@ function setupEventListeners() {
     ctxIncSize.addEventListener('click', (e) => {
       e.stopPropagation();
       if (ctxFontSizeInput) {
-        let val = parseFloat(ctxFontSizeInput.value) || 12;
-        val = Math.min(120, val + 1);
+        let val = parseFloat(ctxFontSizeInput.value) || 16;
+        val = Math.min(150, val + 2);
         ctxFontSizeInput.value = val;
         applyFontSize(val);
       }
@@ -2805,7 +2798,7 @@ function setupEventListeners() {
     ctxFontSizeInput.addEventListener('input', (e) => {
       let val = parseFloat(ctxFontSizeInput.value);
       if (!isNaN(val)) {
-        val = Math.max(6, Math.min(120, val));
+        val = Math.max(8, Math.min(150, val));
         applyFontSize(val);
       }
     });
