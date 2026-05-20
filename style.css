@@ -890,14 +890,24 @@ html[dir="ltr"] .sidebar-top-actions {
 .canvas-wrapper {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 80px 24px 24px 24px;
-  background: radial-gradient(circle at center, rgba(197, 168, 128, 0.03) 0%, transparent 75%);
   flex-grow: 1;
   flex-shrink: 1;
   min-height: 0;
   overflow-y: auto;
+}
+
+.canvas-area {
+  width: 100%;
+  min-height: calc(100vh - 60px - 104px); /* Full height minus top navigation (60px) and vertical padding (80px + 24px = 104px) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(circle at center, rgba(197, 168, 128, 0.03) 0%, transparent 75%);
 }
 
 /* ==========================================================================
@@ -1149,6 +1159,9 @@ html[lang="ar"] .arabic-ui-only {
 }
 
 .app-footer {
+  width: 100%;
+  margin-top: 60px;
+  flex-shrink: 0;
   height: 40px;
   border-top: 1px solid var(--border-ui);
   display: flex;
@@ -1409,6 +1422,9 @@ html[lang="ar"] .arabic-ui-only {
   }
   .canvas-wrapper {
     padding: 56px 16px 16px 16px;
+  }
+  .canvas-area {
+    min-height: calc(100vh - 56px - 72px);
   }
   
   .poetry-card {
@@ -2212,7 +2228,7 @@ body.view-mode-design button.design-only {
 }
 
 /* Checkerboard background */
-.canvas-wrapper.has-grid {
+.canvas-wrapper.has-grid .canvas-area {
   background-image: 
     linear-gradient(45deg, #141519 25%, transparent 25%),
     linear-gradient(-45deg, #141519 25%, transparent 25%),
@@ -2221,6 +2237,13 @@ body.view-mode-design button.design-only {
   background-size: 24px 24px !important;
   background-position: 0 0, 0 12px, 12px -12px, -12px 0px !important;
   background-color: #08080a !important; /* Alternates with #141519 */
+}
+
+.view-mode-document .canvas-area {
+  min-height: auto !important;
+  background: none !important;
+  padding: 0 !important;
+  display: block !important;
 }
 
 /* Document Mode Paper Styling */
@@ -2359,7 +2382,8 @@ body.view-mode-design button.design-only {
     height: auto !important;
     padding: 0 !important;
   }
-  .canvas-wrapper {
+  .canvas-wrapper,
+  .canvas-area {
     background: none !important;
     padding: 0 !important;
     min-height: auto !important;
