@@ -3620,6 +3620,11 @@ function handleFontFileSelect() {
       updateFontStatus(true, `الخط النشط: ${file.name}`);
       
       // Automatically switch web preview to use this custom font
+      if (chkWebMultipleFonts) {
+        chkWebMultipleFonts.checked = false;
+        localStorage.setItem('diwan-web-multiple-fonts', 'false');
+      }
+      setWebTarget('all');
       if (selectWebFontSingle) {
         selectWebFontSingle.value = 'ArabicPoetryCustomUpload';
       }
@@ -3717,6 +3722,11 @@ async function handleWebFontFileInputChange() {
     const lastFont = webCustomFonts[webCustomFonts.length - 1];
     populateFontStyles(currentLang, lastFont.value);
     
+    if (chkWebMultipleFonts) {
+      chkWebMultipleFonts.checked = false;
+      localStorage.setItem('diwan-web-multiple-fonts', 'false');
+    }
+    setWebTarget('all');
     if (selectWebFontSingle) selectWebFontSingle.value = lastFont.value;
     if (selectWebFontHeadings) selectWebFontHeadings.value = lastFont.value;
     if (selectWebFontBody) selectWebFontBody.value = lastFont.value;
