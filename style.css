@@ -7076,28 +7076,48 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
   text-align: center;
 }
 
-.web-tpl-saas .web-brands-list {
+.web-tpl-saas .web-brands-ticker {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  margin-top: 10px;
+  padding: 10px 0;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
+}
+
+.web-tpl-saas .web-brands-track {
   display: flex;
-  justify-content: center;
+  width: max-content;
+  gap: 80px;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 36px;
-  opacity: 0.65;
+  animation: ticker-scroll 25s linear infinite;
 }
 
 .web-tpl-saas .web-brand-item {
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: 800 !important;
-  letter-spacing: 1px;
-  text-transform: lowercase;
-  opacity: 0.75;
+  letter-spacing: 1.5px;
+  text-transform: capitalize;
+  opacity: 0.65;
   outline: none;
   cursor: default;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
 }
 
 .web-tpl-saas .web-brand-item:hover {
   opacity: 1;
+  transform: scale(1.08);
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 /* Responsiveness overrides for SaaS Template */
