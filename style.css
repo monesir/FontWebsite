@@ -1430,6 +1430,10 @@ html[lang="ar"] .arabic-ui-only {
     padding: 66px 16px 30px 16px;
     box-sizing: border-box;
   }
+  body.view-mode-document .canvas-area {
+    min-height: calc(100vh - 56px) !important;
+    padding: 40px 16px !important;
+  }
   
   .poetry-card {
     min-height: auto;
@@ -2244,7 +2248,7 @@ body.view-mode-design button.design-only {
 }
 
 body.view-mode-document .canvas-area {
-  min-height: auto !important;
+  min-height: calc(100vh - 60px) !important;
   background: none;
   padding: 40px 24px !important;
   display: flex !important;
