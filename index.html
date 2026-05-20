@@ -641,6 +641,21 @@
         
         <!-- Right Section (Far Left in Arabic RTL): Export & Site Lang Toggle -->
         <div class="top-nav-right">
+          <!-- Canvas Utilities in Top Bar -->
+          <div class="top-nav-utilities design-only">
+            <button id="btnToggleGrid" class="btn-nav-utility" title="شبكة الخلفية / Checkerboard Grid" data-i18n-title="grid_btn_title">
+              <i class="fa-solid fa-border-all"></i>
+            </button>
+            
+            <button id="btnReset" class="btn-nav-utility" title="إعادة تعيين" data-i18n-title="reset_btn_title">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </button>
+            
+            <button id="btnClear" class="btn-nav-utility" title="مسح النص" data-i18n-title="clear_btn_title">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+
           <!-- Split Save/Export Buttons -->
           <div class="split-btn-container design-only">
             <button id="btnExport" class="btn-primary split-btn-main">
@@ -685,24 +700,9 @@
       
       <!-- Centered Card Canvas Viewport -->
       <div class="canvas-wrapper" id="canvasWrapper">
-        <!-- Floating Pages & Canvas Controls (Corner below top bar, left of sidebar in RTL) -->
+        <!-- Floating Pages Switcher (Corner below top bar, left of sidebar in RTL) -->
         <div class="canvas-floating-controls design-only">
-          <!-- Row of Separated Utility Buttons -->
-          <div class="canvas-panel-utilities">
-            <button id="btnToggleGrid" class="btn-utility-floating" title="شبكة الخلفية / Checkerboard Grid" data-i18n-title="grid_btn_title">
-              <i class="fa-solid fa-border-all"></i>
-            </button>
-            
-            <button id="btnReset" class="btn-utility-floating" title="إعادة تعيين" data-i18n-title="reset_btn_title">
-              <i class="fa-solid fa-arrow-rotate-left"></i>
-            </button>
-            
-            <button id="btnClear" class="btn-utility-floating" title="مسح النص" data-i18n-title="clear_btn_title">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </div>
-
-          <!-- Horizontal Pages Switcher Bar below the utilities -->
+          <!-- Horizontal Pages Switcher Bar -->
           <div class="canvas-pages-bar-wrapper">
             <div id="carouselPageList" class="carousel-page-list">
               <!-- Dynamically populated buttons: Page 1, Page 2... -->

@@ -836,6 +836,48 @@ html[dir="ltr"] .sidebar-top-actions {
   gap: 10px;
 }
 
+/* Top Nav Utilities (Grid, Reset, Clear) */
+.top-nav-utilities {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-nav-utility {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid var(--border-ui) !important;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-nav-utility:hover {
+  background: rgba(197, 168, 128, 0.08);
+  border-color: rgba(197, 168, 128, 0.3) !important;
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-nav-utility:active {
+  transform: translateY(0);
+}
+
+.btn-nav-utility.active {
+  background: rgba(197, 168, 128, 0.15);
+  border-color: var(--accent) !important;
+  color: var(--accent);
+}
+
+.btn-nav-utility i {
+  font-size: 13px;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -1349,6 +1391,20 @@ html[lang="ar"] .arabic-ui-only {
   .top-nav-right {
     gap: 6px;
   }
+  
+  .top-nav-utilities {
+    gap: 4px;
+  }
+  
+  .btn-nav-utility {
+    width: 28px;
+    height: 28px;
+    border-radius: 5px;
+  }
+  
+  .btn-nav-utility i {
+    font-size: 11px;
+  }
 }
 
 /* ==========================================================================
@@ -1715,43 +1771,7 @@ html[dir="ltr"] .canvas-floating-controls {
   align-items: flex-start;
 }
 
-/* Row of separated utility buttons */
-.canvas-panel-utilities {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
 
-/* Separate floating glass utility button */
-.btn-utility-floating {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  background: rgba(15, 15, 18, 0.65);
-  color: rgba(255, 255, 255, 0.65);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-}
-.btn-utility-floating:hover {
-  background: rgba(197, 168, 128, 0.08);
-  border-color: rgba(197, 168, 128, 0.4) !important;
-  color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(197, 168, 128, 0.2);
-}
-.btn-utility-floating:active {
-  transform: translateY(0);
-}
-.btn-utility-floating i {
-  font-size: 13px;
-}
 
 /* Separated horizontal pages switcher bar below utilities */
 .canvas-pages-bar-wrapper {
@@ -1863,12 +1883,6 @@ html[dir="ltr"] .canvas-floating-controls {
   html[dir="rtl"] .canvas-floating-controls { right: 10px; }
   html[dir="ltr"] .canvas-floating-controls { left: 10px; }
 
-  .btn-utility-floating {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    font-size: 11px;
-  }
 
   .canvas-pages-bar-wrapper {
     padding: 4px 6px;
