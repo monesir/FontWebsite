@@ -3176,6 +3176,15 @@ function updateUISiteLanguage(lang) {
   document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
   document.documentElement.setAttribute('lang', lang);
   
+  // Update Meta Tags for SEO dynamically
+  if (lang === 'ar') {
+    document.title = "محرر الخطوط | أداة اختبار وتصميم الخطوط العربية والإنجليزية";
+    document.querySelector('meta[name="description"]')?.setAttribute("content", "محرر الخطوط: أداة مجانية وتفاعلية لتجربة واختبار الخطوط العربية والإنجليزية اونلاين. اكتب نصوصك، جرب مختلف الأنماط، ونسق تصاميمك بدقة واحترافية عالية.");
+  } else {
+    document.title = "Font Editor | Test & Design Arabic and English Fonts";
+    document.querySelector('meta[name="description"]')?.setAttribute("content", "Font Editor: A free interactive web tool to test and preview Arabic and English fonts online. Write your texts, try different styles, and format designs with high precision.");
+  }
+  
   // 1. Text elements translations
   const elements = document.querySelectorAll('[data-i18n]');
   elements.forEach(el => {

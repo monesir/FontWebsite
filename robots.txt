@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://monesir.github.io/FontWebsite/sitemap.xml
