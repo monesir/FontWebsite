@@ -593,22 +593,8 @@
     <main class="main-content">
       <!-- Top Action Navigation -->
       <header class="top-nav">
-        <!-- Carousel Page Manager in the corner between top-nav and sidebar -->
-        <div class="top-nav-carousel-wrapper design-only">
-          <div id="carouselPageList" class="carousel-page-list">
-            <!-- Dynamically populated buttons: Page 1, Page 2... -->
-          </div>
-          <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" aria-label="إضافة صفحة جديدة" data-i18n-title="add_page_title">
-            <i class="fa-solid fa-plus"></i>
-          </button>
-          <button id="btnDeletePage" class="btn-icon-delete" title="حذف الصفحة الحالية" aria-label="حذف الصفحة الحالية" data-i18n-title="delete_page_title" disabled>
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        </div>
-
-        <!-- Left Side: Mobile Toggle, Brand Title, Font Indicator, Word Counter -->
+        <!-- Left Side (Far Right in Arabic RTL): Font Indicator & Word Counter -->
         <div class="top-nav-left">
-
           <!-- Font Name Indicator -->
           <div class="font-indicator desktop-only">
             <i class="fa-solid fa-font" style="color: var(--accent); margin-inline-end: 6px; font-size: 11px;"></i>
@@ -638,26 +624,8 @@
           </div>
         </div>
         
-        <!-- Right Section: Actions & Buttons -->
+        <!-- Right Section (Far Left in Arabic RTL): Export & Site Lang Toggle -->
         <div class="top-nav-right">
-          <!-- Secondary Actions (Desktop: Inline row, Mobile: Styled floating dropdown) -->
-          <div class="header-actions">
-            <!-- Background Checkerboard Grid Toggle -->
-            <button id="btnToggleGrid" class="btn-secondary btn-icon-only" title="شبكة الخلفية / Checkerboard Grid">
-              <i class="fa-solid fa-border-all"></i>
-            </button>
-            
-            <button id="btnReset" class="btn-secondary" title="إعادة تعيين" data-i18n-title="reset_btn_title">
-              <i class="fa-solid fa-arrow-rotate-left"></i>
-              <span data-i18n="reset_btn_text">تعيين</span>
-            </button>
-            
-            <button id="btnClear" class="btn-secondary" title="مسح النص" data-i18n-title="clear_btn_title">
-              <i class="fa-solid fa-trash-can"></i>
-              <span data-i18n="clear_btn_text">مسح</span>
-            </button>
-          </div>
-
           <!-- Split Save/Export Buttons -->
           <div class="split-btn-container design-only">
             <button id="btnExport" class="btn-primary split-btn-main">
@@ -691,7 +659,6 @@
             </div>
           </div>
 
-
           <!-- Site Language Toggle Button -->
           <button class="btn-secondary" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language" style="border: 1px solid var(--border-ui);">
             <i class="fa-solid fa-globe"></i>
@@ -707,6 +674,37 @@
       
       <!-- Centered Card Canvas Viewport -->
       <div class="canvas-wrapper" id="canvasWrapper">
+        <!-- Floating Pages Manager (Corner below top bar, left of sidebar in RTL) -->
+        <div class="canvas-pages-panel design-only">
+          <div id="carouselPageList" class="carousel-page-list">
+            <!-- Dynamically populated buttons: Page 1, Page 2... -->
+          </div>
+          <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" aria-label="إضافة صفحة جديدة" data-i18n-title="add_page_title">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button id="btnDeletePage" class="btn-icon-delete" title="حذف الصفحة الحالية" aria-label="حذف الصفحة الحالية" data-i18n-title="delete_page_title" disabled>
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
+        <!-- Floating Utilities Panel (Below top bar, far side in RTL) -->
+        <div class="canvas-utility-panel design-only">
+          <!-- Background Checkerboard Grid Toggle -->
+          <button id="btnToggleGrid" class="btn-secondary btn-icon-only" title="شبكة الخلفية / Checkerboard Grid">
+            <i class="fa-solid fa-border-all"></i>
+          </button>
+          
+          <button id="btnReset" class="btn-secondary" title="إعادة تعيين" data-i18n-title="reset_btn_title">
+            <i class="fa-solid fa-arrow-rotate-left"></i>
+            <span data-i18n="reset_btn_text">تعيين</span>
+          </button>
+          
+          <button id="btnClear" class="btn-secondary" title="مسح النص" data-i18n-title="clear_btn_title">
+            <i class="fa-solid fa-trash-can"></i>
+            <span data-i18n="clear_btn_text">مسح</span>
+          </button>
+        </div>
+
         <div class="poetry-card royal-charcoal has-shadow has-border-double ratio-auto" id="poetryCard">
           <!-- Background image container for custom images -->
           <div class="card-bg-image" id="cardBgImage"></div>

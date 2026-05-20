@@ -826,10 +826,11 @@ body {
 }
 
 .canvas-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 80px 24px 24px 24px;
   background: radial-gradient(circle at center, rgba(197, 168, 128, 0.03) 0%, transparent 75%);
   min-height: calc(100vh - 60px);
   flex-shrink: 0;
@@ -1339,7 +1340,7 @@ html[lang="ar"] .arabic-ui-only {
     height: 56px;
   }
   .canvas-wrapper {
-    padding: 16px;
+    padding: 56px 16px 16px 16px;
   }
   
   .poetry-card {
@@ -1624,45 +1625,72 @@ html[lang="ar"] .arabic-ui-only {
 }
 
 /* Top Action Bar Carousel styling - Corner Panel */
-.top-nav-carousel-wrapper {
+/* Floating Panels inside Canvas Area */
+.canvas-pages-panel {
+  position: absolute;
+  top: 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: rgba(20, 20, 25, 0.5); /* gorgeous premium dark glassmorphism block */
+  gap: 10px;
+  background: rgba(15, 15, 18, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-inline-end: 1px solid var(--border-ui); /* clean border separating it from top bar contents */
-  height: 100%;
-  padding: 0 20px;
-  margin: 0;
-  border-radius: 0; /* perfectly flush in the corner */
+  border: 1px solid var(--border-ui);
+  padding: 6px 14px;
+  border-radius: 30px; /* premium pill shape */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 40;
+  transition: all var(--transition-normal);
 }
 
-body.view-mode-design .top-nav {
-  padding-inline-start: 0;
-  padding-inline-end: 24px;
+.canvas-utility-panel {
+  position: absolute;
+  top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 15, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-ui);
+  padding: 6px 12px;
+  border-radius: 30px; /* matching pill shape */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 40;
+  transition: all var(--transition-normal);
 }
 
-body.view-mode-design .top-nav-carousel-wrapper.design-only {
-  display: flex !important;
+/* Logical directions positioning */
+html[dir="rtl"] .canvas-pages-panel {
+  right: 24px;
+}
+html[dir="ltr"] .canvas-pages-panel {
+  left: 24px;
 }
 
-.top-nav-carousel-wrapper .carousel-page-list {
+html[dir="rtl"] .canvas-utility-panel {
+  left: 24px;
+}
+html[dir="ltr"] .canvas-utility-panel {
+  right: 24px;
+}
+
+/* Floating panel page list styling */
+.canvas-pages-panel .carousel-page-list {
   display: flex;
   gap: 6px;
-  flex-wrap: nowrap;
-  flex: none;
+  align-items: center;
 }
 
-/* Style carousel buttons inside top nav wrapper */
-.top-nav-carousel-wrapper .carousel-btn-page {
-  min-width: 28px;
-  height: 28px;
+/* Buttons inside the floating pages panel */
+.canvas-pages-panel .carousel-btn-page {
+  min-width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -1670,22 +1698,19 @@ body.view-mode-design .top-nav-carousel-wrapper.design-only {
   justify-content: center;
   transition: all var(--transition-fast);
 }
-
-.top-nav-carousel-wrapper .carousel-btn-page:hover {
+.canvas-pages-panel .carousel-btn-page:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
 }
-
-.top-nav-carousel-wrapper .carousel-btn-page.active {
+.canvas-pages-panel .carousel-btn-page.active {
   background: var(--accent);
   color: #000;
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.4);
 }
 
-/* Add page button */
-.top-nav-carousel-wrapper .btn-icon-add {
-  width: 28px;
-  height: 28px;
+.canvas-pages-panel .btn-icon-add {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 1px dashed rgba(197, 168, 128, 0.4);
   background: rgba(197, 168, 128, 0.05);
@@ -1697,18 +1722,16 @@ body.view-mode-design .top-nav-carousel-wrapper.design-only {
   transition: all var(--transition-fast);
   font-size: 11px;
 }
-
-.top-nav-carousel-wrapper .btn-icon-add:hover {
+.canvas-pages-panel .btn-icon-add:hover {
   background: var(--accent);
   color: #000;
   border-color: var(--accent);
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.3);
 }
 
-/* Delete page button */
-.top-nav-carousel-wrapper .btn-icon-delete {
-  width: 28px;
-  height: 28px;
+.canvas-pages-panel .btn-icon-delete {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: none;
   background: rgba(239, 68, 68, 0.08);
@@ -1720,38 +1743,79 @@ body.view-mode-design .top-nav-carousel-wrapper.design-only {
   transition: all var(--transition-fast);
   font-size: 11px;
 }
-
-.top-nav-carousel-wrapper .btn-icon-delete:hover:not(:disabled) {
+.canvas-pages-panel .btn-icon-delete:hover:not(:disabled) {
   background: rgb(239, 68, 68);
   color: #fff;
   box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
 }
-
-.top-nav-carousel-wrapper .btn-icon-delete:disabled {
+.canvas-pages-panel .btn-icon-delete:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   background: transparent;
   color: rgba(255, 255, 255, 0.15);
 }
 
+/* Floating Utility panel buttons styling */
+.canvas-utility-panel .btn-secondary {
+  border: none;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.6);
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.canvas-utility-panel .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+}
+.canvas-utility-panel .btn-secondary.btn-icon-only {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
-  .top-nav-carousel-wrapper {
+  .canvas-pages-panel {
+    top: 10px;
+    padding: 4px 8px;
     gap: 6px;
-    padding: 0 10px;
   }
-  
-  body.view-mode-design .top-nav {
-    padding-inline-start: 0;
-    padding-inline-end: 12px;
+  html[dir="rtl"] .canvas-pages-panel { right: 10px; }
+  html[dir="ltr"] .canvas-pages-panel { left: 10px; }
+
+  .canvas-utility-panel {
+    top: 10px;
+    padding: 4px 8px;
+    gap: 4px;
   }
-  
-  .top-nav-carousel-wrapper .carousel-btn-page,
-  .top-nav-carousel-wrapper .btn-icon-add,
-  .top-nav-carousel-wrapper .btn-icon-delete {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
+  html[dir="rtl"] .canvas-utility-panel { left: 10px; }
+  html[dir="ltr"] .canvas-utility-panel { right: 10px; }
+
+  .canvas-pages-panel .carousel-btn-page,
+  .canvas-pages-panel .btn-icon-add,
+  .canvas-pages-panel .btn-icon-delete,
+  .canvas-utility-panel .btn-secondary.btn-icon-only {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
     font-size: 10px;
+  }
+  .canvas-utility-panel .btn-secondary {
+    height: 26px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+  .canvas-utility-panel .btn-secondary span {
+    display: none; /* hide text on mobile */
   }
 }
 
