@@ -380,8 +380,18 @@ document.addEventListener('DOMContentLoaded', () => {
   checkAutoloadedFont();
   applyDefaults();
   
-  // Load saved site language (default to 'ar')
-  const savedSiteLang = localStorage.getItem('diwan-site-lang') || 'ar';
+  // Detect language from URL parameter (?lang=en or ?lang=ar), fallback to localStorage, fallback to 'ar'
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlLang = urlParams.get('lang');
+  
+  let savedSiteLang = 'ar';
+  if (urlLang === 'ar' || urlLang === 'en') {
+    savedSiteLang = urlLang;
+    localStorage.setItem('diwan-site-lang', urlLang);
+  } else {
+    savedSiteLang = localStorage.getItem('diwan-site-lang') || 'ar';
+  }
+  
   updateUISiteLanguage(savedSiteLang);
   switchLanguage(savedSiteLang);
 });
@@ -1959,6 +1969,17 @@ const uiTranslations = {
 function updateUISiteLanguage(lang) {
   currentSiteLang = lang;
   localStorage.setItem('diwan-site-lang', lang);
+  
+  // Sync URL search parameters for bilingual SEO indexing (so crawlers see localized pages)
+  try {
+    const newUrl = new URL(window.location.href);
+    if (newUrl.searchParams.get('lang') !== lang) {
+      newUrl.searchParams.set('lang', lang);
+      window.history.replaceState({}, '', newUrl.toString());
+    }
+  } catch (e) {
+    console.warn("Could not update URL lang param:", e);
+  }
   
   // Set document level layout attributes
   document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
