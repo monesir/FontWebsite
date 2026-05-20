@@ -2847,11 +2847,7 @@ body.view-mode-web .canvas-pages-panel {
   display: flex;
 }
 
-.web-tpl-magazine #webContentMagazine {
-  display: flex;
-}
-
-.web-tpl-portfolio #webContentPortfolio {
+.web-tpl-store #webContentStore {
   display: flex;
 }
 
@@ -3500,151 +3496,129 @@ body.view-mode-web .canvas-pages-panel {
 }
 
 /* --------------------------------------------------------------------------
-   Cultural Magazine Template Overrides
+   Electronics E-commerce Storefront Template Overrides
    -------------------------------------------------------------------------- */
-.web-tpl-magazine .web-preview-content {
-  font-family: 'Georgia', 'Times New Roman', serif;
+.web-tpl-store .web-preview-content {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.web-tpl-magazine .web-header {
-  border-bottom: 3px double rgba(255, 255, 255, 0.15) !important;
+/* Store Grid & Card styles */
+.web-store-grid {
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 24px !important;
 }
 
-.web-preview-wrapper.web-theme-light.web-tpl-magazine .web-header {
-  border-bottom: 3px double rgba(0, 0, 0, 0.1) !important;
+@media (max-width: 1024px) {
+  .web-store-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
-.web-preview-wrapper.web-theme-amber.web-tpl-magazine .web-header {
-  border-bottom: 3px double rgba(139, 115, 85, 0.2) !important;
+@media (max-width: 640px) {
+  .web-store-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
-.web-tpl-magazine .web-feature-card {
-  border: 3px double rgba(255, 255, 255, 0.15) !important;
-  border-radius: 4px !important;
-  background: transparent !important;
-}
-
-.web-preview-wrapper.web-theme-light.web-tpl-magazine .web-feature-card {
-  border: 3px double rgba(0, 0, 0, 0.08) !important;
-  box-shadow: none !important;
-}
-
-.web-preview-wrapper.web-theme-amber.web-tpl-magazine .web-feature-card {
-  border: 3px double rgba(139, 115, 85, 0.2) !important;
-  box-shadow: none !important;
-}
-
-.web-tpl-magazine .web-testimonial {
-  border: 3px double rgba(255, 255, 255, 0.15) !important;
-  border-radius: 4px !important;
-  background: transparent !important;
-  border-inline-start: 3px double rgba(255, 255, 255, 0.15) !important;
+.web-product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  padding: 30px 24px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
 }
 
-.web-preview-wrapper.web-theme-light.web-tpl-magazine .web-testimonial {
-  border: 3px double rgba(0, 0, 0, 0.08) !important;
+.web-product-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(212, 175, 55, 0.3) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
 }
 
-.web-preview-wrapper.web-theme-amber.web-tpl-magazine .web-testimonial {
-  border: 3px double rgba(139, 115, 85, 0.2) !important;
+.web-product-icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(212, 175, 55, 0.1) !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px !important;
+  color: var(--accent-gold) !important;
+  font-size: 24px !important;
+  transition: all 0.3s ease !important;
 }
 
-.web-tpl-magazine .web-btn {
-  border-radius: 0 !important;
-  border: 1px solid currentColor !important;
-  background: transparent !important;
-  color: inherit !important;
-}
-
-.web-tpl-magazine .web-btn-primary {
-  background: currentColor !important;
+.web-product-card:hover .web-product-icon {
+  background: var(--accent-gold) !important;
   color: #000 !important;
+  transform: scale(1.05);
 }
 
-.web-preview-wrapper.web-theme-light.web-tpl-magazine .web-btn-primary {
-  color: #fff !important;
+.web-product-category {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
+  font-weight: 600;
 }
 
-.web-preview-wrapper.web-theme-amber.web-tpl-magazine .web-btn-primary {
-  color: #faf6eb !important;
+.web-product-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  margin-bottom: 12px !important;
+  min-height: 48px;
 }
 
-.web-tpl-magazine .web-hero-badge {
-  border-radius: 0 !important;
-  border: 1px solid currentColor !important;
+.web-product-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 20px;
 }
 
-/* --------------------------------------------------------------------------
-   Personal Portfolio Template Overrides
-   -------------------------------------------------------------------------- */
-.web-tpl-portfolio .web-preview-content {
-  font-family: 'Courier New', Courier, monospace;
+.web-product-btn {
+  width: 100% !important;
+  margin-top: auto !important;
+  border-radius: 8px !important;
 }
 
-.web-tpl-portfolio .web-header {
-  border-bottom: none !important;
-  padding: 30px 40px;
+/* Light Theme Specifics */
+.web-preview-wrapper.web-theme-light .web-product-card {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
-.web-tpl-portfolio .web-hero {
-  text-align: start !important;
-  align-items: flex-start !important;
-  padding: 100px 40px;
+.web-preview-wrapper.web-theme-light .web-product-card:hover {
+  background: #ffffff !important;
+  border-color: #d4af37 !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
 }
 
-.web-tpl-portfolio .web-hero-title {
-  font-size: 52px !important;
-  line-height: 1.15;
-  text-align: start !important;
+.web-preview-wrapper.web-theme-light .web-product-category {
+  color: rgba(0, 0, 0, 0.5);
 }
 
-.web-tpl-portfolio .web-hero-desc {
-  font-size: 18px !important;
-  text-align: start !important;
-  max-width: 600px;
-  margin-inline-start: 0;
+/* Amber Theme Specifics */
+.web-preview-wrapper.web-theme-amber .web-product-card {
+  background: rgba(139, 115, 85, 0.04) !important;
+  border: 1px solid rgba(139, 115, 85, 0.12) !important;
 }
 
-.web-tpl-portfolio .web-features-grid {
-  grid-template-columns: 1fr 1fr !important;
+.web-preview-wrapper.web-theme-amber .web-product-card:hover {
+  background: rgba(139, 115, 85, 0.08) !important;
+  border-color: rgba(212, 175, 55, 0.4) !important;
 }
 
-.web-tpl-portfolio .web-feature-card {
-  border: none !important;
-  background: transparent !important;
-  padding: 20px 0 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-.web-preview-wrapper.web-theme-light.web-tpl-portfolio .web-feature-card {
-  border-bottom: 1px solid #cbd5e1 !important;
-}
-
-.web-preview-wrapper.web-theme-amber.web-tpl-portfolio .web-feature-card {
-  border-bottom: 1px solid rgba(139, 115, 85, 0.2) !important;
-}
-
-.web-tpl-portfolio .web-testimonial {
-  border-inline-start: none !important;
-  background: transparent !important;
-  padding: 40px 0 !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 0 !important;
-  margin: 40px 0;
-}
-
-.web-preview-wrapper.web-theme-light.web-tpl-portfolio .web-testimonial {
-  border-top: 1px solid #cbd5e1 !important;
-  border-bottom: 1px solid #cbd5e1 !important;
-}
-
-.web-preview-wrapper.web-theme-amber.web-tpl-portfolio .web-testimonial {
-  border-top: 1px solid rgba(139, 115, 85, 0.2) !important;
-  border-bottom: 1px solid rgba(139, 115, 85, 0.2) !important;
+.web-preview-wrapper.web-theme-amber .web-product-category {
+  color: rgba(139, 115, 85, 0.6);
 }
 
 /* --------------------------------------------------------------------------
@@ -3837,12 +3811,9 @@ body.view-mode-web .canvas-pages-panel {
    ========================================================================== */
 
 /* Hide SaaS exclusive elements in other templates */
-.web-tpl-magazine .web-hero-visual,
-.web-tpl-portfolio .web-hero-visual,
-.web-tpl-magazine .web-hero-stats,
-.web-tpl-portfolio .web-hero-stats,
-.web-tpl-magazine .web-brands-row,
-.web-tpl-portfolio .web-brands-row {
+.web-tpl-store .web-hero-visual,
+.web-tpl-store .web-hero-stats,
+.web-tpl-store .web-brands-row {
   display: none !important;
 }
 

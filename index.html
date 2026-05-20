@@ -590,15 +590,12 @@
         <!-- Web Template Select -->
         <div class="control-group">
           <label class="control-label" data-i18n="web_template_lbl">قالب الموقع</label>
-          <div class="ratio-grid web-template-grid">
+          <div class="ratio-grid web-template-grid" style="grid-template-columns: repeat(2, 1fr);">
             <button class="ratio-btn active" id="btnWebTemplateSaas" data-template="saas">
               <span data-i18n="web_template_saas">موقع تقني / SaaS</span>
             </button>
-            <button class="ratio-btn" id="btnWebTemplateMagazine" data-template="magazine">
-              <span data-i18n="web_template_magazine">بوابة ثقافية</span>
-            </button>
-            <button class="ratio-btn" id="btnWebTemplatePortfolio" data-template="portfolio">
-              <span data-i18n="web_template_portfolio">معرض أعمال شخصي</span>
+            <button class="ratio-btn" id="btnWebTemplateStore" data-template="store">
+              <span data-i18n="web_template_store">متجر إلكتروني</span>
             </button>
           </div>
         </div>
@@ -1128,57 +1125,73 @@
             </footer>
           </div>
 
-          <!-- Cultural Magazine / Portal Layout -->
-          <div id="webContentMagazine" class="web-template-content">
-            <!-- Magazine Header -->
+          <!-- Electronics E-commerce Storefront Layout -->
+          <div id="webContentStore" class="web-template-content">
+            <!-- Store Header -->
             <header class="web-header">
-              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="mag_logo">ديوان الثقافة</div>
+              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
               <nav class="web-nav">
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_mag">المجلة</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_poems">قصائد الأدب</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_phil">فلسفة وفكر</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_authors">كتّاب ديوان</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_about">عن المجلة</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_home">الرئيسية</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_phones">الهواتف والأجهزة</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_audio">الصوتيات الراقية</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_accessories">ملحقات التصميم</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_contact">تواصل معنا</a>
               </nav>
               <div class="web-header-actions">
-                <button class="web-btn web-btn-outline" contenteditable="true" spellcheck="false" data-i18n="mag_btn_login">تسجيل الدخول</button>
-                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false" data-i18n="mag_btn_sub">اشترك الآن</button>
+                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false"><i class="fa-solid fa-cart-shopping" style="margin-left: 6px;"></i><span data-i18n="store_cart_btn">سلة المشتريات (3)</span></button>
               </div>
             </header>
 
             <!-- Hero Section -->
             <section class="web-hero">
               <div class="web-hero-content">
-                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="mag_hero_title">حين تصبح الكلمة وطناً، والقصيدة بيتاً.</h1>
-                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="mag_hero_desc">مجلة ثقافية أدبية تعنى بالشعر العربي المعاصر، النقد الأدبي، والفنون البصرية الراقية.</p>
+                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك.</h1>
+                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="store_hero_desc">اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.</p>
                 <div class="web-hero-buttons">
-                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="mag_btn_primary">اقرأ العدد الحالي</button>
-                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="mag_btn_secondary">تصفح الأرشيف</button>
+                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="store_hero_cta_primary">تسوق العروض الحصرية</button>
+                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="store_hero_cta_secondary">شاهد الفيديو الترويجي</button>
                 </div>
               </div>
             </section>
 
-            <!-- Features Section -->
+            <!-- Product Showcase Grid -->
             <section class="web-features">
               <div class="web-section-header">
-                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat_sec_title">مقالات مختارة</h2>
-                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat_sec_desc">حوارات فكرية وقراءات نقدية في الأدب المعاصر والتايبوغرافي</p>
+                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="store_grid_title">أحدث التقنيات المختارة</h2>
+                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="store_grid_desc">منتجات حائزة على جوائز تجمع بين متعة الاستخدام وأناقة التصميم العصري الفخم</p>
               </div>
-              <div class="web-features-grid">
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat1_title">جماليات الخط العربي في العصر الرقمي</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat1_desc">قراءة فلسفية في تطور الحرف العربي وتأثير التكنولوجيا المعاصرة على هويته البصرية.</p>
+              <div class="web-features-grid web-store-grid">
+                <!-- Product Card 1 -->
+                <div class="web-feature-card web-product-card">
+                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-headphones"></i></div>
+                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod1_cat">صوتيات راقية</div>
+                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod1_title">سماعات رأس ديوان اللاسلكية بنقاء فائق</h3>
+                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod1_price">$299</div>
+                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod1_btn">أضف إلى السلة</button>
                 </div>
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-book-open"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat2_title">أثر التشكيل وحركات الإعراب على موسيقى الشعر</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat2_desc">كيف يسهم ضبط أواخر الكلمات وحركات الحروف في تشكيل البناء الموسيقي والتعبيري للقصيدة.</p>
+                <!-- Product Card 2 -->
+                <div class="web-feature-card web-product-card">
+                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-keyboard"></i></div>
+                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod2_cat">ملحقات مكتبية</div>
+                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod2_title">لوحة مفاتيح ميكانيكية مخصصة للمصممين</h3>
+                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod2_price">$189</div>
+                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod2_btn">أضف إلى السلة</button>
                 </div>
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-feather-point"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat3_title">مدارس الشعر الحر: ثورة اللفظ والمعنى</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat3_desc">دراسة نقدية حول نشأة قصيدة التفعيلة وتحررها من القوالب التقليدية مع الحفاظ على روح الهوية.</p>
+                <!-- Product Card 3 -->
+                <div class="web-feature-card web-product-card">
+                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-stopwatch-20"></i></div>
+                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod3_cat">أجهزة ذكية</div>
+                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod3_title">ساعة ديوان الرياضية الذكية الجيل الخامس</h3>
+                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod3_price">$249</div>
+                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod3_btn">أضف إلى السلة</button>
+                </div>
+                <!-- Product Card 4 -->
+                <div class="web-feature-card web-product-card">
+                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-display"></i></div>
+                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod4_cat">شاشات احترافية</div>
+                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod4_title">شاشة منحنية احترافية فائقة الدقة 34 بوصة</h3>
+                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod4_price">$549</div>
+                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod4_btn">أضف إلى السلة</button>
                 </div>
               </div>
             </section>
@@ -1187,10 +1200,10 @@
             <section class="web-testimonial">
               <div class="web-testimonial-content">
                 <i class="fa-solid fa-quote-right quote-icon"></i>
-                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="mag_quote_text">«الشعر هو الفن الذي يجعلنا نلمس اللامرئي، ونسمع الصمت، ونرى ما وراء الكلمات. إنه تنفس الروح في جسد اللغة الحية.»</p>
+                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="store_quote_text">«لقد غيرت سماعات ديوان اللاسلكية تجربتي اليومية بالكامل، عزل الضوضاء فائق الذكاء وجودة الصوت لا تقارن بأي سماعات أخرى جربتها سابقاً.»</p>
                 <div class="web-testimonial-author">
-                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="mag_quote_author">د. أمين الجرجاني</div>
-                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="mag_quote_title">ناقد وباحث في جماليات الأدب العربي</div>
+                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="store_quote_author">سارة عبد الرحمن</div>
+                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="store_quote_title">مهندسة برمجيات وصانعة محتوى رقمي</div>
                 </div>
               </div>
             </section>
@@ -1199,115 +1212,24 @@
             <footer class="web-footer">
               <div class="web-footer-top">
                 <div class="web-footer-brand">
-                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="mag_logo">ديوان الثقافة</div>
-                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="mag_footer_desc">منبر أدبي يسعى لإحياء الفنون اللغوية العربية وإبراز جماليات التايبوغرافي العربي.</p>
+                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
+                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="store_footer_desc">متجرك التقني الأول لأحدث الابتكارات والأجهزة الإلكترونية الذكية بأعلى مواصفات الجودة وخدمة عملاء فائقة التميز.</p>
                 </div>
                 <div class="web-footer-links">
                   <div class="web-links-column">
-                    <h4 contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_title">الأقسام</h4>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_link1">دراسات نقدية</a>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_link2">قصائد وأقاصيص</a>
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_title">التسوق</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_link1">عروض مميزة</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_link2">أحدث الملحقات</a>
                   </div>
                   <div class="web-links-column">
-                    <h4 contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_title">المشاركة</h4>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_link1">أرسل مساهمتك</a>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_link2">شروط النشر</a>
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_title">المساعدة</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_link1">سياسة الضمان</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_link2">تتبع الشحنة</a>
                   </div>
                 </div>
               </div>
               <div class="web-footer-bottom">
-                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="mag_copyright">حقوق النشر © 2026 مجلة ديوان. جميع الحقوق محفوظة.</p>
-              </div>
-            </footer>
-          </div>
-
-          <!-- Personal Portfolio Layout -->
-          <div id="webContentPortfolio" class="web-template-content">
-            <!-- Portfolio Header -->
-            <header class="web-header">
-              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="port_logo">أنس بن أحمد</div>
-              <nav class="web-nav">
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_bio">السيرة الأدبية</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_col">الدواوين</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_poems">القصائد المختارة</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_contact">اتصل بي</a>
-              </nav>
-              <div class="web-header-actions">
-                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false" data-i18n="port_btn_book">طلب لقاء شعري</button>
-              </div>
-            </header>
-
-            <!-- Hero Section -->
-            <section class="web-hero">
-              <div class="web-hero-content">
-                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="port_hero_title">في محراب الحرف أكتب عمري قصيدة.</h1>
-                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="port_hero_desc">شاعر وكاتب معاصر، أفتش عن عمق المعاني في تفاصيل الحياة اليومية، وأصوغ المشاعر حبراً على ورق معتق يلامس الأفئدة.</p>
-                <div class="web-hero-buttons">
-                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="port_btn_primary">اقرأ آخر القصائد</button>
-                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="port_btn_secondary">تحميل ديواني الرقمي</button>
-                </div>
-              </div>
-            </section>
-
-            <!-- Features Section -->
-            <section class="web-features">
-              <div class="web-section-header">
-                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="port_feat_sec_title">دواوين ومؤلفات</h2>
-                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat_sec_desc">إصدارات شعرية وكتب منشورة تغني المكتبة العربية وتجسد الرحلة الوجدانية</p>
-              </div>
-              <div class="web-features-grid">
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-scroll"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat1_title">ديوان: تراتيل الصمت</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat1_desc">مجموعة شعرية فازت بجائزة الإبداع العربي المعاصر، تستلهم سكون الصحراء وهمس الريح.</p>
-                </div>
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-feather"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat2_title">كتاب: فلسفة المجاز</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat2_desc">قراءات نقدية وخواطر فكرية حول تطور المجاز في البلاغة العربية الكلاسيكية والحديثة.</p>
-                </div>
-                <div class="web-feature-card">
-                  <div class="web-feature-icon"><i class="fa-solid fa-compass"></i></div>
-                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat3_title">ديوان: موانئ الغربة</h3>
-                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat3_desc">قصائد وجدانية تحكي قصة الترحال والبحث عن الذات عبر عواصم العالم، بأسلوب تفعيلة متزن.</p>
-                </div>
-              </div>
-            </section>
-
-            <!-- Testimonial Section -->
-            <section class="web-testimonial">
-              <div class="web-testimonial-content">
-                <i class="fa-solid fa-quote-right quote-icon"></i>
-                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="port_quote_text">«القصيدة بيت نسكنه حين تضيق بنا المدائن، وهي مرآة نرى فيها انعكاس أرواحنا في أجمل وأصدق صورة ممكنة.»</p>
-                <div class="web-testimonial-author">
-                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="port_quote_author">أنس بن أحمد</div>
-                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="port_quote_title">شاعر وأكاديمي في الأدب العربي</div>
-                </div>
-              </div>
-            </section>
-
-            <!-- Footer -->
-            <footer class="web-footer">
-              <div class="web-footer-top">
-                <div class="web-footer-brand">
-                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="port_logo">أنس بن أحمد</div>
-                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="port_footer_desc">تواصل معي للتعاون الأدبي، الأمسيات الشعرية، أو القراءات النقدية والأكاديمية.</p>
-                </div>
-                <div class="web-footer-links">
-                  <div class="web-links-column">
-                    <h4 contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_title">روابط سريعة</h4>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_link1">الأمسيات القادمة</a>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_link2">المدونة الشخصية</a>
-                  </div>
-                  <div class="web-links-column">
-                    <h4 contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_title">تواصل</h4>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_link1">راسلني مباشرة</a>
-                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_link2">حساب تويتر</a>
-                  </div>
-                </div>
-              </div>
-              <div class="web-footer-bottom">
-                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="port_copyright">حقوق النشر © 2026 أنس بن أحمد. جميع الحقوق محفوظة.</p>
+                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="store_copyright">حقوق النشر © 2026 ديوان إلكترونكس. جميع الحقوق محفوظة.</p>
               </div>
             </footer>
           </div>
