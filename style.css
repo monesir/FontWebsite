@@ -1667,64 +1667,92 @@ html[lang="ar"] .arabic-ui-only {
 }
 
 /* Top Action Bar Carousel styling - Corner Panel */
-/* Floating Panels inside Canvas Area */
+
+/* Premium Unified Floating Card Control Panel */
 .canvas-pages-panel {
   position: absolute;
   top: 16px;
   display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(15, 15, 18, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-ui);
-  padding: 6px 14px;
-  border-radius: 30px; /* premium pill shape */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 40;
-  transition: all var(--transition-normal);
-}
-
-.canvas-utility-panel {
-  position: absolute;
-  top: 16px;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
   background: rgba(15, 15, 18, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-ui);
-  padding: 6px 12px;
-  border-radius: 30px; /* matching pill shape */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border-radius: 20px; /* Elegant card-like curves */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   z-index: 40;
   transition: all var(--transition-normal);
 }
 
-/* Logical directions positioning */
+/* Logical directional overrides */
 html[dir="rtl"] .canvas-pages-panel {
   right: 24px;
+  left: auto;
 }
 html[dir="ltr"] .canvas-pages-panel {
   left: 24px;
+  right: auto;
 }
 
-html[dir="rtl"] .canvas-utility-panel {
-  left: 24px;
-}
-html[dir="ltr"] .canvas-utility-panel {
-  right: 24px;
+/* Top Row: Utilities Layout */
+.canvas-panel-utilities {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-/* Floating panel page list styling */
+/* Glassmorphic icon buttons styling */
+.canvas-pages-panel .btn-secondary.btn-icon-only {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.canvas-pages-panel .btn-secondary.btn-icon-only:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+  transform: translateY(-1px);
+}
+.canvas-pages-panel .btn-secondary.btn-icon-only:active {
+  transform: translateY(0);
+}
+
+/* Elegant visual divider between top row and bottom row */
+.canvas-panel-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 2px 0;
+}
+
+/* Bottom Row: Pages row layout */
+.canvas-panel-pages-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
 .canvas-pages-panel .carousel-page-list {
   display: flex;
   gap: 6px;
   align-items: center;
 }
 
-/* Buttons inside the floating pages panel */
+/* Custom pages manager elements styling */
 .canvas-pages-panel .carousel-btn-page {
   min-width: 30px;
   height: 30px;
@@ -1797,67 +1825,29 @@ html[dir="ltr"] .canvas-utility-panel {
   color: rgba(255, 255, 255, 0.15);
 }
 
-/* Floating Utility panel buttons styling */
-.canvas-utility-panel .btn-secondary {
-  border: none;
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.6);
-  height: 30px;
-  padding: 0 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-.canvas-utility-panel .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-light);
-}
-.canvas-utility-panel .btn-secondary.btn-icon-only {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border-radius: 50%;
-  justify-content: center;
-}
-
+/* Mobile Responsiveness for combined panel */
 @media (max-width: 768px) {
   .canvas-pages-panel {
     top: 10px;
-    padding: 4px 8px;
+    padding: 6px 10px;
     gap: 6px;
+    border-radius: 16px;
   }
   html[dir="rtl"] .canvas-pages-panel { right: 10px; }
   html[dir="ltr"] .canvas-pages-panel { left: 10px; }
 
-  .canvas-utility-panel {
-    top: 10px;
-    padding: 4px 8px;
-    gap: 4px;
+  .canvas-panel-divider {
+    margin: 1px 0;
   }
-  html[dir="rtl"] .canvas-utility-panel { left: 10px; }
-  html[dir="ltr"] .canvas-utility-panel { right: 10px; }
 
+  .canvas-pages-panel .btn-secondary.btn-icon-only,
   .canvas-pages-panel .carousel-btn-page,
   .canvas-pages-panel .btn-icon-add,
-  .canvas-pages-panel .btn-icon-delete,
-  .canvas-utility-panel .btn-secondary.btn-icon-only {
+  .canvas-pages-panel .btn-icon-delete {
     width: 26px;
     height: 26px;
     min-width: 26px;
     font-size: 10px;
-  }
-  .canvas-utility-panel .btn-secondary {
-    height: 26px;
-    padding: 0 8px;
-    font-size: 10px;
-  }
-  .canvas-utility-panel .btn-secondary span {
-    display: none; /* hide text on mobile */
   }
 }
 
