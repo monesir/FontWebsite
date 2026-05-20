@@ -9,6 +9,7 @@ log_step_*.txt
 restored_from_*.html
 step_*.txt
 *.log
+.command-code-staging/
 
 # Editor & OS files
 .DS_Store

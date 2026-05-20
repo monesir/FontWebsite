@@ -164,7 +164,7 @@
       <!-- Font Loader Section -->
       <div class="control-section font-loader-section">
         <h2 class="section-title"><i class="fa-solid fa-file-font icon"></i><span data-i18n="font_loader_title">تحميل خط مخصص</span></h2>
-        <p class="section-desc" data-i18n="font_loader_desc">الخط الافتراضي محمل تلقائياً. لتحميل خط آخر لديك (OTF, TTF, WOFF, WOFF2)، اسحبه هنا أو انقر للاختيار.</p>
+        <p class="section-desc" data-i18n="font_loader_desc">اسحب ملف الخط الخاص بك هنا أو اضغط للاختيار لتخصيص البطاقة تماماً.</p>
         
         <div class="dropzone" id="fontDropzone">
           <input type="file" id="fontFileInput" accept=".otf,.ttf,.woff,.woff2" style="display: none;">
@@ -584,43 +584,17 @@
 
       <!-- Web Preview Style (Visible in Web Mode only) -->
       <div class="control-section web-only" style="display: none;">
-        <h2 class="section-title"><i class="fa-solid fa-laptop-code icon"></i><span data-i18n="web_page_settings">تنسيق قالب الموقع</span></h2>
-        <p class="section-desc" data-i18n="web_page_settings_desc">اختر قالب للموقع، ومظهر الألوان، وتحديد الخط المخصص.</p>
-        
-        <!-- Web Template Select -->
-        <div class="control-group">
-          <label class="control-label" data-i18n="web_template_lbl">قالب الموقع</label>
-          <div class="ratio-grid web-template-grid" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="ratio-btn active" id="btnWebTemplateSaas" data-template="saas">
-              <span data-i18n="web_template_saas">موقع تقني / SaaS</span>
-            </button>
-            <button class="ratio-btn" id="btnWebTemplateStore" data-template="store">
-              <span data-i18n="web_template_store">متجر إلكتروني</span>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Web Theme Toggle (Dark / Light / Amber) -->
-        <div class="control-group">
-          <label class="control-label" data-i18n="web_theme_lbl">مظهر الألوان</label>
-          <div class="ratio-grid web-theme-grid">
-            <button class="ratio-btn active" id="btnWebThemeDark" data-theme="dark">
-              <span data-i18n="web_theme_dark">داكن فاخر</span>
-            </button>
-            <button class="ratio-btn" id="btnWebThemeLight" data-theme="light">
-              <span data-i18n="web_theme_light">فاتح نظيف</span>
-            </button>
-            <button class="ratio-btn" id="btnWebThemeAmber" data-theme="amber">
-              <span data-i18n="web_theme_amber">عنبري ملكي</span>
-            </button>
-          </div>
-        </div>
+        <h2 class="section-title"><i class="fa-solid fa-laptop-code icon"></i><span data-i18n="web_page_settings">تنسيق خطوط قالب الموقع</span></h2>
+        <p class="section-desc" data-i18n="web_page_settings_desc">تعديل وتنسيق الخطوط الخاصة بقوالب المواقع الإلكترونية.</p>
 
         <!-- Web Font Settings -->
         <div class="control-group" id="grpWebFontMode">
-          <div class="checkbox-wrapper" style="display: flex; align-items: center; gap: 8px;">
-            <input type="checkbox" id="chkWebMultipleFonts" class="styled-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
-            <label for="chkWebMultipleFonts" class="checkbox-label" data-i18n="web_multi_fonts_lbl" style="font-weight: 600; cursor: pointer; user-select: none;">تفعيل خطوط متعددة للموقع</label>
+          <div class="toggle-buttons">
+            <label class="toggle-switch premium-web-toggle">
+              <input type="checkbox" id="chkWebMultipleFonts" checked>
+              <span class="slider-toggle"></span>
+              <span class="toggle-text" data-i18n="web_multi_fonts_lbl">تفعيل خطوط متعددة للموقع</span>
+            </label>
           </div>
         </div>
 
@@ -904,14 +878,47 @@
       <div class="web-preview-wrapper web-tpl-saas web-theme-dark web-target-all" id="webPreviewWrapper" style="display: none;">
         <!-- Mock Browser Topbar Frame -->
         <div class="mock-browser-header">
-          <div class="browser-dots">
-            <span class="dot dot-red"></span>
-            <span class="dot dot-yellow"></span>
-            <span class="dot dot-green"></span>
+          <div class="mock-browser-top-row">
+            <div class="browser-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="browser-tabs">
+              <div class="browser-tab active" id="tabWebTemplateSaas" data-template="saas">
+                <i class="fa-solid fa-laptop-code"></i>
+                <span data-i18n="web_template_saas">سيرة</span>
+              </div>
+              <div class="browser-tab" id="tabWebTemplateStore" data-template="store">
+                <i class="fa-solid fa-store"></i>
+                <span data-i18n="web_template_store">متجر</span>
+              </div>
+              <div class="browser-tab" id="tabWebTemplateDashboard" data-template="dashboard">
+                <i class="fa-solid fa-chart-line"></i>
+                <span data-i18n="web_template_dashboard">لوحة</span>
+              </div>
+            </div>
           </div>
-          <div class="browser-address-bar">
-            <i class="fa-solid fa-lock browser-lock"></i>
-            <span>diwan.com/preview</span>
+          <div class="web-theme-selector-row">
+            <div class="browser-address-bar">
+              <i class="fa-solid fa-lock browser-lock"></i>
+              <span>fontseditor.com/preview</span>
+            </div>
+            <!-- Browser Theme Switcher on the far right -->
+            <div class="web-theme-selector-chrome">
+              <button class="chrome-theme-btn active" id="btnWebThemeDark" data-theme="dark" title="داكن فاخر">
+                <i class="fa-solid fa-moon"></i>
+                <span data-i18n="web_theme_dark_short">داكن</span>
+              </button>
+              <button class="chrome-theme-btn" id="btnWebThemeLight" data-theme="light" title="فاتح نظيف">
+                <i class="fa-solid fa-sun"></i>
+                <span data-i18n="web_theme_light_short">فاتح</span>
+              </button>
+              <button class="chrome-theme-btn" id="btnWebThemeAmber" data-theme="amber" title="عنبري ملكي">
+                <i class="fa-solid fa-crown"></i>
+                <span data-i18n="web_theme_amber_short">عنبري</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -923,11 +930,11 @@
             <header class="web-header">
               <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="web_logo_text">منشئ سيرتي الذاتية الذكية</div>
               <nav class="web-nav">
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_home">المميزات</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_about">آلية العمل</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_templates">نماذج</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_features">الأسعار</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_contact">الأسئلة الشائعة</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="web_nav_home">المميزات</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="web_nav_about">آلية العمل</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="web_nav_templates">نماذج</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="web_nav_features">الأسعار</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="web_nav_contact">الأسئلة الشائعة</a>
               </nav>
               <div class="web-header-actions">
                 <button class="web-btn web-btn-outline" contenteditable="true" spellcheck="false" data-i18n="web_btn_login">تسجيل الدخول</button>
@@ -939,7 +946,7 @@
             <section class="web-hero">
               <div class="web-hero-content">
 
-                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="web_hero_title">سيرة مهنية تصنع مستقبلك الذكي.</h1>
+                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="web_hero_title">سيرة مهنية تصنع مستقبلك الذكي</h1>
                 <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="web_hero_desc">ارفع سيرتك مرة واحدة، ألصق وصف الوظيفة، واحصل على ملف PDF أنيق وجاهز لـ ATS مصمم لهذا الدور تحديدًا — خلال دقيقة تقريبًا.</p>
                 <div class="web-hero-buttons">
                   <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="web_btn_primary">ابدأ مجاناً ←</button>
@@ -1149,18 +1156,18 @@
                 <div class="store-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
               </div>
               <nav class="store-nav">
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_home">الرئيسية</a>
-                <a href="#" onclick="return false;" class="store-nav-link" data-filter="audio" contenteditable="true" spellcheck="false" data-i18n="store_nav_audio">الصوتيات الراقية</a>
-                <a href="#" onclick="return false;" class="store-nav-link" data-filter="keyboard" contenteditable="true" spellcheck="false" data-i18n="store_nav_accessories">ملحقات التصميم</a>
-                <a href="#" onclick="return false;" class="store-nav-link" data-filter="watch" contenteditable="true" spellcheck="false" data-i18n="store_nav_phones">الهواتف والأجهزة</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_contact">تواصل معنا</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="store_nav_home">الرئيسية</a>
+                <a class="store-nav-link" data-filter="audio" contenteditable="true" spellcheck="false" data-i18n="store_nav_audio">الصوتيات الراقية</a>
+                <a class="store-nav-link" data-filter="keyboard" contenteditable="true" spellcheck="false" data-i18n="store_nav_accessories">ملحقات التصميم</a>
+                <a class="store-nav-link" data-filter="watch" contenteditable="true" spellcheck="false" data-i18n="store_nav_phones">الهواتف والأجهزة</a>
+                <a contenteditable="true" spellcheck="false" data-i18n="store_nav_contact">تواصل معنا</a>
               </nav>
               <div class="store-header-actions">
                 <div class="store-search-box">
                   <i class="fa-solid fa-magnifying-glass search-icon"></i>
                   <input type="text" class="store-search-input" placeholder="ابحث عن منتج..." data-i18n-placeholder="store_search_placeholder" spellcheck="false">
                 </div>
-                <button class="store-wishlist-btn" title="المفضلة"><i class="fa-regular fa-heart"></i></button>
+                <button class="store-wishlist-btn" title="Wishlist"><i class="fa-regular fa-heart"></i></button>
                 <button class="store-cart-toggle-btn web-btn web-btn-primary" contenteditable="true" spellcheck="false">
                   <i class="fa-solid fa-bag-shopping"></i>
                   <span class="cart-badge">0</span>
@@ -1176,7 +1183,7 @@
                   <div class="store-hero-badge-container">
                     <span class="store-hero-badge" contenteditable="true" spellcheck="false" data-i18n="store_hero_badge">عرض إطلاق خاص - خصم 15٪ لفترة محدودة</span>
                   </div>
-                  <h1 class="store-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك.</h1>
+                  <h1 class="store-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك</h1>
                   <p class="store-hero-desc" contenteditable="true" spellcheck="false" data-i18n="store_hero_desc">اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.</p>
                   <div class="store-hero-price-tag">
                     <span class="price-label" data-i18n="store_hero_starts_at">تبدأ الأسعار من</span>
@@ -1530,7 +1537,7 @@
             <div id="storeCartDrawer" class="store-cart-drawer">
               <div class="cart-drawer-header">
                 <h3 data-i18n-html="cart_drawer_title"><i class="fa-solid fa-basket-shopping"></i> سلة التسوق الخاصة بك</h3>
-                <button class="cart-drawer-close-btn" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+                <button class="cart-drawer-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
               </div>
               <div class="cart-drawer-body">
                 <!-- Cart items list (rendered dynamically or using realistic HTML skeleton) -->
@@ -1569,6 +1576,402 @@
             </div>
             <!-- Cart drawer backdrop overlay -->
             <div id="storeCartBackdrop" class="store-cart-backdrop"></div>
+          </div>
+
+          <!-- Arabic Dashboard Layout -->
+          <div id="webContentDashboard" class="web-template-content">
+            <!-- Sidebar Navigation (Right Side) -->
+            <aside class="db-sidebar">
+              <div class="db-sidebar-section">
+                <div class="db-sidebar-header" data-i18n="db_menu_title_general">عام</div>
+                <div class="db-sidebar-menu">
+                  <a class="db-menu-item active" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-house db-menu-icon"></i><span data-i18n="db_menu_home">الصفحة الرئيسية</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-list-check db-menu-icon"></i><span data-i18n="db_menu_tasks">المهام</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-chart-simple db-menu-icon"></i><span data-i18n="db_menu_analytics">التحاليل والأرقام</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-wallet db-menu-icon"></i><span data-i18n="db_menu_finance">الطلبات المالية</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-circle-question db-menu-icon"></i><span data-i18n="db_menu_support">طلبات الدعم</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="db-sidebar-section">
+                <div class="db-sidebar-header" data-i18n="db_menu_title_people">الأشخاص والتقارير</div>
+                <div class="db-sidebar-menu">
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-users db-menu-icon"></i><span data-i18n="db_menu_employees">الموظفون</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-file-lines db-menu-icon"></i><span data-i18n="db_menu_reports">التقارير</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-envelope db-menu-icon"></i><span data-i18n="db_menu_messages">الرسائل</span> <span class="db-msg-badge">4</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="db-sidebar-section db-sidebar-footer">
+                <div class="db-sidebar-header" data-i18n="db_menu_title_support">الدعم</div>
+                <div class="db-sidebar-menu">
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-gear db-menu-icon"></i><span data-i18n="db_menu_settings">الإعدادات</span>
+                  </a>
+                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
+                    <i class="fa-solid fa-circle-info db-menu-icon"></i><span data-i18n="db_menu_help">الدعم والمساعدة</span>
+                  </a>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Main Content Area (Left Side) -->
+            <div class="db-main">
+              <!-- Top Header -->
+              <header class="db-header">
+                <div class="db-header-right">
+                  <div class="db-logo-container">
+                    <div class="db-logo-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <span class="db-logo-text" contenteditable="true" spellcheck="false" data-i18n="db_platform_title">المنصة الرقمية الموحدة</span>
+                  </div>
+                </div>
+                
+                <nav class="db-header-nav">
+                  <a class="active" contenteditable="true" data-i18n="db_nav_home">الرئيسية</a>
+                  <a contenteditable="true" data-i18n="db_nav_tasks">المهام</a>
+                  <a contenteditable="true" data-i18n="db_nav_finance">الطلبات المالية</a>
+                  <a contenteditable="true" data-i18n="db_nav_help">الدعم والمساعدة</a>
+                  <a contenteditable="true" data-i18n="db_nav_activity">الالتحاق والنشاط</a>
+                  <a contenteditable="true" data-i18n="db_nav_analytics">التحاليل والأرقام</a>
+                </nav>
+                
+                <div class="db-team-dropdown">
+                  <i class="fa-solid fa-users-gear db-team-icon"></i>
+                  <span contenteditable="true" data-i18n="db_team_financial">الفريق المالي</span>
+                  <i class="fa-solid fa-chevron-down db-dropdown-arrow"></i>
+                </div>
+
+                <div class="db-header-left">
+                  <button class="db-lang-btn">English</button>
+                  <button class="db-icon-btn"><i class="fa-solid fa-bell"></i><span class="db-noti-dot"></span></button>
+                  <button class="db-icon-btn"><i class="fa-solid fa-circle-user"></i></button>
+                  <div class="db-user-info">
+                    <div class="db-user-avatar" data-i18n="db_user_initials">عم</div>
+                    <div class="db-user-details">
+                      <span class="db-user-name" contenteditable="true" spellcheck="false" data-i18n="db_user_name">عبدالمجيد مؤنس</span>
+                      <span class="db-user-role" contenteditable="true" spellcheck="false" data-i18n="db_user_role">المدير التقني</span>
+                    </div>
+                  </div>
+                </div>
+              </header>
+
+              <!-- Dashboard Dashboard Grid -->
+              <div class="db-content-body">
+                
+                <!-- KPI Row -->
+                <div class="db-kpi-row">
+                  <!-- KPI 1 -->
+                  <div class="db-card db-kpi-card">
+                    <div class="db-kpi-header">
+                      <div class="db-kpi-title-wrapper">
+                        <i class="fa-solid fa-layer-group db-kpi-icon"></i>
+                        <span class="db-kpi-title" contenteditable="true" data-i18n="db_kpi_total_requests">مجموع الطلبات</span>
+                      </div>
+                      <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                    </div>
+                    <div class="db-kpi-value-row">
+                      <span class="db-kpi-num" contenteditable="true">1,520</span>
+                      <span class="db-kpi-badge badge-green" contenteditable="true" data-i18n="db_kpi_total_requests_sub">+20% أكثر من الشهر السابق</span>
+                    </div>
+                  </div>
+                  <!-- KPI 2 -->
+                  <div class="db-card db-kpi-card">
+                    <div class="db-kpi-header">
+                      <div class="db-kpi-title-wrapper">
+                        <i class="fa-solid fa-circle-notch db-kpi-icon"></i>
+                        <span class="db-kpi-title" contenteditable="true" data-i18n="db_kpi_current_requests">الطلبات الحالية</span>
+                      </div>
+                      <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                    </div>
+                    <div class="db-kpi-value-row">
+                      <span class="db-kpi-num" contenteditable="true">1,230</span>
+                      <span class="db-kpi-badge badge-red" contenteditable="true" data-i18n="db_kpi_current_requests_sub">-5.8% أقل من الشهر السابق</span>
+                    </div>
+                  </div>
+                  <!-- KPI 3 -->
+                  <div class="db-card db-kpi-card">
+                    <div class="db-kpi-header">
+                      <div class="db-kpi-title-wrapper">
+                        <i class="fa-solid fa-ban db-kpi-icon"></i>
+                        <span class="db-kpi-title" contenteditable="true" data-i18n="db_kpi_cancelled_requests">الطلبات الملغية</span>
+                      </div>
+                      <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                    </div>
+                    <div class="db-kpi-value-row">
+                      <span class="db-kpi-num" contenteditable="true">290</span>
+                      <span class="db-kpi-badge badge-green" contenteditable="true" data-i18n="db_kpi_cancelled_requests_sub">+12.5% أكثر من الشهر السابق</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Charts & Matrices Section -->
+                <div class="db-charts-row">
+                  <!-- Column 1: Semicircular Performance Gauge -->
+                  <div class="db-card db-gauge-card">
+                    <div class="db-card-header">
+                      <div class="db-card-title-wrapper">
+                        <i class="fa-solid fa-gauge-high db-card-icon"></i>
+                        <span class="db-card-title" contenteditable="true" data-i18n="db_performance_title">مؤشر الأداء</span>
+                      </div>
+                      <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                    </div>
+                    <div class="db-gauge-body">
+                      <div class="db-gauge-visual-container">
+                        <svg class="db-gauge-svg" viewBox="0 0 100 50">
+                          <!-- Semicircle background arc -->
+                          <path class="db-gauge-bg-arc" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round"/>
+                          <!-- Active performance level arc -->
+                          <path class="db-gauge-value-arc" d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke-width="8" stroke-linecap="round" stroke-dasharray="125.6" stroke-dashoffset="37.6"/>
+                        </svg>
+                        <div class="db-gauge-text-center">
+                          <span class="db-gauge-val-num" contenteditable="true">1,520</span>
+                          <span class="db-gauge-val-lbl" contenteditable="true" data-i18n="db_performance_tasks">عدد المهام</span>
+                        </div>
+                      </div>
+                      <div class="db-gauge-legends">
+                        <div class="db-legend-item">
+                          <span class="legend-dot dot-orange"></span>
+                          <span contenteditable="true" data-i18n="db_performance_personal">المهام الشخصية</span>
+                          <span class="legend-val">87%</span>
+                        </div>
+                        <div class="db-legend-item">
+                          <span class="legend-dot dot-green"></span>
+                          <span contenteditable="true" data-i18n="db_performance_dept">مهام القسم</span>
+                          <span class="legend-val">70%</span>
+                        </div>
+                      </div>
+                      <button class="db-gauge-btn" contenteditable="true" data-i18n="db_performance_btn">إضافة المزيد من المؤشرات</button>
+                    </div>
+                  </div>
+
+                  <!-- Column 2: Heatmap Matrix -->
+                  <div class="db-card db-heatmap-card">
+                    <div class="db-card-header">
+                      <div class="db-card-title-wrapper">
+                        <i class="fa-solid fa-calendar-days db-card-icon"></i>
+                        <div class="db-card-header-titles">
+                          <span class="db-card-title" contenteditable="true" data-i18n="db_heatmap_title">الطلبات حسب الوقت</span>
+                          <div class="db-heatmap-subrow">
+                            <span class="db-heatmap-total">2,392</span>
+                            <span class="badge-green badge-mini" contenteditable="true" data-i18n="db_heatmap_sub">+1.4% أكثر من الشهر السابق</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span class="db-heatmap-time-range">20:00 - 02:00</span>
+                    </div>
+                    <div class="db-heatmap-wrapper">
+                      <div class="db-heatmap-grid">
+                        <!-- Heatmap cells (rows of time slots x columns of days) -->
+                        <span class="db-heatmap-time-label">20:00</span>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-mid"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+
+                        <span class="db-heatmap-time-label">21:00</span>
+                        <div class="db-heatmap-cell cell-mid"></div>
+                        <div class="db-heatmap-cell cell-mid"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-mid"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+
+                        <span class="db-heatmap-time-label">22:00</span>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+
+                        <span class="db-heatmap-time-label">00:00</span>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-empty"></div>
+                        <div class="db-heatmap-cell cell-low"></div>
+                      </div>
+                      <div class="db-heatmap-days-row">
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_sun">الأحد</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_mon">الإثنين</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_tue">الثلاثاء</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_wed">الأربعاء</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_thu">الخميس</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_fri">الجمعة</span>
+                        <span class="db-heatmap-day" contenteditable="true" data-i18n="db_heatmap_sat">السبت</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Column 3: Stacked Small Cards -->
+                  <div class="db-charts-col-stacked">
+                    <!-- Devices Used -->
+                    <div class="db-card db-chart-card">
+                      <div class="db-card-header">
+                        <div class="db-card-title-wrapper">
+                          <i class="fa-solid fa-tablet-screen-button db-card-icon"></i>
+                          <span class="db-card-title" contenteditable="true" data-i18n="db_devices_title">الأجهزة المستخدمة</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                      </div>
+                      <div class="db-progress-container">
+                        <div class="db-progress-item">
+                          <div class="db-progress-label">
+                            <span contenteditable="true" data-i18n="db_devices_mobile">الهواتف المحمولة</span>
+                            <span class="db-progress-val">65%</span>
+                          </div>
+                          <div class="db-progress-bg"><div class="db-progress-fill" style="width: 65%;"></div></div>
+                        </div>
+                        <div class="db-progress-item">
+                          <div class="db-progress-label">
+                            <span contenteditable="true" data-i18n="db_devices_desktop">أجهزة الحاسوب</span>
+                            <span class="db-progress-val">25%</span>
+                          </div>
+                          <div class="db-progress-bg"><div class="db-progress-fill" style="width: 25%;"></div></div>
+                        </div>
+                        <div class="db-progress-item">
+                          <div class="db-progress-label">
+                            <span contenteditable="true" data-i18n="db_devices_tablet">الأجهزة اللوحية</span>
+                            <span class="db-progress-val">10%</span>
+                          </div>
+                          <div class="db-progress-bg"><div class="db-progress-fill" style="width: 10%;"></div></div>
+                        </div>
+                      </div>
+                    </div>
+                     <!-- Members Group -->
+                    <div class="db-card db-chart-card">
+                      <div class="db-card-header">
+                        <div class="db-card-title-wrapper">
+                          <i class="fa-solid fa-users db-card-icon"></i>
+                          <span class="db-card-title" contenteditable="true" data-i18n="db_members_title">مجموعة الأعضاء</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                      </div>
+                      <div class="db-members-split">
+                        <div class="db-member-stat">
+                          <div class="db-member-icon icon-male"><i class="fa-solid fa-mars"></i></div>
+                          <div class="db-member-info">
+                            <span class="db-member-val">1,246</span>
+                            <span class="db-member-lbl" contenteditable="true" data-i18n="db_members_male">ذكور 82%</span>
+                          </div>
+                        </div>
+                        <div class="db-member-stat">
+                          <div class="db-member-icon icon-female"><i class="fa-solid fa-venus"></i></div>
+                          <div class="db-member-info">
+                            <span class="db-member-val">274</span>
+                            <span class="db-member-lbl" contenteditable="true" data-i18n="db_members_female">إناث 18%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Tasks Table -->
+                <div class="db-card db-table-card">
+                  <div class="db-card-header">
+                    <div class="db-table-header-title">
+                      <i class="fa-solid fa-clipboard-list db-table-icon"></i>
+                      <span class="db-card-title" contenteditable="true" data-i18n="db_table_title">المهام</span>
+                    </div>
+                    <i class="fa-solid fa-ellipsis db-card-actions"></i>
+                  </div>
+                  <div class="db-table-wrapper">
+                    <table class="db-table">
+                      <thead>
+                        <tr>
+                          <th contenteditable="true" data-i18n="db_th_details">الطلب بتفاصيله</th>
+                          <th contenteditable="true" data-i18n="db_th_assigned">تم تعيينها إلى</th>
+                          <th contenteditable="true" data-i18n="db_th_dept">القسم</th>
+                          <th contenteditable="true" data-i18n="db_th_time">التوقيت</th>
+                          <th contenteditable="true" data-i18n="db_th_status">حالة الطلب</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="db-cell-title" contenteditable="true" data-i18n="db_row1_title">إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...</td>
+                          <td>
+                            <div class="db-table-user">
+                              <span class="db-table-avatar text-orange" data-i18n="db_user_initials">عم</span>
+                              <span contenteditable="true" data-i18n="db_user_name">عبدالمجيد مؤنس</span>
+                            </div>
+                          </td>
+                          <td class="text-secondary" contenteditable="true" data-i18n="db_dept_tech">التقني</td>
+                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
+                        </tr>
+                        <tr>
+                          <td class="db-cell-title" contenteditable="true" data-i18n="db_row2_title">إحصاء عدد المستخدمين للمنصة منذ تاريخ 1 يونيو 2024...</td>
+                          <td>
+                            <div class="db-table-user">
+                              <span class="db-table-avatar text-blue" data-i18n="db_user2_initials">رغ</span>
+                              <span contenteditable="true" data-i18n="db_user2_name">رشيد الغالي محمد</span>
+                            </div>
+                          </td>
+                          <td class="text-secondary" contenteditable="true" data-i18n="db_dept_finance">المالي</td>
+                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
+                        </tr>
+                        <tr>
+                          <td class="db-cell-title" contenteditable="true" data-i18n="db_row3_title">إصلاح مشكلة التحقق الثنائي لمستخدمي أندرويد من طراز 6.2...</td>
+                          <td>
+                            <div class="db-table-user">
+                              <span class="db-table-avatar text-red" data-i18n="db_user3_initials">مب</span>
+                              <span contenteditable="true" data-i18n="db_user3_name">مصطفى البنوني</span>
+                            </div>
+                          </td>
+                          <td class="text-secondary" contenteditable="true" data-i18n="db_dept_tech">التقني</td>
+                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td><span class="status-pill status-cancelled" contenteditable="true" data-i18n="db_status_cancelled">CANCELLED</span></td>
+                        </tr>
+                        <tr>
+                          <td class="db-cell-title" contenteditable="true" data-i18n="db_row4_title">إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...</td>
+                          <td>
+                            <div class="db-table-user">
+                              <span class="db-table-avatar text-green" data-i18n="db_user4_initials">جب</span>
+                              <span contenteditable="true" data-i18n="db_user4_name">جلهارير بارياكوساد</span>
+                            </div>
+                          </td>
+                          <td class="text-secondary" contenteditable="true" data-i18n="db_dept_sales">المبيعات</td>
+                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            </div>
           </div>
         </div>
       </div>

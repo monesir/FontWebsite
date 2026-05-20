@@ -119,6 +119,9 @@ const btnPaperThemeDark = document.getElementById('btnPaperThemeDark');
 // Web Mode settings buttons
 const btnWebTemplateSaas = document.getElementById('btnWebTemplateSaas');
 const btnWebTemplateStore = document.getElementById('btnWebTemplateStore');
+const tabWebTemplateSaas = document.getElementById('tabWebTemplateSaas');
+const tabWebTemplateStore = document.getElementById('tabWebTemplateStore');
+const tabWebTemplateDashboard = document.getElementById('tabWebTemplateDashboard');
 const btnWebThemeDark = document.getElementById('btnWebThemeDark');
 const btnWebThemeLight = document.getElementById('btnWebThemeLight');
 const btnWebThemeAmber = document.getElementById('btnWebThemeAmber');
@@ -644,7 +647,8 @@ const syncSidebarControls = () => {
     if (match) selectWebFontButtons.value = match[1] || match[2];
   }
   if (chkWebMultipleFonts) {
-    const isMulti = localStorage.getItem('diwan-web-multiple-fonts') === 'true';
+    const savedMulti = localStorage.getItem('diwan-web-multiple-fonts');
+    const isMulti = savedMulti !== null ? savedMulti === 'true' : true;
     chkWebMultipleFonts.checked = isMulti;
     const grpWebFontSingle = document.getElementById('grpWebFontSingle');
     const grpWebTarget = document.getElementById('grpWebTarget');
@@ -685,6 +689,10 @@ const syncSidebarControls = () => {
 // Multilingual & Font Select state variables
 let currentLang = 'ar'; // 'ar' or 'en'
 let currentSiteLang = 'ar'; // UI Language: 'ar' or 'en'
+
+function getActiveSiteLang() {
+  return currentSiteLang || localStorage.getItem('diwan-site-lang') || 'ar';
+}
 let customFontLoaded = false;
 let customFontName = '';
 const webCustomFonts = []; // Array of { value: string, name: string, displayName: string }
@@ -2143,6 +2151,9 @@ function setupEventListeners() {
   // Web Mode Template Event Listeners
   if (btnWebTemplateSaas) btnWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
   if (btnWebTemplateStore) btnWebTemplateStore.addEventListener('click', () => setWebTemplate('store'));
+  if (tabWebTemplateSaas) tabWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
+  if (tabWebTemplateStore) tabWebTemplateStore.addEventListener('click', () => setWebTemplate('store'));
+  if (tabWebTemplateDashboard) tabWebTemplateDashboard.addEventListener('click', () => setWebTemplate('dashboard'));
 
   // Web Mode Theme Event Listeners
   if (btnWebThemeDark) btnWebThemeDark.addEventListener('click', () => setWebTheme('dark'));
@@ -3135,7 +3146,8 @@ function switchViewMode(mode) {
 
     // Restore multi-font settings
     if (chkWebMultipleFonts) {
-      const isMulti = localStorage.getItem('diwan-web-multiple-fonts') === 'true';
+      const savedMulti = localStorage.getItem('diwan-web-multiple-fonts');
+      const isMulti = savedMulti !== null ? savedMulti === 'true' : true;
       chkWebMultipleFonts.checked = isMulti;
       
       if (selectWebFontHeadings) {
@@ -3225,13 +3237,19 @@ function clearWebPreviewFonts() {
 function setWebTemplate(template) {
   if (!webPreviewWrapper) return;
   clearWebPreviewFonts();
-  webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-store');
+  webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-store', 'web-tpl-dashboard');
   webPreviewWrapper.classList.add(`web-tpl-${template}`);
   
   // Update active state on template toggle buttons
   document.querySelectorAll('.control-section.web-only .ratio-btn[id^="btnWebTemplate"]').forEach(btn => btn.classList.remove('active'));
   const activeBtn = document.getElementById(`btnWebTemplate${template.charAt(0).toUpperCase() + template.slice(1)}`);
   if (activeBtn) activeBtn.classList.add('active');
+
+  // Update active state on browser tabs
+  document.querySelectorAll('.browser-tab').forEach(tab => tab.classList.remove('active'));
+  const activeTab = document.getElementById(`tabWebTemplate${template.charAt(0).toUpperCase() + template.slice(1)}`);
+  if (activeTab) activeTab.classList.add('active');
+
   localStorage.setItem('diwan-web-template', template);
   setWebPreviewZoom(webPreviewZoom);
 }
@@ -3243,7 +3261,7 @@ function setWebTheme(theme) {
   webPreviewWrapper.classList.add(`web-theme-${theme}`);
   
   // Update active state on theme toggle buttons
-  document.querySelectorAll('.control-section.web-only .ratio-btn[id^="btnWebTheme"]').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.chrome-theme-btn').forEach(btn => btn.classList.remove('active'));
   const activeBtn = document.getElementById(`btnWebTheme${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
   if (activeBtn) activeBtn.classList.add('active');
   localStorage.setItem('diwan-web-theme', theme);
@@ -4761,11 +4779,11 @@ const uiTranslations = {
     export_compressing: "جاري ضغط صفحة",
     doc_text_color_lbl: "لون النص",
     tab_web_mode: "معاينة موقع (Web)",
-    web_page_settings: "تنسيق قالب الموقع",
-    web_page_settings_desc: "اختر قالب للموقع، ومظهر الألوان، وتحديد الخط المخصص.",
+    web_page_settings: "تنسيق خطوط قالب الموقع",
+    web_page_settings_desc: "تعديل وتنسيق الخطوط الخاصة بقوالب المواقع الإلكترونية.",
     web_template_lbl: "قالب الموقع",
-    web_template_saas: "موقع تقني / SaaS",
-    web_template_store: "متجر إلكتروني",
+    web_template_saas: "سيرة",
+    web_template_store: "متجر",
     web_theme_lbl: "مظهر الألوان",
     web_theme_dark: "داكن فاخر",
     web_theme_light: "فاتح نظيف",
@@ -4791,7 +4809,7 @@ const uiTranslations = {
     web_btn_login: "تسجيل الدخول",
     web_btn_start: "انطلق الآن",
     web_hero_badge: "الجيل الجديد من الذكاء الاصطناعي ✨",
-    web_hero_title: "سيرة مهنية تصنع مستقبلك الذكي.",
+    web_hero_title: "سيرة مهنية تصنع مستقبلك الذكي",
     web_hero_desc: "ارفع سيرتك الذاتية واحصل على تقييم فوري من الذكاء الاصطناعي، ثم حسّنها بمقترحات مخصصة بناءً على الوصف الوظيفي — خلال دقيقة تقريباً.",
     web_btn_primary: "ابدأ مجاناً ←",
     web_btn_secondary: "اكتشف طريقتنا",
@@ -4844,7 +4862,7 @@ const uiTranslations = {
     store_nav_accessories: "ملحقات التصميم",
     store_nav_contact: "تواصل معنا",
     store_cart_btn: "سلة المشتريات (3)",
-    store_hero_title: "بوابة الابتكار الرقمي بين يديك.",
+    store_hero_title: "بوابة الابتكار الرقمي بين يديك",
     store_hero_desc: "اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.",
     store_hero_cta_primary: "تسوق العروض الحصرية",
     store_hero_cta_secondary: "شاهد الفيديو الترويجي",
@@ -4937,7 +4955,81 @@ const uiTranslations = {
     web_zoom_lbl: "تغيير حجم خطوط المعاينة",
     web_zoom_in: "تكبير",
     web_zoom_out: "تصغير",
-    web_zoom_reset: "افتراضي"
+    web_zoom_reset: "افتراضي",
+    web_template_dashboard: "لوحة",
+    db_menu_title_general: "عام",
+    db_menu_home: "الصفحة الرئيسية",
+    db_menu_tasks: "المهام",
+    db_menu_analytics: "التحاليل والأرقام",
+    db_menu_finance: "الطلبات المالية",
+    db_menu_support: "طلبات الدعم",
+    db_menu_title_people: "الأشخاص والتقارير",
+    db_menu_employees: "الموظفون",
+    db_menu_reports: "التقارير",
+    db_menu_messages: "الرسائل",
+    db_menu_title_support: "الدعم",
+    db_menu_settings: "الإعدادات",
+    db_menu_help: "الدعم والمساعدة",
+    db_platform_title: "المنصة الرقمية الموحدة",
+    db_nav_home: "الرئيسية",
+    db_nav_tasks: "المهام",
+    db_nav_finance: "الطلبات المالية",
+    db_nav_help: "الدعم والمساعدة",
+    db_nav_activity: "الالتحاق والنشاط",
+    db_nav_analytics: "التحاليل والأرقام",
+    db_menu_finance_full: "الالتحاق والنشاط",
+    db_team_financial: "الفريق المالي",
+    db_user_initials: "عم",
+    db_user_name: "عبدالمجيد مؤنس",
+    db_user_role: "المدير التقني",
+    db_kpi_total_requests: "مجموع الطلبات",
+    db_kpi_current_requests: "الطلبات الحالية",
+    db_kpi_cancelled_requests: "الطلبات الملغية",
+    db_kpi_total_requests_sub: "+20% أكثر من الشهر السابق",
+    db_kpi_current_requests_sub: "-5.8% أقل من الشهر السابق",
+    db_kpi_cancelled_requests_sub: "+12.5% أكثر من الشهر السابق",
+    db_devices_title: "الأجهزة المستخدمة",
+    db_devices_mobile: "الهواتف المحمولة",
+    db_devices_desktop: "أجهزة الحاسوب",
+    db_devices_tablet: "الأجهزة اللوحية",
+    db_members_title: "مجموعة الأعضاء",
+    db_members_male: "ذكور 82%",
+    db_members_female: "إناث 18%",
+    db_heatmap_title: "الطلبات حسب الوقت",
+    db_heatmap_sub: "+1.4% أكثر من الشهر السابق",
+    db_heatmap_sun: "الأحد",
+    db_heatmap_mon: "الإثنين",
+    db_heatmap_tue: "الثلاثاء",
+    db_heatmap_wed: "الأربعاء",
+    db_heatmap_thu: "الخميس",
+    db_heatmap_fri: "الجمعة",
+    db_heatmap_sat: "السبت",
+    db_performance_title: "مؤشر الأداء",
+    db_performance_tasks: "عدد المهام",
+    db_performance_personal: "المهام الشخصية",
+    db_performance_dept: "مهام القسم",
+    db_performance_btn: "إضافة المزيد من المؤشرات",
+    db_table_title: "المهام",
+    db_th_details: "الطلب بتفاصيله",
+    db_th_assigned: "تم تعيينها إلى",
+    db_th_dept: "القسم",
+    db_th_time: "التوقيت",
+    db_th_status: "حالة الطلب",
+    db_status_completed: "COMPLETED",
+    db_status_cancelled: "CANCELLED",
+    db_dept_tech: "التقني",
+    db_dept_finance: "المالي",
+    db_dept_sales: "المبيعات",
+    db_user2_initials: "رغ",
+    db_user2_name: "رشيد الغالي محمد",
+    db_user3_initials: "مب",
+    db_user3_name: "مصطفى البنوني",
+    db_user4_initials: "جب",
+    db_user4_name: "جلهارير بارياكوساد",
+    db_row1_title: "إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...",
+    db_row2_title: "إحصاء عدد المستخدمين للمنصة منذ تاريخ 1 يونيو 2024...",
+    db_row3_title: "إصلاح مشكلة التحقق الثنائي لمستخدمي أندرويد من طراز 6.2...",
+    db_row4_title: "إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم..."
   },
   en: {
     logo_title: "Font Editor",
@@ -5113,11 +5205,11 @@ const uiTranslations = {
     format_zip: "Photo Album (ZIP)",
     export_compressing: "Compressing page",
     tab_web_mode: "Website Preview (Web)",
-    web_page_settings: "Website Template Settings",
-    web_page_settings_desc: "Choose a website template, color scheme, and custom font mapping.",
+    web_page_settings: "Website Template Fonts",
+    web_page_settings_desc: "Modify and format the fonts of the website templates.",
     web_template_lbl: "Website Template",
-    web_template_saas: "SaaS / Tech Layout",
-    web_template_store: "E-commerce Store",
+    web_template_saas: "Resume",
+    web_template_store: "Store",
     web_theme_lbl: "Color Theme",
     web_theme_dark: "Premium Dark",
     web_theme_light: "Clean Light",
@@ -5143,7 +5235,7 @@ const uiTranslations = {
     web_btn_login: "Login",
     web_btn_start: "Launch Now",
     web_hero_badge: "Next-Gen AI Resume Builder ✨",
-    web_hero_title: "A Professional Resume Built For Your Future.",
+    web_hero_title: "A Professional Resume Built For Your Future",
     web_hero_desc: "Upload your resume, get an instant AI score, and optimize it with tailored suggestions based on the job description — in under a minute.",
     web_btn_primary: "Start Free →",
     web_btn_secondary: "Discover Our Method",
@@ -5196,7 +5288,7 @@ const uiTranslations = {
     store_nav_accessories: "Designer Accessories",
     store_nav_contact: "Contact Us",
     store_cart_btn: "Shopping Cart (3)",
-    store_hero_title: "Your Gateway to Digital Innovation.",
+    store_hero_title: "Your Gateway to Digital Innovation",
     store_hero_desc: "Discover the next generation of smart devices and accessories, meticulously crafted to elevate your productivity and modern lifestyle with the highest quality standards.",
     store_hero_cta_primary: "Shop Exclusive Deals",
     store_hero_cta_secondary: "Watch Promo Video",
@@ -5289,7 +5381,81 @@ const uiTranslations = {
     web_zoom_lbl: "Preview Font Scale",
     web_zoom_in: "Enlarge",
     web_zoom_out: "Shrink",
-    web_zoom_reset: "Reset"
+    web_zoom_reset: "Reset",
+    web_template_dashboard: "Dashboard",
+    db_menu_title_general: "General",
+    db_menu_home: "Dashboard Home",
+    db_menu_tasks: "Tasks",
+    db_menu_analytics: "Analytics",
+    db_menu_finance: "Finance Requests",
+    db_menu_support: "Support Tickets",
+    db_menu_title_people: "People & Reports",
+    db_menu_employees: "Employees",
+    db_menu_reports: "Reports",
+    db_menu_messages: "Messages",
+    db_menu_title_support: "Support",
+    db_menu_settings: "Settings",
+    db_menu_help: "Help & FAQ",
+    db_platform_title: "Unified Digital Platform",
+    db_nav_home: "Home",
+    db_nav_tasks: "Tasks",
+    db_nav_finance: "Finance",
+    db_nav_help: "Support",
+    db_nav_activity: "Admissions",
+    db_nav_analytics: "Analytics",
+    db_menu_finance_full: "Admissions & Activity",
+    db_team_financial: "Finance Team",
+    db_user_initials: "AM",
+    db_user_name: "Abdulmajeed Mounes",
+    db_user_role: "Technical Director",
+    db_kpi_total_requests: "Total Requests",
+    db_kpi_current_requests: "Current Requests",
+    db_kpi_cancelled_requests: "Cancelled Requests",
+    db_kpi_total_requests_sub: "+20% from last month",
+    db_kpi_current_requests_sub: "-5.8% from last month",
+    db_kpi_cancelled_requests_sub: "+12.5% from last month",
+    db_devices_title: "Devices Used",
+    db_devices_mobile: "Mobile Phones",
+    db_devices_desktop: "Desktop PCs",
+    db_devices_tablet: "Tablet Devices",
+    db_members_title: "Members Group",
+    db_members_male: "Male 82%",
+    db_members_female: "Female 18%",
+    db_heatmap_title: "Requests by Time",
+    db_heatmap_sub: "+1.4% from last month",
+    db_heatmap_sun: "Sunday",
+    db_heatmap_mon: "Monday",
+    db_heatmap_tue: "Tuesday",
+    db_heatmap_wed: "Wednesday",
+    db_heatmap_thu: "Thursday",
+    db_heatmap_fri: "Friday",
+    db_heatmap_sat: "Saturday",
+    db_performance_title: "Performance Index",
+    db_performance_tasks: "Tasks Count",
+    db_performance_personal: "Personal Tasks",
+    db_performance_dept: "Department Tasks",
+    db_performance_btn: "Add More Indices",
+    db_table_title: "Tasks List",
+    db_th_details: "Request Details",
+    db_th_assigned: "Assigned To",
+    db_th_dept: "Department",
+    db_th_time: "Time",
+    db_th_status: "Status",
+    db_status_completed: "COMPLETED",
+    db_status_cancelled: "CANCELLED",
+    db_dept_tech: "Tech",
+    db_dept_finance: "Finance",
+    db_dept_sales: "Sales",
+    db_user2_initials: "RG",
+    db_user2_name: "Rashed Al-Ghali Mohammed",
+    db_user3_initials: "MB",
+    db_user3_name: "Mustafa Al-Banouni",
+    db_user4_initials: "JB",
+    db_user4_name: "Jalhareer Bariaxosad",
+    db_row1_title: "Create a user satisfaction survey to evaluate our digital services...",
+    db_row2_title: "Audit the total platform user count starting from June 1st, 2024...",
+    db_row3_title: "Fix the 2FA issue for Android users running model version 6.2...",
+    db_row4_title: "Create a user satisfaction survey to evaluate our digital services..."
   }
 };
 
@@ -5711,7 +5877,7 @@ function addToCart(productId) {
   if (existing) {
     existing.qty++;
   } else {
-    const lang = localStorage.getItem('siteLanguage') || 'ar';
+    const lang = getActiveSiteLang();
     let price = storeProducts[productId]?.price || 0;
     let title = lang === 'ar' ? storeProducts[productId]?.titleAr : storeProducts[productId]?.titleEn;
 
@@ -5754,7 +5920,7 @@ function removeFromCart(productId) {
 }
 
 function updateCartBadge() {
-  const lang = localStorage.getItem('siteLanguage') || 'ar';
+  const lang = getActiveSiteLang();
   const totalQty = storeCart.reduce((sum, item) => sum + item.qty, 0);
   const badge = document.querySelector('.cart-badge');
   if (badge) {
@@ -5778,7 +5944,7 @@ function renderCart() {
 
   if (!cartItemsList || !cartEmptyState) return;
 
-  const lang = localStorage.getItem('siteLanguage') || 'ar';
+  const lang = getActiveSiteLang();
 
   if (storeCart.length === 0) {
     cartItemsList.style.display = 'none';
