@@ -3987,6 +3987,9 @@ function applyDefaults() {
   if (samplesListEn) samplesListEn.style.display = 'none';
   if (titleSamples) titleSamples.textContent = 'نماذج من الشعر العربي';
   populateFontStyles('ar');
+  if (selectWebFontHeadings) applyWebFont('headings', selectWebFontHeadings.value);
+  if (selectWebFontBody) applyWebFont('body', selectWebFontBody.value);
+  if (selectWebFontButtons) applyWebFont('buttons', selectWebFontButtons.value);
 
   poetryCard.setAttribute('dir', 'rtl');
   poetryCard.style.direction = 'rtl';
@@ -4378,15 +4381,27 @@ function populateFontStyles(lang, selectedValue = null) {
   }
   if (selectWebFontHeadings) {
     const savedHead = localStorage.getItem('diwan-web-headings-font');
-    selectWebFontHeadings.value = savedHead || resolvedVal;
+    if (savedHead) {
+      selectWebFontHeadings.value = savedHead;
+    } else {
+      selectWebFontHeadings.value = lang === 'ar' ? 'ThmanyahSerifDisplay' : resolvedVal;
+    }
   }
   if (selectWebFontBody) {
     const savedBody = localStorage.getItem('diwan-web-body-font');
-    selectWebFontBody.value = savedBody || resolvedVal;
+    if (savedBody) {
+      selectWebFontBody.value = savedBody;
+    } else {
+      selectWebFontBody.value = lang === 'ar' ? 'ThmanyahSerifText' : resolvedVal;
+    }
   }
   if (selectWebFontButtons) {
     const savedButtons = localStorage.getItem('diwan-web-buttons-font');
-    selectWebFontButtons.value = savedButtons || resolvedVal;
+    if (savedButtons) {
+      selectWebFontButtons.value = savedButtons;
+    } else {
+      selectWebFontButtons.value = lang === 'ar' ? 'ThmanyahSans' : resolvedVal;
+    }
   }
   
   // Apply font CSS

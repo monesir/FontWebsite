@@ -40,6 +40,11 @@
   --font-poetry-fallback: 'Amiri', serif;
   --font-poetry: 'ArabicPoetry', var(--font-poetry-fallback);
   
+  /* Web Preview Defaults */
+  --font-web-headings: "ThmanyahSerifDisplay", sans-serif;
+  --font-web-body: "ThmanyahSerifText", sans-serif;
+  --font-web-buttons: "ThmanyahSans", sans-serif;
+  
   /* UI Colors */
   --bg-app: #08080a;
   --bg-sidebar: rgba(15, 15, 18, 0.9);
