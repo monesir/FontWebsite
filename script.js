@@ -1591,6 +1591,14 @@ function setupEventListeners() {
       switchLanguage(nextLang);
     });
   }
+  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
+  if (btnToggleWritingLang) {
+    btnToggleWritingLang.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nextLang = currentLang === 'ar' ? 'en' : 'ar';
+      switchLanguage(nextLang);
+    });
+  }
   if (selectFontStyle) {
     selectFontStyle.addEventListener('change', () => {
       const font = selectFontStyle.value;
@@ -2381,6 +2389,11 @@ function applyDefaults() {
   customFontName = '';
   if (btnLangAr) btnLangAr.classList.add('active');
   if (btnLangEn) btnLangEn.classList.remove('active');
+  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
+  if (btnToggleWritingLang) {
+    const indicator = btnToggleWritingLang.querySelector('.writing-lang-indicator');
+    if (indicator) indicator.textContent = 'ع';
+  }
   if (samplesListAr) samplesListAr.style.display = 'flex';
   if (samplesListEn) samplesListEn.style.display = 'none';
   if (titleSamples) titleSamples.textContent = 'نماذج من الشعر العربي';
@@ -2807,6 +2820,14 @@ function switchLanguage(lang) {
     }
   }
   
+  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
+  if (btnToggleWritingLang) {
+    const indicator = btnToggleWritingLang.querySelector('.writing-lang-indicator');
+    if (indicator) {
+      indicator.textContent = lang === 'ar' ? 'ع' : 'EN';
+    }
+  }
+  
   applyDividers();
 }
 
@@ -2820,6 +2841,7 @@ const uiTranslations = {
     writing_lang_title: "لغة الكتابة",
     writing_lang_ar: "عربي",
     writing_lang_en: "إنجليزي",
+    writing_lang_tooltip: "تغيير لغة الكتابة (عربي / English)",
     font_loader_title: "تحميل خط مخصص",
     font_loader_desc: "اسحب ملف الخط الخاص بك هنا أو اضغط للاختيار لتخصيص البطاقة تماماً.",
     drag_font_hint: "اختر ملف الخط أو اسحبه هنا",
@@ -3018,6 +3040,7 @@ const uiTranslations = {
     writing_lang_title: "Writing Language",
     writing_lang_ar: "Arabic",
     writing_lang_en: "English",
+    writing_lang_tooltip: "Toggle Writing Language (Arabic / English)",
     font_loader_title: "Load Custom Font",
     font_loader_desc: "Drag your font file here or click to browse to load custom typography.",
     drag_font_hint: "Choose a font file or drag it here",

@@ -109,11 +109,19 @@
     
     <!-- Sidebar Control Panel -->
     <aside class="sidebar mode-simple" id="sidebarPanel">
-      <!-- Site Language Toggle Button -->
-      <button class="btn-secondary btn-icon-only language-switcher-sidebar" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language">
-        <i class="fa-solid fa-globe"></i>
-        <span class="lang-text" style="display: none;">English</span>
-      </button>
+      <!-- Sidebar Top Actions -->
+      <div class="sidebar-top-actions">
+        <!-- Site Language Toggle Button -->
+        <button class="btn-secondary btn-icon-only language-switcher-sidebar" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language">
+          <i class="fa-solid fa-globe"></i>
+          <span class="lang-text" style="display: none;">English</span>
+        </button>
+
+        <!-- Writing Language Toggle Button -->
+        <button class="btn-secondary btn-icon-only writing-language-switcher-sidebar" id="btnToggleWritingLang" title="لغة الكتابة / Writing Language">
+          <span class="writing-lang-indicator">ع</span>
+        </button>
+      </div>
 
       <div class="sidebar-header">
         <div class="sidebar-logo-row">
@@ -137,8 +145,8 @@
         </div>
       </div>
       
-      <!-- Language Switcher -->
-      <div class="ui-mode-toggle-wrapper lang-switcher-wrapper">
+      <!-- Language Switcher (Hidden) -->
+      <div class="ui-mode-toggle-wrapper lang-switcher-wrapper" style="display: none !important;">
         <div class="control-label select-label">
           <i class="fa-solid fa-globe"></i> <span data-i18n="writing_lang_title">لغة الكتابة / Language</span>
         </div>
