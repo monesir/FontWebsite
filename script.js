@@ -2685,23 +2685,29 @@ function setupEventListeners() {
     return true;
   };
 
-  // Event delegation for right-clicks on editable and non-editable text elements in preview
+  // Event delegation for right-clicks on editable and non-editable text elements in preview or main editors
   document.addEventListener('contextmenu', (e) => {
     if (!previewContextMenu) return;
     
     let target = e.target;
     
-    // First, check if there is a contenteditable="true" ancestor within the web preview
-    const editableAncestor = target.closest('.web-preview-content [contenteditable="true"]');
-    if (editableAncestor) {
-      target = editableAncestor;
+    // Check if we are inside the main text editor (Design/Document mode)
+    const mainEditor = target.closest('#editableText') || (target.id === 'editableText' ? target : null);
+    if (mainEditor) {
+      target = mainEditor;
     } else {
-      // If no editable ancestor, check if the clicked element (or its parent) is a valid text target
-      if (!isValidTextTarget(target)) {
-        if (target.parentElement && isValidTextTarget(target.parentElement)) {
-          target = target.parentElement;
-        } else {
-          return; // Ignore right-clicks on structural layouts
+      // Check if there is a contenteditable="true" ancestor within the web preview
+      const editableAncestor = target.closest('.web-preview-content [contenteditable="true"]');
+      if (editableAncestor) {
+        target = editableAncestor;
+      } else {
+        // If no editable ancestor, check if the clicked element (or its parent) is a valid text target
+        if (!isValidTextTarget(target)) {
+          if (target.parentElement && isValidTextTarget(target.parentElement)) {
+            target = target.parentElement;
+          } else {
+            return; // Ignore right-clicks on structural layouts
+          }
         }
       }
     }
@@ -2746,7 +2752,10 @@ function setupEventListeners() {
       activeContextElement.dataset.customizedFontSize = "true";
       activeContextElement.dataset.customizedFontSizeVal = sizePx;
       
-      const scaledSize = Math.round(sizePx * webPreviewZoom);
+      const isMainEditor = activeContextElement.id === 'editableText';
+      const zoomFactor = isMainEditor ? 1.0 : webPreviewZoom;
+      
+      const scaledSize = Math.round(sizePx * zoomFactor);
       activeContextElement.style.setProperty('font-size', `${scaledSize}px`, 'important');
       
       // Update info text
@@ -2754,6 +2763,15 @@ function setupEventListeners() {
       const isAr = (currentSiteLang === 'ar');
       if (ctxCurrentSizeText) {
         ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizePt}pt` : `Current Size: ${sizePt}pt`;
+      }
+
+      // Also update the sidebar slider and CSS variable if it's the main editor!
+      if (isMainEditor) {
+        if (sliderFontSize && valFontSize) {
+          sliderFontSize.value = Math.round(sizePx);
+          valFontSize.textContent = `${Math.round(sizePx)}px`;
+        }
+        document.documentElement.style.setProperty('--card-font-size', `${Math.round(sizePx)}px`);
       }
     }
   };
@@ -2803,19 +2821,41 @@ function setupEventListeners() {
         activeContextElement.style.removeProperty('font-size');
         activeContextElement.style.removeProperty('font-weight');
         activeContextElement.style.removeProperty('color');
+        activeContextElement.style.removeProperty('font-family');
         
         delete activeContextElement.dataset.customizedFontSize;
         delete activeContextElement.dataset.customizedFontSizeVal;
         delete activeContextElement.dataset.originalFontSize;
         
-        // Reapply global zoom to it if necessary
-        if (webPreviewZoom !== 1.0) {
-          const computedStyle = window.getComputedStyle(activeContextElement);
-          const computedFontSize = computedStyle.fontSize;
-          const baseSize = computedFontSize ? parseFloat(computedFontSize) : 16;
-          activeContextElement.dataset.originalFontSize = baseSize;
-          const newSize = Math.round(baseSize * webPreviewZoom);
-          activeContextElement.style.setProperty('font-size', `${newSize}px`, 'important');
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          if (sliderFontSize && valFontSize) {
+            sliderFontSize.value = DEFAULTS.fontSize;
+            valFontSize.textContent = `${DEFAULTS.fontSize}px`;
+          }
+          document.documentElement.style.setProperty('--card-font-size', `${DEFAULTS.fontSize}px`);
+          document.documentElement.style.removeProperty('--card-font-color');
+          document.documentElement.style.setProperty('--font-poetry', `"ArabicPoetry", sans-serif`);
+          
+          const selectFontStyle = document.getElementById('selectFontStyle');
+          if (selectFontStyle) {
+            selectFontStyle.value = 'ArabicPoetry';
+          }
+          const selectWebFontSingle = document.getElementById('selectWebFontSingle');
+          if (selectWebFontSingle) {
+            selectWebFontSingle.value = 'ArabicPoetry';
+          }
+          localStorage.removeItem('diwan-poetry-font');
+        } else {
+          // Reapply global zoom to it if necessary
+          if (webPreviewZoom !== 1.0) {
+            const computedStyle = window.getComputedStyle(activeContextElement);
+            const computedFontSize = computedStyle.fontSize;
+            const baseSize = computedFontSize ? parseFloat(computedFontSize) : 16;
+            activeContextElement.dataset.originalFontSize = baseSize;
+            const newSize = Math.round(baseSize * webPreviewZoom);
+            activeContextElement.style.setProperty('font-size', `${newSize}px`, 'important');
+          }
         }
         
         setTimeout(() => {
@@ -2823,6 +2863,7 @@ function setupEventListeners() {
         }, 10);
         HistoryManager.saveState();
       }
+      hideContextMenu();
     });
   }
 
@@ -2845,6 +2886,7 @@ function setupEventListeners() {
         }
         HistoryManager.saveState();
       }
+      hideContextMenu();
     });
   }
 
@@ -2860,8 +2902,14 @@ function setupEventListeners() {
         presetDots.forEach(d => d.classList.remove('active'));
         ctxResetColor.classList.add('active');
         
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          document.documentElement.style.removeProperty('--card-font-color');
+        }
+        
         HistoryManager.saveState();
       }
+      hideContextMenu();
     });
   }
 
@@ -2883,8 +2931,14 @@ function setupEventListeners() {
           ctxColorInput.value = selectedColor;
         }
         
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          document.documentElement.style.setProperty('--card-font-color', selectedColor);
+        }
+        
         HistoryManager.saveState();
       }
+      hideContextMenu();
     });
   });
 
@@ -2908,6 +2962,11 @@ function setupEventListeners() {
             dot.classList.remove('active');
           }
         });
+        
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          document.documentElement.style.setProperty('--card-font-color', selectedColor);
+        }
       }
     });
 
@@ -2926,6 +2985,25 @@ function setupEventListeners() {
           activeContextElement.style.removeProperty('font-family');
         } else {
           activeContextElement.style.setProperty('font-family', `"${val}", sans-serif`, 'important');
+        }
+        
+        const isMainEditor = activeContextElement.id === 'editableText';
+        if (isMainEditor) {
+          if (val !== 'inherit') {
+            document.documentElement.style.setProperty('--font-poetry', `"${val}", sans-serif`);
+            const selectFontStyle = document.getElementById('selectFontStyle');
+            if (selectFontStyle) {
+              selectFontStyle.value = val;
+            }
+            const selectWebFontSingle = document.getElementById('selectWebFontSingle');
+            if (selectWebFontSingle) {
+              selectWebFontSingle.value = val;
+            }
+            localStorage.setItem('diwan-poetry-font', val);
+          } else {
+            document.documentElement.style.setProperty('--font-poetry', `"ArabicPoetry", sans-serif`);
+            localStorage.removeItem('diwan-poetry-font');
+          }
         }
         HistoryManager.saveState();
       }
