@@ -1628,6 +1628,138 @@ html[lang="ar"] .arabic-ui-only {
   border-color: var(--accent);
 }
 
+/* Top Action Bar Carousel styling - Corner Panel */
+.top-nav-carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(20, 20, 25, 0.5); /* gorgeous premium dark glassmorphism block */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-inline-end: 1px solid var(--border-ui); /* clean border separating it from top bar contents */
+  height: 100%;
+  padding: 0 20px;
+  margin: 0;
+  border-radius: 0; /* perfectly flush in the corner */
+}
+
+body.view-mode-design .top-nav {
+  padding-inline-start: 0;
+  padding-inline-end: 24px;
+}
+
+body.view-mode-design .top-nav-carousel-wrapper.design-only {
+  display: flex !important;
+}
+
+.top-nav-carousel-wrapper .carousel-page-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex: none;
+}
+
+/* Style carousel buttons inside top nav wrapper */
+.top-nav-carousel-wrapper .carousel-btn-page {
+  min-width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.top-nav-carousel-wrapper .carousel-btn-page:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+}
+
+.top-nav-carousel-wrapper .carousel-btn-page.active {
+  background: var(--accent);
+  color: #000;
+  box-shadow: 0 2px 10px rgba(197, 168, 128, 0.4);
+}
+
+/* Add page button */
+.top-nav-carousel-wrapper .btn-icon-add {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px dashed rgba(197, 168, 128, 0.4);
+  background: rgba(197, 168, 128, 0.05);
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-size: 11px;
+}
+
+.top-nav-carousel-wrapper .btn-icon-add:hover {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(197, 168, 128, 0.3);
+}
+
+/* Delete page button */
+.top-nav-carousel-wrapper .btn-icon-delete {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(239, 68, 68, 0.08);
+  color: rgb(239, 68, 68);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  font-size: 11px;
+}
+
+.top-nav-carousel-wrapper .btn-icon-delete:hover:not(:disabled) {
+  background: rgb(239, 68, 68);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+}
+
+.top-nav-carousel-wrapper .btn-icon-delete:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .top-nav-carousel-wrapper {
+    gap: 6px;
+    padding: 0 10px;
+  }
+  
+  body.view-mode-design .top-nav {
+    padding-inline-start: 0;
+    padding-inline-end: 12px;
+  }
+  
+  .top-nav-carousel-wrapper .carousel-btn-page,
+  .top-nav-carousel-wrapper .btn-icon-add,
+  .top-nav-carousel-wrapper .btn-icon-delete {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    font-size: 10px;
+  }
+}
+
 /* Card Page Indicator overlay styling */
 .card-page-indicator {
   position: absolute;

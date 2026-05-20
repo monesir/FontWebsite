@@ -167,6 +167,17 @@
             <span data-i18n="ratio_landscape">عرضي 16:9</span>
           </button>
         </div>
+        
+        <!-- Toggle to show/hide page numbers on card (Advanced Only) -->
+        <div class="control-group advanced-only" style="margin-top: 12px; margin-bottom: 0;">
+          <div class="toggle-buttons">
+            <label class="toggle-switch">
+              <input type="checkbox" id="togglePageIndicator" checked>
+              <span class="slider-toggle"></span>
+              <span class="toggle-text" data-i18n="show_page_numbers_label">إظهار أرقام الصفحات على الصورة</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- Typography Settings -->
@@ -486,37 +497,7 @@
       </div>
 
 
-      <!-- Carousel Page Manager Section -->
-      <div class="control-section design-only">
-        <h2 class="section-title"><i class="fa-solid fa-copy icon"></i><span data-i18n="pages_section_title">صفحات التصميم (الألبوم)</span></h2>
-        <p class="section-desc" data-i18n="pages_section_desc">أضف صفحات متعددة لتوليد ألبوم كامل بنفس التنسيق.</p>
-        
-        <div class="carousel-manager">
-          <div class="carousel-pages-row">
-            <div id="carouselPageList" class="carousel-page-list">
-              <!-- Dynamically populated buttons: Page 1, Page 2... -->
-            </div>
-            <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" data-i18n-title="add_page_title"><i class="fa-solid fa-plus"></i></button>
-          </div>
-          
-          <div class="carousel-actions-row" style="margin-top: 10px; display: flex; gap: 8px;">
-            <button id="btnDeletePage" class="btn-danger-sm" style="flex: 1; justify-content: center;" disabled>
-              <i class="fa-solid fa-trash-can"></i> <span data-i18n="delete_page_btn">حذف الصفحة الحالية</span>
-            </button>
-          </div>
-        </div>
-        
-        <!-- Toggle to show/hide page numbers on card (Advanced Only) -->
-        <div class="control-group advanced-only" style="margin-top: 12px; margin-bottom: 0;">
-          <div class="toggle-buttons">
-            <label class="toggle-switch">
-              <input type="checkbox" id="togglePageIndicator" checked>
-              <span class="slider-toggle"></span>
-              <span class="toggle-text" data-i18n="show_page_numbers_label">إظهار أرقام الصفحات على الصورة</span>
-            </label>
-          </div>
-        </div>
-      </div>
+
 
       <!-- Document Page Style (Visible in Document Mode only) -->
       <div class="control-section document-only" style="display: none;">
@@ -582,6 +563,19 @@
     <main class="main-content">
       <!-- Top Action Navigation -->
       <header class="top-nav">
+        <!-- Carousel Page Manager in the corner between top-nav and sidebar -->
+        <div class="top-nav-carousel-wrapper design-only">
+          <div id="carouselPageList" class="carousel-page-list">
+            <!-- Dynamically populated buttons: Page 1, Page 2... -->
+          </div>
+          <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" data-i18n-title="add_page_title">
+            <i class="fa-solid fa-plus"></i>
+          </button>
+          <button id="btnDeletePage" class="btn-icon-delete" title="حذف الصفحة الحالية" data-i18n-title="delete_page_title" disabled>
+            <i class="fa-solid fa-trash-can"></i>
+          </button>
+        </div>
+
         <!-- Left Side: Mobile Toggle, Brand Title, Font Indicator, Word Counter -->
         <div class="top-nav-left">
 
