@@ -2813,7 +2813,7 @@ function switchLanguage(lang) {
 // Translation mapping for English and Arabic interface
 const uiTranslations = {
   ar: {
-    logo_title: "مُحَرِّرُ الخُطُوطِ",
+    logo_title: "مُحَرِّرُ الخُطُوط",
     logo_subtitle: "أداة كتابة واختبار وتصميم الخطوط العربية والإنجليزية",
     mode_simple: "الوضع المبسط",
     mode_advanced: "الوضع المتقدم",
