@@ -781,6 +781,7 @@ html[dir="ltr"] .language-switcher-sidebar {
 }
 
 .top-nav-left {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -806,9 +807,18 @@ html[dir="ltr"] .language-switcher-sidebar {
   margin-inline-start: 4px;
 }
 
-.top-nav-right {
+.top-nav-middle {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.top-nav-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 10px;
 }
 
