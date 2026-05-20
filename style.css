@@ -165,7 +165,7 @@ body {
 }
 
 .mobile-logo-text {
-  font-family: var(--font-poetry);
+  font-family: 'ArabicPoetry', var(--font-poetry-fallback);
   font-size: 40px;
   font-weight: normal;
   color: var(--text-light);
@@ -255,7 +255,7 @@ html[dir="ltr"] .sidebar-top-actions {
 }
 
 .logo-text {
-  font-family: var(--font-poetry);
+  font-family: 'ArabicPoetry', var(--font-poetry-fallback);
   font-size: 52px;
   font-weight: normal;
   color: var(--text-light);
@@ -7492,4 +7492,11 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
   border-color: var(--danger) !important;
   color: var(--danger);
 }
+
+/* Hide font style option in Design (Card) and Document modes */
+body.view-mode-design #grpFontStyle,
+body.view-mode-document #grpFontStyle {
+  display: none !important;
+}
+
 
