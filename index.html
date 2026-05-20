@@ -1126,117 +1126,435 @@
           </div>
 
           <!-- Electronics E-commerce Storefront Layout -->
-          <div id="webContentStore" class="web-template-content">
-            <!-- Store Header -->
-            <header class="web-header">
-              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
-              <nav class="web-nav">
+                    <div id="webContentStore" class="web-template-content">
+            <!-- Store Navigation Header -->
+            <header class="store-header">
+              <div class="store-header-left">
+                <div class="store-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
+              </div>
+              <nav class="store-nav">
                 <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_home">الرئيسية</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_phones">الهواتف والأجهزة</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_audio">الصوتيات الراقية</a>
-                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_accessories">ملحقات التصميم</a>
+                <a href="#" onclick="return false;" class="store-nav-link" data-filter="audio" contenteditable="true" spellcheck="false" data-i18n="store_nav_audio">الصوتيات الراقية</a>
+                <a href="#" onclick="return false;" class="store-nav-link" data-filter="keyboard" contenteditable="true" spellcheck="false" data-i18n="store_nav_accessories">ملحقات التصميم</a>
+                <a href="#" onclick="return false;" class="store-nav-link" data-filter="watch" contenteditable="true" spellcheck="false" data-i18n="store_nav_phones">الهواتف والأجهزة</a>
                 <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_nav_contact">تواصل معنا</a>
               </nav>
-              <div class="web-header-actions">
-                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false"><i class="fa-solid fa-cart-shopping" style="margin-left: 6px;"></i><span data-i18n="store_cart_btn">سلة المشتريات (3)</span></button>
+              <div class="store-header-actions">
+                <div class="store-search-box">
+                  <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                  <input type="text" class="store-search-input" placeholder="ابحث عن منتج..." data-i18n-placeholder="store_search_placeholder" spellcheck="false">
+                </div>
+                <button class="store-wishlist-btn" title="المفضلة"><i class="fa-regular fa-heart"></i></button>
+                <button class="store-cart-toggle-btn web-btn web-btn-primary">
+                  <i class="fa-solid fa-bag-shopping"></i>
+                  <span class="cart-badge">0</span>
+                  <span class="cart-btn-label" data-i18n="store_cart_btn">سلة المشتريات (3)</span>
+                </button>
               </div>
             </header>
 
-            <!-- Hero Section -->
-            <section class="web-hero">
-              <div class="web-hero-content">
-                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك.</h1>
-                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="store_hero_desc">اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.</p>
-                <div class="web-hero-buttons">
-                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="store_hero_cta_primary">تسوق العروض الحصرية</button>
-                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="store_hero_cta_secondary">شاهد الفيديو الترويجي</button>
+            <!-- Store Hero Section -->
+            <section class="store-hero">
+              <div class="store-hero-grid">
+                <div class="store-hero-text">
+                  <div class="store-hero-badge-container">
+                    <span class="store-hero-badge" contenteditable="true" spellcheck="false" data-i18n="store_hero_badge">✨ عرض إطلاق خاص - حسم 15٪ لفترة محدودة</span>
+                  </div>
+                  <h1 class="store-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك.</h1>
+                  <p class="store-hero-desc" contenteditable="true" spellcheck="false" data-i18n="store_hero_desc">اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.</p>
+                  <div class="store-hero-price-tag">
+                    <span class="price-label" data-i18n="store_hero_starts_at">تبدأ الأسعار من</span>
+                    <span class="price-value" contenteditable="true" spellcheck="false" data-i18n="store_hero_starts_price">$189</span>
+                  </div>
+                  <div class="store-hero-buttons">
+                    <button class="web-btn web-btn-primary web-btn-lg store-btn-shop-now" data-i18n="store_hero_cta_primary">تسوق العروض الحصرية</button>
+                    <button class="web-btn web-btn-secondary web-btn-lg store-btn-watch" data-i18n="store_hero_cta_secondary">شاهد الفيديو الترويجي</button>
+                  </div>
+                </div>
+                
+                <!-- Immersive CSS Product Showcase (Headphones) -->
+                <div class="store-hero-visual">
+                  <div class="store-hero-backdrop"></div>
+                  <div class="store-hero-graphic-container">
+                    <div class="store-hero-graphic headphones-graphic">
+                      <!-- CSS RENDERED HEADPHONES -->
+                      <div class="css-headphone-arch"></div>
+                      <div class="css-headphone-band"></div>
+                      <div class="css-headphone-cups">
+                        <div class="css-cup cup-left">
+                          <div class="css-cup-yoke"></div>
+                          <div class="css-cup-housing">
+                            <div class="css-cup-ring"></div>
+                          </div>
+                          <div class="css-cup-cushion"></div>
+                        </div>
+                        <div class="css-cup cup-right">
+                          <div class="css-cup-yoke"></div>
+                          <div class="css-cup-housing">
+                            <div class="css-cup-ring"></div>
+                          </div>
+                          <div class="css-cup-cushion"></div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Dynamic Pulse Dots with Tooltips -->
+                    <div class="pulse-dot dot-1" data-tooltip-ar="صوت فائق الدقة Hi-Res مع مشغلات 40 مم" data-tooltip-en="Hi-Res Audio with 40mm Dynamic Drivers">
+                      <span class="pulse-ring"></span>
+                      <span class="pulse-core"></span>
+                    </div>
+                    <div class="pulse-dot dot-2" data-tooltip-ar="عزل ضوضاء نشط هجين ANC يصل إلى 42dB" data-tooltip-en="Hybrid Active Noise Cancellation up to 42dB">
+                      <span class="pulse-ring"></span>
+                      <span class="pulse-core"></span>
+                    </div>
+                    <div class="pulse-dot dot-3" data-tooltip-ar="بطارية ضخمة تدوم 40 ساعة من التشغيل المستمر" data-tooltip-en="Massive 40-Hour Battery Life with Fast Charge">
+                      <span class="pulse-ring"></span>
+                      <span class="pulse-core"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
 
-            <!-- Product Showcase Grid -->
-            <section class="web-features">
-              <div class="web-section-header">
+            <!-- Interactive Category Filter Tabs -->
+            <section class="store-filters-section">
+              <div class="store-section-header">
                 <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="store_grid_title">أحدث التقنيات المختارة</h2>
                 <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="store_grid_desc">منتجات حائزة على جوائز تجمع بين متعة الاستخدام وأناقة التصميم العصري الفخم</p>
               </div>
-              <div class="web-features-grid web-store-grid">
-                <!-- Product Card 1 -->
-                <div class="web-feature-card web-product-card">
-                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-headphones"></i></div>
-                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod1_cat">صوتيات راقية</div>
-                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod1_title">سماعات رأس ديوان اللاسلكية بنقاء فائق</h3>
-                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod1_price">$299</div>
-                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod1_btn">أضف إلى السلة</button>
+              <div class="store-filter-tabs">
+                <button class="store-filter-tab active" data-filter="all" data-i18n="store_filter_all">الكل</button>
+                <button class="store-filter-tab" data-filter="audio" data-i18n="store_filter_audio">الصوتيات</button>
+                <button class="store-filter-tab" data-filter="keyboard" data-i18n="store_filter_keyboards">ملحقات مكتبية</button>
+                <button class="store-filter-tab" data-filter="watch" data-i18n="store_filter_watches">ساعات ذكية</button>
+                <button class="store-filter-tab" data-filter="display" data-i18n="store_filter_displays">الشاشات</button>
+              </div>
+            </section>
+
+            <!-- Premium Product Grid -->
+            <section class="store-products-section">
+              <div class="store-products-grid">
+                <!-- Product Card 1 (Audio) -->
+                <div class="store-product-card" data-category="audio" data-id="headphones">
+                  <div class="store-product-badge badge-bestseller" contenteditable="true" data-i18n="store_badge_bestseller">الأكثر مبيعاً</div>
+                  
+                  <!-- CSS Product Graphic: Headphones -->
+                  <div class="store-card-graphic-wrapper">
+                    <div class="product-graphic-headphones">
+                      <div class="mini-cup-left"></div>
+                      <div class="mini-cup-right"></div>
+                      <div class="mini-band"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="store-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod1_cat">صوتيات راقية</div>
+                  <h3 class="store-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod1_title">سماعات رأس ديوان اللاسلكية بنقاء فائق</h3>
+                  
+                  <!-- Rating stars -->
+                  <div class="store-product-rating">
+                    <div class="stars-stars">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="rating-text">(4.9)</span>
+                  </div>
+
+                  <!-- Specs list -->
+                  <ul class="store-product-specs">
+                    <li contenteditable="true" data-i18n="store_prod1_spec1">عزل نشط للضوضاء ANC</li>
+                    <li contenteditable="true" data-i18n="store_prod1_spec2">صوت محيطي ثلاثي الأبعاد</li>
+                    <li contenteditable="true" data-i18n="store_prod1_spec3">شحن سريع (5 دقائق = 5 ساعات)</li>
+                  </ul>
+
+                  <!-- Pricing and Action -->
+                  <div class="store-product-footer">
+                    <div class="store-price-container">
+                      <span class="store-original-price">$349</span>
+                      <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod1_price">$299</span>
+                    </div>
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="headphones">
+                      <i class="fa-solid fa-cart-plus"></i>
+                      <span data-i18n="store_prod1_btn">أضف إلى السلة</span>
+                    </button>
+                  </div>
                 </div>
-                <!-- Product Card 2 -->
-                <div class="web-feature-card web-product-card">
-                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-keyboard"></i></div>
-                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod2_cat">ملحقات مكتبية</div>
-                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod2_title">لوحة مفاتيح ميكانيكية مخصصة للمصممين</h3>
-                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod2_price">$189</div>
-                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod2_btn">أضف إلى السلة</button>
+
+                <!-- Product Card 2 (Keyboard) -->
+                <div class="store-product-card" data-category="keyboard" data-id="keyboard">
+                  <div class="store-product-badge badge-new" contenteditable="true" data-i18n="store_badge_new">جديد بالكامل</div>
+                  
+                  <!-- CSS Product Graphic: Keyboard -->
+                  <div class="store-card-graphic-wrapper">
+                    <div class="product-graphic-keyboard">
+                      <div class="kb-chassis">
+                        <div class="kb-key-row">
+                          <span class="kb-key key-accent"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+                          <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key key-accent2"></span>
+                        </div>
+                        <div class="kb-key-row">
+                          <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+                          <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="store-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod2_cat">ملحقات مكتبية</div>
+                  <h3 class="store-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod2_title">لوحة مفاتيح ميكانيكية مخصصة للمصممين</h3>
+                  
+                  <div class="store-product-rating">
+                    <div class="stars-stars">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star-half-stroke"></i>
+                    </div>
+                    <span class="rating-text">(4.8)</span>
+                  </div>
+
+                  <ul class="store-product-specs">
+                    <li contenteditable="true" data-i18n="store_prod2_spec1">مفاتيح خطية صامتة ومريحة</li>
+                    <li contenteditable="true" data-i18n="store_prod2_spec2">هيكل ألومنيوم مؤكسد متين</li>
+                    <li contenteditable="true" data-i18n="store_prod2_spec3">اتصال لاسلكي ثلاثي الأوضاع</li>
+                  </ul>
+
+                  <div class="store-product-footer">
+                    <div class="store-price-container">
+                      <span class="store-original-price">$219</span>
+                      <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod2_price">$189</span>
+                    </div>
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="keyboard">
+                      <i class="fa-solid fa-cart-plus"></i>
+                      <span data-i18n="store_prod2_btn">أضف إلى السلة</span>
+                    </button>
+                  </div>
                 </div>
-                <!-- Product Card 3 -->
-                <div class="web-feature-card web-product-card">
-                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-stopwatch-20"></i></div>
-                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod3_cat">أجهزة ذكية</div>
-                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod3_title">ساعة ديوان الرياضية الذكية الجيل الخامس</h3>
-                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod3_price">$249</div>
-                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod3_btn">أضف إلى السلة</button>
+
+                <!-- Product Card 3 (Smartwatch) -->
+                <div class="store-product-card" data-category="watch" data-id="watch">
+                  <div class="store-product-badge badge-hot" contenteditable="true" data-i18n="store_badge_hot">الأكثر طلباً</div>
+                  
+                  <!-- CSS Product Graphic: Smartwatch -->
+                  <div class="store-card-graphic-wrapper">
+                    <div class="product-graphic-watch">
+                      <div class="watch-strap strap-top"></div>
+                      <div class="watch-case">
+                        <div class="watch-screen">
+                          <div class="watch-content">
+                            <span class="watch-time">10:09</span>
+                            <span class="watch-ring"></span>
+                          </div>
+                        </div>
+                        <div class="watch-crown"></div>
+                      </div>
+                      <div class="watch-strap strap-bottom"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="store-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod3_cat">أجهزة ذكية</div>
+                  <h3 class="store-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod3_title">ساعة ديوان الرياضية الذكية الجيل الخامس</h3>
+                  
+                  <div class="store-product-rating">
+                    <div class="stars-stars">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="rating-text">(4.7)</span>
+                  </div>
+
+                  <ul class="store-product-specs">
+                    <li contenteditable="true" data-i18n="store_prod3_spec1">مراقبة مستمرة لنبض القلب والدم</li>
+                    <li contenteditable="true" data-i18n="store_prod3_spec2">شاشة Retina AMOLED ساطعة</li>
+                    <li contenteditable="true" data-i18n="store_prod3_spec3">عمر بطارية يصل إلى 7 أيام كاملة</li>
+                  </ul>
+
+                  <div class="store-product-footer">
+                    <div class="store-price-container">
+                      <span class="store-original-price">$299</span>
+                      <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod3_price">$249</span>
+                    </div>
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="watch">
+                      <i class="fa-solid fa-cart-plus"></i>
+                      <span data-i18n="store_prod3_btn">أضف إلى السلة</span>
+                    </button>
+                  </div>
                 </div>
-                <!-- Product Card 4 -->
-                <div class="web-feature-card web-product-card">
-                  <div class="web-feature-icon web-product-icon"><i class="fa-solid fa-display"></i></div>
-                  <div class="web-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod4_cat">شاشات احترافية</div>
-                  <h3 class="web-feature-title web-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod4_title">شاشة منحنية احترافية فائقة الدقة 34 بوصة</h3>
-                  <div class="web-product-price" contenteditable="true" spellcheck="false" data-i18n="store_prod4_price">$549</div>
-                  <button class="web-btn web-btn-outline web-product-btn" contenteditable="true" spellcheck="false" data-i18n="store_prod4_btn">أضف إلى السلة</button>
+
+                <!-- Product Card 4 (Display) -->
+                <div class="store-product-card" data-category="display" data-id="display">
+                  <div class="store-product-badge badge-discount" contenteditable="true" data-i18n="store_badge_discount">وفر 100$</div>
+                  
+                  <!-- CSS Product Graphic: Curved Monitor -->
+                  <div class="store-card-graphic-wrapper">
+                    <div class="product-graphic-monitor">
+                      <div class="monitor-screen-curve">
+                        <div class="monitor-display-glowing"></div>
+                      </div>
+                      <div class="monitor-stand"></div>
+                      <div class="monitor-base"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="store-product-category" contenteditable="true" spellcheck="false" data-i18n="store_prod4_cat">شاشات احترافية</div>
+                  <h3 class="store-product-title" contenteditable="true" spellcheck="false" data-i18n="store_prod4_title">شاشة منحنية احترافية فائقة الدقة 34 بوصة</h3>
+                  
+                  <div class="store-product-rating">
+                    <div class="stars-stars">
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                      <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="rating-text">(4.9)</span>
+                  </div>
+
+                  <ul class="store-product-specs">
+                    <li contenteditable="true" data-i18n="store_prod4_spec1">معدل تحديث فائق السرعة 144Hz</li>
+                    <li contenteditable="true" data-i18n="store_prod4_spec2">انحناء مثالي 1500R لراحة العين</li>
+                    <li contenteditable="true" data-i18n="store_prod4_spec3">ألوان حيوية 99٪ sRGB و DCI-P3</li>
+                  </ul>
+
+                  <div class="store-product-footer">
+                    <div class="store-price-container">
+                      <span class="store-original-price">$649</span>
+                      <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod4_price">$549</span>
+                    </div>
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="display">
+                      <i class="fa-solid fa-cart-plus"></i>
+                      <span data-i18n="store_prod4_btn">أضف إلى السلة</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </section>
 
-            <!-- Testimonial Section -->
-            <section class="web-testimonial">
-              <div class="web-testimonial-content">
-                <i class="fa-solid fa-quote-right quote-icon"></i>
-                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="store_quote_text">«لقد غيرت سماعات ديوان اللاسلكية تجربتي اليومية بالكامل، عزل الضوضاء فائق الذكاء وجودة الصوت لا تقارن بأي سماعات أخرى جربتها سابقاً.»</p>
-                <div class="web-testimonial-author">
-                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="store_quote_author">سارة عبد الرحمن</div>
-                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="store_quote_title">مهندسة برمجيات وصانعة محتوى رقمي</div>
+            <!-- Bento Highlights Info Grid -->
+            <section class="store-highlights-section">
+              <div class="store-bento-grid">
+                <div class="store-bento-card bento-wide">
+                  <div class="bento-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                  <h3 contenteditable="true" data-i18n="store_bento1_title">شحن فائق السرعة مجاني</h3>
+                  <p contenteditable="true" data-i18n="store_bento1_desc">شحن وتوصيل مجاني سريع لجميع الطلبات التي تتجاوز قيمتها 150 دولارًا أمريكيًا شامل التغطية الكاملة والتأمين.</p>
+                </div>
+                <div class="store-bento-card">
+                  <div class="bento-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                  <h3 contenteditable="true" data-i18n="store_bento2_title">ضمان معتمد لمدة سنتين</h3>
+                  <p contenteditable="true" data-i18n="store_bento2_desc">نقدم ضمانًا محليًا وعالميًا شاملاً لمدة 24 شهرًا ضد جميع العيوب المصنعية مع دعم فني متكامل.</p>
+                </div>
+                <div class="store-bento-card">
+                  <div class="bento-icon"><i class="fa-solid fa-rotate-left"></i></div>
+                  <h3 contenteditable="true" data-i18n="store_bento3_title">إرجاع مرن وسلس</h3>
+                  <p contenteditable="true" data-i18n="store_bento3_desc">سياسة استرجاع واستبدال مرنة لمدة 14 يومًا بضمان استرداد الأموال بالكامل بدون أي تعقيدات.</p>
                 </div>
               </div>
             </section>
 
-            <!-- Footer -->
-            <footer class="web-footer">
-              <div class="web-footer-top">
-                <div class="web-footer-brand">
-                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
-                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="store_footer_desc">متجرك التقني الأول لأحدث الابتكارات والأجهزة الإلكترونية الذكية بأعلى مواصفات الجودة وخدمة عملاء فائقة التميز.</p>
+            <!-- Customer Review Showcase Quote Section -->
+            <section class="store-testimonial-section">
+              <div class="store-testimonial-container">
+                <div class="testimonial-decor-quotes"><i class="fa-solid fa-quote-right"></i></div>
+                <p class="store-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="store_quote_text">«لقد غيرت سماعات ديوان اللاسلكية تجربتي اليومية بالكامل، عزل الضوضاء فائق الذكاء وجودة الصوت لا تقارن بأي سماعات أخرى جربتها سابقاً.»</p>
+                <div class="store-testimonial-profile">
+                  <div class="testimonial-avatar"><i class="fa-regular fa-circle-user"></i></div>
+                  <div class="testimonial-meta">
+                    <h4 class="store-author-name" contenteditable="true" spellcheck="false" data-i18n="store_quote_author">سارة عبد الرحمن</h4>
+                    <span class="store-author-title" contenteditable="true" spellcheck="false" data-i18n="store_quote_title">مهندسة برمجيات وصانعة محتوى رقمي</span>
+                  </div>
                 </div>
-                <div class="web-footer-links">
-                  <div class="web-links-column">
+              </div>
+            </section>
+
+            <!-- Newsletter Signup Block -->
+            <section class="store-newsletter-section">
+              <div class="store-newsletter-card">
+                <h3 contenteditable="true" data-i18n="store_news_title">كن أول من يعرف بالمنتجات الجديدة</h3>
+                <p contenteditable="true" data-i18n="store_news_desc">اشترك في نشرتنا البريدية لتلقي تحديثات الإصدارات الجديدة، العروض الحصرية، وقسائم الحسم الشهرية الخاصة.</p>
+                <form class="store-news-form" onsubmit="return false;">
+                  <input type="email" class="store-news-input" placeholder="عنوان بريدك الإلكتروني" data-i18n-placeholder="store_news_placeholder" required spellcheck="false">
+                  <button type="submit" class="web-btn web-btn-primary store-news-btn" data-i18n="store_news_btn">اشترك الآن</button>
+                </form>
+                <div class="store-news-success-msg" style="display: none;" data-i18n="store_news_success">✨ تم تسجيل اشتراكك بنجاح! شكرًا لانضمامك إلينا.</div>
+              </div>
+            </section>
+
+            <!-- Store Footer Section -->
+            <footer class="store-footer">
+              <div class="store-footer-top">
+                <div class="store-footer-brand">
+                  <div class="store-logo" contenteditable="true" spellcheck="false" data-i18n="store_logo">ديوان إلكترونكس</div>
+                  <p class="store-footer-desc" contenteditable="true" spellcheck="false" data-i18n="store_footer_desc">متجرك التقني الأول لأحدث الابتكارات والأجهزة الإلكترونية الذكية بأعلى مواصفات الجودة وخدمة عملاء فائقة التميز.</p>
+                </div>
+                <div class="store-footer-links">
+                  <div class="store-links-column">
                     <h4 contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_title">التسوق</h4>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_link1">عروض مميزة</a>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col1_link2">أحدث الملحقات</a>
                   </div>
-                  <div class="web-links-column">
+                  <div class="store-links-column">
                     <h4 contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_title">المساعدة</h4>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_link1">سياسة الضمان</a>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="store_foot_col2_link2">تتبع الشحنة</a>
                   </div>
                 </div>
               </div>
-              <div class="web-footer-bottom">
-                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="store_copyright">حقوق النشر © 2026 ديوان إلكترونكس. جميع الحقوق محفوظة.</p>
+              <div class="store-footer-bottom">
+                <p class="store-copyright" contenteditable="true" spellcheck="false" data-i18n="store_copyright">حقوق النشر © 2026 ديوان إلكترونكس. جميع الحقوق محفوظة.</p>
               </div>
             </footer>
-          </div>
-        </div>
-      </div>
 
-      <!-- FAQ & SEO Section -->
+            <!-- Slide-out Shopping Cart Drawer -->
+            <div id="storeCartDrawer" class="store-cart-drawer">
+              <div class="cart-drawer-header">
+                <h3 data-i18n-html="cart_drawer_title"><i class="fa-solid fa-basket-shopping"></i> سلة التسوق الخاصة بك</h3>
+                <button class="cart-drawer-close-btn" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="cart-drawer-body">
+                <!-- Cart items list (rendered dynamically or using realistic HTML skeleton) -->
+                <div class="cart-items-container">
+                  <!-- Empty state placeholder -->
+                  <div class="cart-empty-state" data-i18n-html="cart_empty_msg">
+                    <i class="fa-solid fa-bag-shopping empty-icon"></i>
+                    <p>السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>
+                  </div>
+                  
+                  <!-- High fidelity items listing -->
+                  <div class="cart-items-list" style="display: none;">
+                    <!-- Items injected here by javascript -->
+                  </div>
+                </div>
+              </div>
+              <div class="cart-drawer-footer">
+                <div class="cart-summary-row">
+                  <span class="summary-label" data-i18n="cart_subtotal">المجموع الفرعي:</span>
+                  <span class="summary-value subtotal-amount">$0</span>
+                </div>
+                <div class="cart-summary-row">
+                  <span class="summary-label" data-i18n="cart_shipping">الشحن والتسليم:</span>
+                  <span class="summary-value shipping-amount" data-i18n="cart_shipping_free">مجاني</span>
+                </div>
+                <div class="cart-summary-divider"></div>
+                <div class="cart-summary-row total-row">
+                  <span class="summary-label" data-i18n="cart_total">الإجمالي الكلي:</span>
+                  <span class="summary-value total-amount">$0</span>
+                </div>
+                <div class="cart-checkout-actions">
+                  <button class="web-btn web-btn-primary cart-checkout-btn" data-i18n="cart_checkout_btn">إتمام عملية الشراء</button>
+                  <button class="web-btn web-btn-outline cart-continue-btn" data-i18n="cart_continue_btn">مواصلة التسوق</button>
+                </div>
+              </div>
+            </div>
+            <!-- Cart drawer backdrop overlay -->
+            <div id="storeCartBackdrop" class="store-cart-backdrop"></div>
+          </div>
+<!-- FAQ & SEO Section -->
       <section class="faq-section">
         <div class="faq-header">
           <h2 class="faq-title" data-i18n="faq_title">الأسئلة الشائعة ودليل الاستخدام</h2>

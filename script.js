@@ -2975,6 +2975,9 @@ function setupEventListeners() {
   document.addEventListener('change', (e) => {
     HistoryManager.saveState();
   });
+
+  // Initialize premium storefront interactive logic
+  initStorefrontEvents();
 }
 
 // Switch View Mode (Design Card vs Word Document vs Web Landing Page Preview)
@@ -4643,6 +4646,50 @@ const uiTranslations = {
     store_foot_col2_link1: "سياسة الضمان",
     store_foot_col2_link2: "تتبع الشحنة",
     store_copyright: "حقوق النشر © 2026 ديوان إلكترونكس. جميع الحقوق محفوظة.",
+    store_hero_badge: "✨ عرض إطلاق خاص - حسم 15٪ لفترة محدودة",
+    store_hero_starts_at: "تبدأ الأسعار من",
+    store_hero_starts_price: "$189",
+    store_filter_all: "الكل",
+    store_filter_audio: "الصوتيات",
+    store_filter_keyboards: "ملحقات مكتبية",
+    store_filter_watches: "ساعات ذكية",
+    store_filter_displays: "الشاشات",
+    store_badge_bestseller: "الأكثر مبيعاً",
+    store_prod1_spec1: "عزل نشط للضوضاء ANC",
+    store_prod1_spec2: "صوت محيطي ثلاثي الأبعاد",
+    store_prod1_spec3: "شحن سريع (5 دقائق = 5 ساعات)",
+    store_badge_new: "جديد بالكامل",
+    store_prod2_spec1: "مفاتيح خطية صامتة ومريحة",
+    store_prod2_spec2: "هيكل ألومنيوم مؤكسد متين",
+    store_prod2_spec3: "اتصال لاسلكي ثلاثي الأوضاع",
+    store_badge_hot: "الأكثر طلباً",
+    store_prod3_spec1: "مراقبة مستمرة لنبض القلب والدم",
+    store_prod3_spec2: "شاشة Retina AMOLED ساطعة",
+    store_prod3_spec3: "عمر بطارية يصل إلى 7 أيام كاملة",
+    store_badge_discount: "وفر 100$",
+    store_prod4_spec1: "معدل تحديث فائق السرعة 144Hz",
+    store_prod4_spec2: "انحناء مثالي 1500R لراحة العين",
+    store_prod4_spec3: "ألوان حيوية 99٪ sRGB و DCI-P3",
+    store_bento1_title: "شحن فائق السرعة مجاني",
+    store_bento1_desc: "شحن وتوصيل مجاني سريع لجميع الطلبات التي تتجاوز قيمتها 150 دولارًا أمريكيًا شامل التغطية الكاملة والتأمين.",
+    store_bento2_title: "ضمان معتمد لمدة سنتين",
+    store_bento2_desc: "نقدم ضمانًا محليًا وعالميًا شاملاً لمدة 24 شهرًا ضد جميع العيوب المصنعية مع دعم فني متكامل.",
+    store_bento3_title: "إرجاع مرن وسلس",
+    store_bento3_desc: "سياسة استرجاع واستبدال مرنة لمدة 14 يومًا بضمان استرداد الأموال بالكامل بدون أي تعقيدات.",
+    store_news_title: "كن أول من يعرف بالمنتجات الجديدة",
+    store_news_desc: "اشترك في نشرتنا البريدية لتلقي تحديثات الإصدارات الجديدة، العروض الحصرية، وقسائم الحسم الشهرية الخاصة.",
+    store_news_placeholder: "عنوان بريدك الإلكتروني",
+    store_news_btn: "اشترك الآن",
+    store_news_success: "✨ تم تسجيل اشتراكك بنجاح! شكرًا لانضمامك إلينا.",
+    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> سلة التسوق الخاصة بك",
+    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p>السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>",
+    cart_subtotal: "المجموع الفرعي:",
+    cart_shipping: "الشحن والتسليم:",
+    cart_shipping_free: "مجاني",
+    cart_total: "الإجمالي الكلي:",
+    cart_checkout_btn: "إتمام عملية الشراء",
+    cart_continue_btn: "مواصلة التسوق",
+    store_search_placeholder: "ابحث عن منتج...",
 
     web_hint_lbl: "💡 نصيحة: يمكنك النقر فوق أي نص في الموقع وتعديله مباشرة لتجربة الخط عليه!",
     ctx_enlarge_font: "تكبير الخط (+)",
@@ -4951,6 +4998,50 @@ const uiTranslations = {
     store_foot_col2_link1: "Warranty Policy",
     store_foot_col2_link2: "Track Order",
     store_copyright: "Copyright © 2026 Diwan Electronics. All rights reserved.",
+    store_hero_badge: "✨ Special Launch Offer - 15% Off Limited Time",
+    store_hero_starts_at: "Starts at",
+    store_hero_starts_price: "$189",
+    store_filter_all: "All",
+    store_filter_audio: "Audio",
+    store_filter_keyboards: "Desk Accessories",
+    store_filter_watches: "Smartwatches",
+    store_filter_displays: "Displays",
+    store_badge_bestseller: "Bestseller",
+    store_prod1_spec1: "Active Noise Cancelling (ANC)",
+    store_prod1_spec2: "3D Spatial Surround Sound",
+    store_prod1_spec3: "Fast Charging (5m charge = 5h play)",
+    store_badge_new: "Brand New",
+    store_prod2_spec1: "Silent Linear Mechanical Switches",
+    store_prod2_spec2: "Anodized Aluminum Solid Case",
+    store_prod2_spec3: "Triple-Mode Wireless Connectivity",
+    store_badge_hot: "Hot Product",
+    store_prod3_spec1: "Continuous HR & Blood Oxygen Tracking",
+    store_prod3_spec2: "Ultra-Bright Retina AMOLED Screen",
+    store_prod3_spec3: "Up to 7 Days Battery Life",
+    store_badge_discount: "Save $100",
+    store_prod4_spec1: "144Hz Ultra-Fast Refresh Rate",
+    store_prod4_spec2: "1500R Ergonomic Curve Radius",
+    store_prod4_spec3: "99% sRGB & DCI-P3 Color Gamut",
+    store_bento1_title: "Free Express Shipping",
+    store_bento1_desc: "Free fast shipping and transit insurance on all orders over $150 worldwide.",
+    store_bento2_title: "2-Year Authorized Warranty",
+    store_bento2_desc: "Enjoy 24 months of local and global certified warranty against manufacturing defects.",
+    store_bento3_title: "Hassle-Free 14-Day Returns",
+    store_bento3_desc: "Flexible, no-questions-asked return policy within 14 days with 100% money back guarantee.",
+    store_news_title: "Be the First to Know About New Releases",
+    store_news_desc: "Subscribe to our tech newsletter for new product launches, special member codes, and exclusive benefits.",
+    store_news_placeholder: "Your email address",
+    store_news_btn: "Subscribe Now",
+    store_news_success: "✨ Subscribed successfully! Thank you for joining us.",
+    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> Your Shopping Cart",
+    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p>Your cart is empty. Add some amazing products to start shopping!</p>",
+    cart_subtotal: "Subtotal:",
+    cart_shipping: "Shipping & Handling:",
+    cart_shipping_free: "Free",
+    cart_total: "Grand Total:",
+    cart_checkout_btn: "Proceed to Checkout",
+    cart_continue_btn: "Continue Shopping",
+    store_search_placeholder: "Search for products...",
 
     web_hint_lbl: "💡 Tip: You can click on any text in the website mock-up and edit it directly to test your font!",
     ctx_enlarge_font: "Enlarge Font (+)",
@@ -5062,6 +5153,11 @@ function updateUISiteLanguage(lang) {
     if (!customFontLoaded) {
       activeFontName.textContent = lang === 'ar' ? 'خط الشعر العربي (الافتراضي)' : 'Arabic Poetry (Default Loaded)';
     }
+  }
+
+  // 7. Storefront cart rendering sync
+  if (typeof renderCart === 'function') {
+    renderCart();
   }
 }
 
@@ -5249,3 +5345,387 @@ function exportDocAsPDF() {
     btnSaveDocAsBtn.innerHTML = originalHTML;
   });
 }
+
+// ============================================================================
+// PREMIUM STOREFRONT INTERACTIVE LOGIC
+// ============================================================================
+
+// Store Product Data Mapping (Fallbacks)
+const storeProducts = {
+  headphones: {
+    titleAr: "سماعات رأس ديوان اللاسلكية بنقاء فائق",
+    titleEn: "Diwan Ultra-Clarity Wireless Headphones",
+    price: 299
+  },
+  keyboard: {
+    titleAr: "لوحة مفاتيح ميكانيكية مخصصة للمصممين",
+    titleEn: "Mechanical Designer Keyboard",
+    price: 189
+  },
+  watch: {
+    titleAr: "ساعة ديوان الرياضية الذكية الجيل الخامس",
+    titleEn: "Diwan Smart Sports Watch Series 5",
+    price: 249
+  },
+  display: {
+    titleAr: "شاشة منحنية احترافية فائقة الدقة 34 بوصة",
+    titleEn: "34-inch Ultra-Wide Curved Pro Monitor",
+    price: 549
+  }
+};
+
+// Global Store Cart State
+let storeCart = [];
+
+// Initialize Storefront Interactive Logic
+function initStorefrontEvents() {
+  const webContentStore = document.getElementById('webContentStore');
+  if (!webContentStore) return;
+
+  const cartDrawer = document.getElementById('storeCartDrawer');
+  const cartBackdrop = document.getElementById('storeCartBackdrop');
+
+  const openCart = () => {
+    if (cartDrawer) cartDrawer.classList.add('active');
+    if (cartBackdrop) cartBackdrop.classList.add('active');
+  };
+
+  const closeCart = () => {
+    if (cartDrawer) cartDrawer.classList.remove('active');
+    if (cartBackdrop) cartBackdrop.classList.remove('active');
+  };
+
+  // Toggle Cart Drawer
+  const btnCartToggle = document.querySelector('.store-cart-toggle-btn');
+  const btnCloseDrawer = document.querySelector('.cart-drawer-close-btn');
+  const btnContinueShopping = document.querySelector('.cart-continue-btn');
+
+  if (btnCartToggle) {
+    btnCartToggle.addEventListener('click', openCart);
+  }
+  if (btnCloseDrawer) {
+    btnCloseDrawer.addEventListener('click', closeCart);
+  }
+  if (btnContinueShopping) {
+    btnContinueShopping.addEventListener('click', closeCart);
+  }
+  if (cartBackdrop) {
+    cartBackdrop.addEventListener('click', closeCart);
+  }
+
+  // Scoped Event Delegation for Store interactions
+  webContentStore.addEventListener('click', (e) => {
+    // 1. Add to Cart button
+    const addBtn = e.target.closest('.store-add-cart-btn');
+    if (addBtn) {
+      const productId = addBtn.dataset.id;
+      addToCart(productId);
+      openCart();
+    }
+
+    // 2. Quantity Plus button
+    const plusBtn = e.target.closest('.qty-plus-btn');
+    if (plusBtn) {
+      const productId = plusBtn.dataset.id;
+      changeQuantity(productId, 1);
+    }
+
+    // 3. Quantity Minus button
+    const minusBtn = e.target.closest('.qty-minus-btn');
+    if (minusBtn) {
+      const productId = minusBtn.dataset.id;
+      changeQuantity(productId, -1);
+    }
+
+    // 4. Remove Item button
+    const removeBtn = e.target.closest('.cart-item-remove-btn');
+    if (removeBtn) {
+      const productId = removeBtn.dataset.id;
+      removeFromCart(productId);
+    }
+
+    // 5. Category filter tab clicks
+    const filterTab = e.target.closest('.store-filter-tab');
+    if (filterTab) {
+      const filter = filterTab.dataset.filter;
+      webContentStore.querySelectorAll('.store-filter-tab').forEach(t => t.classList.remove('active'));
+      filterTab.classList.add('active');
+      filterProducts(filter);
+    }
+
+    // 6. Navigation link clicks
+    const navLink = e.target.closest('.store-nav-link');
+    if (navLink) {
+      const filter = navLink.dataset.filter;
+      const matchingTab = webContentStore.querySelector(`.store-filter-tab[data-filter="${filter}"]`);
+      if (matchingTab) {
+        webContentStore.querySelectorAll('.store-filter-tab').forEach(t => t.classList.remove('active'));
+        matchingTab.classList.add('active');
+      }
+      filterProducts(filter);
+    }
+  });
+
+  // Newsletter Submit Listener
+  const newsForm = document.querySelector('.store-news-form');
+  const newsSuccess = document.querySelector('.store-news-success-msg');
+  if (newsForm && newsSuccess) {
+    newsForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      newsForm.style.display = 'none';
+      newsSuccess.style.display = 'block';
+    });
+  }
+
+  // Checkout Button Listener
+  const btnCheckout = document.querySelector('.cart-checkout-btn');
+  if (btnCheckout) {
+    btnCheckout.addEventListener('click', () => {
+      const lang = localStorage.getItem('siteLanguage') || 'ar';
+      const msg = lang === 'ar' 
+        ? 'شكراً لتسوقك معنا! تم محاكاة عملية الدفع بنجاح.' 
+        : 'Thank you for shopping with us! Checkout simulation completed successfully.';
+      alert(msg);
+      storeCart = [];
+      renderCart();
+      closeCart();
+    });
+  }
+
+  // Initial cart rendering
+  renderCart();
+}
+
+function addToCart(productId) {
+  const existing = storeCart.find(item => item.id === productId);
+  if (existing) {
+    existing.qty++;
+  } else {
+    const lang = localStorage.getItem('siteLanguage') || 'ar';
+    let price = storeProducts[productId]?.price || 0;
+    let title = lang === 'ar' ? storeProducts[productId]?.titleAr : storeProducts[productId]?.titleEn;
+
+    const card = document.querySelector(`.store-product-card[data-id="${productId}"]`);
+    if (card) {
+      const priceEl = card.querySelector('.store-sale-price');
+      if (priceEl) {
+        const parsedPrice = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, ''));
+        if (!isNaN(parsedPrice)) price = parsedPrice;
+      }
+      const titleEl = card.querySelector('.store-product-title');
+      if (titleEl) title = titleEl.textContent.trim();
+    }
+
+    storeCart.push({
+      id: productId,
+      qty: 1,
+      price: price,
+      title: title
+    });
+  }
+  renderCart();
+}
+
+function changeQuantity(productId, amount) {
+  const item = storeCart.find(item => item.id === productId);
+  if (item) {
+    item.qty += amount;
+    if (item.qty <= 0) {
+      removeFromCart(productId);
+    } else {
+      renderCart();
+    }
+  }
+}
+
+function removeFromCart(productId) {
+  storeCart = storeCart.filter(item => item.id !== productId);
+  renderCart();
+}
+
+function updateCartBadge() {
+  const lang = localStorage.getItem('siteLanguage') || 'ar';
+  const totalQty = storeCart.reduce((sum, item) => sum + item.qty, 0);
+  const badge = document.querySelector('.cart-badge');
+  if (badge) {
+    badge.textContent = totalQty;
+    badge.style.display = totalQty > 0 ? 'flex' : 'none';
+  }
+
+  const label = document.querySelector('.cart-btn-label');
+  if (label) {
+    if (lang === 'ar') {
+      label.textContent = `سلة المشتريات (${totalQty})`;
+    } else {
+      label.textContent = `Shopping Cart (${totalQty})`;
+    }
+  }
+}
+
+function renderCart() {
+  const cartItemsList = document.querySelector('.cart-items-list');
+  const cartEmptyState = document.querySelector('.cart-empty-state');
+
+  if (!cartItemsList || !cartEmptyState) return;
+
+  const lang = localStorage.getItem('siteLanguage') || 'ar';
+
+  if (storeCart.length === 0) {
+    cartItemsList.style.display = 'none';
+    cartEmptyState.style.display = 'flex';
+
+    document.querySelectorAll('.subtotal-amount').forEach(el => el.textContent = '$0');
+    document.querySelectorAll('.total-amount').forEach(el => el.textContent = '$0');
+    const shippingEl = document.querySelector('.shipping-amount');
+    if (shippingEl) {
+      shippingEl.textContent = lang === 'ar' ? 'مجاني' : 'Free';
+      shippingEl.setAttribute('data-i18n', 'cart_shipping_free');
+    }
+
+    updateCartBadge();
+    return;
+  }
+
+  cartItemsList.style.display = 'block';
+  cartEmptyState.style.display = 'none';
+
+  let html = '';
+  let subtotal = 0;
+
+  storeCart.forEach(item => {
+    let displayTitle = item.title;
+    const defaultAr = storeProducts[item.id]?.titleAr;
+    const defaultEn = storeProducts[item.id]?.titleEn;
+
+    if (lang === 'ar' && displayTitle === defaultEn) {
+      displayTitle = defaultAr;
+      item.title = defaultAr;
+    } else if (lang === 'en' && displayTitle === defaultAr) {
+      displayTitle = defaultEn;
+      item.title = defaultEn;
+    }
+
+    const card = document.querySelector(`.store-product-card[data-id="${item.id}"]`);
+    if (card) {
+      const priceEl = card.querySelector('.store-sale-price');
+      if (priceEl) {
+        const parsedPrice = parseFloat(priceEl.textContent.replace(/[^0-9.]/g, ''));
+        if (!isNaN(parsedPrice)) item.price = parsedPrice;
+      }
+    }
+
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+
+    let graphicHtml = '';
+    if (item.id === 'headphones') {
+      graphicHtml = `
+        <div class="product-graphic-headphones">
+          <div class="mini-cup-left"></div>
+          <div class="mini-cup-right"></div>
+          <div class="mini-band"></div>
+        </div>`;
+    } else if (item.id === 'keyboard') {
+      graphicHtml = `
+        <div class="product-graphic-keyboard">
+          <div class="kb-chassis">
+            <div class="kb-key-row">
+              <span class="kb-key key-accent"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+              <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key key-accent2"></span>
+            </div>
+            <div class="kb-key-row">
+              <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+              <span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span><span class="kb-key"></span>
+            </div>
+          </div>
+        </div>`;
+    } else if (item.id === 'watch') {
+      graphicHtml = `
+        <div class="product-graphic-watch">
+          <div class="watch-strap strap-top"></div>
+          <div class="watch-case">
+            <div class="watch-screen">
+              <div class="watch-content">
+                <span class="watch-time">10:09</span>
+                <span class="watch-ring"></span>
+              </div>
+            </div>
+            <div class="watch-crown"></div>
+          </div>
+          <div class="watch-strap strap-bottom"></div>
+        </div>`;
+    } else if (item.id === 'display') {
+      graphicHtml = `
+        <div class="product-graphic-monitor">
+          <div class="monitor-screen-curve">
+            <div class="monitor-display-glowing"></div>
+          </div>
+          <div class="monitor-stand"></div>
+          <div class="monitor-base"></div>
+        </div>`;
+    }
+
+    html += `
+      <div class="cart-item" data-id="${item.id}">
+        <div class="cart-item-img-wrapper">
+          ${graphicHtml}
+        </div>
+        <div class="cart-item-details">
+          <h4 class="cart-item-title">${displayTitle}</h4>
+          <span class="cart-item-price">$${item.price}</span>
+          <div class="cart-item-actions">
+            <div class="cart-qty-selector">
+              <button class="qty-btn qty-minus-btn" data-id="${item.id}"><i class="fa-solid fa-minus"></i></button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn qty-plus-btn" data-id="${item.id}"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <button class="cart-item-remove-btn" data-id="${item.id}" title="${lang === 'ar' ? 'حذف' : 'Remove'}">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  cartItemsList.innerHTML = html;
+
+  const shipping = subtotal > 150 ? 0 : 15;
+  const total = subtotal + shipping;
+
+  document.querySelectorAll('.subtotal-amount').forEach(el => el.textContent = `$${subtotal}`);
+  document.querySelectorAll('.total-amount').forEach(el => el.textContent = `$${total}`);
+
+  const shippingEl = document.querySelector('.shipping-amount');
+  if (shippingEl) {
+    if (shipping === 0) {
+      shippingEl.textContent = lang === 'ar' ? 'مجاني' : 'Free';
+      shippingEl.setAttribute('data-i18n', 'cart_shipping_free');
+    } else {
+      shippingEl.textContent = `$${shipping}`;
+      shippingEl.removeAttribute('data-i18n');
+    }
+  }
+
+  updateCartBadge();
+}
+
+function filterProducts(filter) {
+  const cards = document.querySelectorAll('.store-product-card');
+  cards.forEach(card => {
+    const category = card.dataset.category;
+    if (filter === 'all' || category === filter) {
+      card.style.display = 'flex';
+      setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0) scale(1)';
+      }, 50);
+    } else {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(10px) scale(0.95)';
+      setTimeout(() => {
+        card.style.display = 'none';
+      }, 300);
+    }
+  });
+}
+
