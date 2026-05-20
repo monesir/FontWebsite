@@ -155,6 +155,11 @@ body {
   overflow-y: auto;
   transition: transform var(--transition-normal);
   position: relative;
+  direction: ltr; /* Moves scrollbar to the right edge (wall) in RTL */
+}
+
+.sidebar > * {
+  direction: rtl; /* Restores content layout direction */
 }
 
 .sidebar-header {
@@ -1463,6 +1468,11 @@ html[dir="ltr"] .sidebar {
   border-left: none;
   border-right: 1px solid var(--border-ui);
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5);
+  direction: rtl; /* Moves scrollbar to the left edge (wall) in LTR */
+}
+
+html[dir="ltr"] .sidebar > * {
+  direction: ltr; /* Restores content layout direction */
 }
 
 @media (max-width: 900px) {
