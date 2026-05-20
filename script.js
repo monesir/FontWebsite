@@ -2090,6 +2090,7 @@ function setupEventListeners() {
       const font = selectFontStyle.value;
       if (selectWebFontSingle) selectWebFontSingle.value = font;
       document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
+      localStorage.setItem('diwan-poetry-font', font);
       if (activeFontName) {
         activeFontName.textContent = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || '';
       }
@@ -2208,6 +2209,7 @@ function setupEventListeners() {
         }
       }
       document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
+      localStorage.setItem('diwan-poetry-font', font);
       HistoryManager.saveState();
     });
   }
@@ -3027,8 +3029,8 @@ function switchViewMode(mode) {
         if (savedButtons) selectWebFontButtons.value = savedButtons;
       }
       if (selectWebFontSingle) {
-        const savedSingle = localStorage.getItem('diwan-poetry-font') || selectFontStyle?.value;
-        if (savedSingle) selectWebFontSingle.value = savedSingle;
+        const savedSingle = localStorage.getItem('diwan-poetry-font') || 'ArabicPoetry';
+        selectWebFontSingle.value = savedSingle;
       }
 
       updateWebMultipleFontsMode();
@@ -3714,6 +3716,10 @@ function removeBackgroundImage() {
 
 // Reset values to defaults
 function applyDefaults() {
+  localStorage.removeItem('diwan-poetry-font');
+  localStorage.removeItem('diwan-web-headings-font');
+  localStorage.removeItem('diwan-web-body-font');
+  localStorage.removeItem('diwan-web-buttons-font');
   if (poetryCard) {
     poetryCard.style.removeProperty('width');
     poetryCard.style.removeProperty('height');
@@ -4244,22 +4250,24 @@ function populateFontStyles(lang, selectedValue = null) {
     }
   }
 
-  if (selectFontStyle) selectFontStyle.value = valToSet;
+  const savedSingle = localStorage.getItem('diwan-poetry-font');
+  const resolvedVal = savedSingle || valToSet;
+
+  if (selectFontStyle) selectFontStyle.value = resolvedVal;
   if (selectWebFontSingle) {
-    const savedSingle = localStorage.getItem('diwan-poetry-font');
-    selectWebFontSingle.value = savedSingle || valToSet;
+    selectWebFontSingle.value = resolvedVal;
   }
   if (selectWebFontHeadings) {
     const savedHead = localStorage.getItem('diwan-web-headings-font');
-    selectWebFontHeadings.value = savedHead || valToSet;
+    selectWebFontHeadings.value = savedHead || resolvedVal;
   }
   if (selectWebFontBody) {
     const savedBody = localStorage.getItem('diwan-web-body-font');
-    selectWebFontBody.value = savedBody || valToSet;
+    selectWebFontBody.value = savedBody || resolvedVal;
   }
   if (selectWebFontButtons) {
     const savedButtons = localStorage.getItem('diwan-web-buttons-font');
-    selectWebFontButtons.value = savedButtons || valToSet;
+    selectWebFontButtons.value = savedButtons || resolvedVal;
   }
   
   // Apply font CSS
