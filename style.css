@@ -11,6 +11,30 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'ThmanyahSans';
+  src: url('/fonts/thmanyahsans-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ThmanyahSerifDisplay';
+  src: url('/fonts/thmanyahserifdisplay-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ThmanyahSerifText';
+  src: url('/fonts/thmanyahseriftext-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --font-ui: 'Cairo', system-ui, -apple-system, sans-serif;
   --font-poetry-fallback: 'Amiri', serif;

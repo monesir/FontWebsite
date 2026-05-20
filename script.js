@@ -690,7 +690,10 @@ let customFontName = '';
 const webCustomFonts = []; // Array of { value: string, name: string, displayName: string }
 
 const arabicFonts = [
-  { value: 'ArabicPoetry', name: 'خط الديوان (الافتراضي)' }
+  { value: 'ArabicPoetry', name: 'خط الديوان (الافتراضي)' },
+  { value: 'ThmanyahSans', name: 'ثمانية Sans (حديث)' },
+  { value: 'ThmanyahSerifDisplay', name: 'ثمانية Serif للعناوين' },
+  { value: 'ThmanyahSerifText', name: 'ثمانية Serif للنصوص' }
 ];
 
 const englishFonts = [
