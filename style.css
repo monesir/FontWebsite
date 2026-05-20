@@ -1724,30 +1724,33 @@ html[dir="ltr"] .canvas-floating-controls {
 
 /* Separate floating glass utility button */
 .btn-utility-floating {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--border-ui) !important;
-  background: rgba(15, 15, 18, 0.75);
-  color: rgba(255, 255, 255, 0.7);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: rgba(15, 15, 18, 0.65);
+  color: rgba(255, 255, 255, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
 }
 .btn-utility-floating:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2) !important;
-  color: var(--text-light);
+  background: rgba(197, 168, 128, 0.08);
+  border-color: rgba(197, 168, 128, 0.4) !important;
+  color: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 20px rgba(197, 168, 128, 0.2);
 }
 .btn-utility-floating:active {
   transform: translateY(0);
+}
+.btn-utility-floating i {
+  font-size: 13px;
 }
 
 /* Separated horizontal pages switcher bar below utilities */
@@ -1755,12 +1758,12 @@ html[dir="ltr"] .canvas-floating-controls {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(15, 15, 18, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-ui);
-  padding: 6px 10px;
-  border-radius: 30px;
+  background: rgba(15, 15, 18, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 8px;
+  border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   width: fit-content;
 }
@@ -1775,40 +1778,43 @@ html[dir="ltr"] .canvas-floating-controls {
 .canvas-pages-bar-wrapper .carousel-btn-page {
   min-width: 30px;
   height: 30px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
   color: rgba(255, 255, 255, 0.6);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .canvas-pages-bar-wrapper .carousel-btn-page:hover {
   background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
   color: var(--text-light);
+  transform: translateY(-1px);
 }
 .canvas-pages-bar-wrapper .carousel-btn-page.active {
   background: var(--accent);
   color: #000;
+  border-color: var(--accent) !important;
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.4);
 }
 
 .canvas-pages-bar-wrapper .btn-icon-add {
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  border: 1px dashed rgba(197, 168, 128, 0.4);
-  background: rgba(197, 168, 128, 0.05);
+  border-radius: 8px;
+  border: 1px dashed rgba(197, 168, 128, 0.3);
+  background: rgba(197, 168, 128, 0.03);
   color: var(--accent);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 11px;
 }
 .canvas-pages-bar-wrapper .btn-icon-add:hover {
@@ -1816,31 +1822,35 @@ html[dir="ltr"] .canvas-floating-controls {
   color: #000;
   border-color: var(--accent);
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.3);
+  transform: translateY(-1px);
 }
 
 .canvas-pages-bar-wrapper .btn-icon-delete {
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(239, 68, 68, 0.08);
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.04);
   color: rgb(239, 68, 68);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 11px;
 }
 .canvas-pages-bar-wrapper .btn-icon-delete:hover:not(:disabled) {
   background: rgb(239, 68, 68);
   color: #fff;
+  border-color: rgb(239, 68, 68);
   box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+  transform: translateY(-1px);
 }
 .canvas-pages-bar-wrapper .btn-icon-delete:disabled {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: not-allowed;
   background: transparent;
+  border-color: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.15);
 }
 
@@ -1854,14 +1864,16 @@ html[dir="ltr"] .canvas-floating-controls {
   html[dir="ltr"] .canvas-floating-controls { left: 10px; }
 
   .btn-utility-floating {
-    width: 26px;
-    height: 26px;
-    font-size: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    font-size: 11px;
   }
 
   .canvas-pages-bar-wrapper {
-    padding: 5px 8px;
+    padding: 4px 6px;
     gap: 6px;
+    border-radius: 10px;
   }
 
   .canvas-pages-bar-wrapper .carousel-btn-page,
@@ -1871,6 +1883,7 @@ html[dir="ltr"] .canvas-floating-controls {
     height: 26px;
     min-width: 26px;
     font-size: 10px;
+    border-radius: 6px;
   }
 }
 
