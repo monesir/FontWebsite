@@ -98,6 +98,7 @@ const btnReset = document.getElementById('btnReset');
 // Document Mode & Grid controls
 const tabDesignMode = document.getElementById('tabDesignMode');
 const tabDocMode = document.getElementById('tabDocMode');
+const tabWebMode = document.getElementById('tabWebMode');
 const btnToggleGrid = document.getElementById('btnToggleGrid');
 const btnSaveDocAsBtn = document.getElementById('btnSaveDocAsBtn');
 const btnSaveDocDropdownTrigger = document.getElementById('btnSaveDocDropdownTrigger');
@@ -114,6 +115,36 @@ const btnPaperGrid = document.getElementById('btnPaperGrid');
 const btnPaperThemeWhite = document.getElementById('btnPaperThemeWhite');
 const btnPaperThemeCream = document.getElementById('btnPaperThemeCream');
 const btnPaperThemeDark = document.getElementById('btnPaperThemeDark');
+
+// Web Mode settings buttons
+const btnWebTemplateSaas = document.getElementById('btnWebTemplateSaas');
+const btnWebTemplateMagazine = document.getElementById('btnWebTemplateMagazine');
+const btnWebTemplatePortfolio = document.getElementById('btnWebTemplatePortfolio');
+const btnWebThemeDark = document.getElementById('btnWebThemeDark');
+const btnWebThemeLight = document.getElementById('btnWebThemeLight');
+const btnWebThemeAmber = document.getElementById('btnWebThemeAmber');
+const btnWebTargetAll = document.getElementById('btnWebTargetAll');
+const btnWebTargetHeadings = document.getElementById('btnWebTargetHeadings');
+const btnWebTargetButtons = document.getElementById('btnWebTargetButtons');
+const btnWebTargetNone = document.getElementById('btnWebTargetNone');
+const chkWebMultipleFonts = document.getElementById('chkWebMultipleFonts');
+const selectWebFontSingle = document.getElementById('selectWebFontSingle');
+const selectWebFontHeadings = document.getElementById('selectWebFontHeadings');
+const selectWebFontBody = document.getElementById('selectWebFontBody');
+const selectWebFontButtons = document.getElementById('selectWebFontButtons');
+const ctxFontSelect = document.getElementById('ctxFontSelect');
+const webPreviewWrapper = document.getElementById('webPreviewWrapper');
+const btnWebZoomIn = document.getElementById('btnWebZoomIn');
+const btnWebZoomOut = document.getElementById('btnWebZoomOut');
+const btnWebZoomReset = document.getElementById('btnWebZoomReset');
+
+// Web Custom Font Uploader elements
+const btnWebUploadFonts = document.getElementById('btnWebUploadFonts');
+const webFontFileInput = document.getElementById('webFontFileInput');
+const webUploadedFontsList = document.getElementById('webUploadedFontsList');
+const webFontCountBadge = document.getElementById('webFontCountBadge');
+const btnWebUploadFontsText = document.getElementById('btnWebUploadFontsText');
+
 
 // Advanced Mode Selector and Controls
 const btnModeSimple = document.getElementById('btnModeSimple');
@@ -212,11 +243,452 @@ And looked down one as far as I could`
 let carouselPages = [];
 let currentPageIndex = 0;
 
+// Custom History Undo/Redo Manager
+const HistoryManager = {
+  undoStack: [],
+  redoStack: [],
+  maxStates: 50,
+  isApplyingState: false,
+
+  getCurrentState: function() {
+    const activeMode = document.body.classList.contains('view-mode-web') ? 'web' :
+                       document.body.classList.contains('view-mode-document') ? 'document' : 'design';
+    
+    const state = {
+      mode: activeMode,
+      timestamp: Date.now()
+    };
+
+    if (activeMode === 'design') {
+      const poetryCard = document.getElementById('poetryCard');
+      state.carouselPages = JSON.parse(JSON.stringify(carouselPages));
+      state.currentPageIndex = currentPageIndex;
+      state.cardHTML = document.getElementById('editableText') ? document.getElementById('editableText').innerHTML : '';
+      if (poetryCard) {
+        state.cardStyles = poetryCard.getAttribute('style') || '';
+        state.cardClasses = poetryCard.className;
+      }
+      
+      const cardBgImage = document.getElementById('cardBgImage');
+      const bgControlsGroup = document.getElementById('bgControlsGroup');
+      const bgUploadText = document.getElementById('bgUploadText');
+      state.bgImage = {
+        src: cardBgImage ? cardBgImage.src : '',
+        display: cardBgImage ? cardBgImage.style.display : 'none',
+        controlsDisplay: bgControlsGroup ? bgControlsGroup.style.display : 'none',
+        dropzoneText: bgUploadText ? bgUploadText.innerHTML : ''
+      };
+
+      const inputWatermark = document.getElementById('inputWatermark');
+      const cardWatermark = document.getElementById('cardWatermark');
+      state.watermark = {
+        value: inputWatermark ? inputWatermark.value : '',
+        text: cardWatermark ? cardWatermark.innerHTML : '',
+        display: cardWatermark ? cardWatermark.style.display : 'none'
+      };
+
+      const inputTopOrnament = document.getElementById('inputTopOrnament');
+      const inputBottomOrnament = document.getElementById('inputBottomOrnament');
+      const cardTopOrnament = document.getElementById('cardTopOrnament');
+      const cardBottomOrnament = document.getElementById('cardBottomOrnament');
+      state.ornaments = {
+        topVal: inputTopOrnament ? inputTopOrnament.value : '',
+        bottomVal: inputBottomOrnament ? inputBottomOrnament.value : '',
+        topHTML: cardTopOrnament ? cardTopOrnament.innerHTML : '',
+        bottomHTML: cardBottomOrnament ? cardBottomOrnament.innerHTML : '',
+        topDisplay: cardTopOrnament ? cardTopOrnament.style.display : 'none',
+        bottomDisplay: cardBottomOrnament ? cardBottomOrnament.style.display : 'none'
+      };
+    } else if (activeMode === 'document') {
+      const docBody = document.querySelector('.document-body');
+      state.docHTML = docBody ? docBody.innerHTML : '';
+    } else if (activeMode === 'web') {
+      const webContent = document.querySelector('.web-preview-content');
+      state.webHTML = webContent ? webContent.innerHTML : '';
+    }
+
+    // Save global CSS variables
+    const STYLE_VARIABLES = [
+      '--haraka-color',
+      '--card-font-size',
+      '--card-line-height',
+      '--card-letter-spacing',
+      '--card-text-color',
+      '--card-bg-color',
+      '--card-ornament-color',
+      '--card-border-color',
+      '--overlay-opacity',
+      '--bg-blur',
+      '--bg-scale',
+      '--bg-pos-y',
+      '--bg-pos-x',
+      '--texture-opacity',
+      '--verse-divider-size',
+      '--font-poetry',
+      '--card-font-weight',
+      '--doc-text-color',
+      '--card-text-align',
+      '--font-web-headings',
+      '--font-web-body',
+      '--font-web-buttons'
+    ];
+    state.styles = {};
+    STYLE_VARIABLES.forEach(v => {
+      state.styles[v] = document.documentElement.style.getPropertyValue(v) || "";
+    });
+
+    return state;
+  },
+
+  saveState: function() {
+    if (this.isApplyingState) return;
+
+    const state = this.getCurrentState();
+    
+    // Check if state is identical to the top of the stack to avoid duplicates
+    if (this.undoStack.length > 0) {
+      const lastState = this.undoStack[this.undoStack.length - 1];
+      if (JSON.stringify(lastState) === JSON.stringify(state)) {
+        return;
+      }
+    }
+
+    this.undoStack.push(state);
+    if (this.undoStack.length > this.maxStates) {
+      this.undoStack.shift();
+    }
+    
+    // Clear redo stack on new action
+    this.redoStack = [];
+  },
+
+  applyState: function(state) {
+    if (!state) return;
+    this.isApplyingState = true;
+
+    try {
+      // Restore view mode class but don't call full switchViewMode as it scrolls/mutates extra things
+      document.body.classList.remove('view-mode-web', 'view-mode-document', 'view-mode-design');
+      document.body.classList.add(`view-mode-${state.mode}`);
+      
+      const tabWebMode = document.getElementById('tabWebMode');
+      const tabDesignMode = document.getElementById('tabDesignMode');
+      const tabDocMode = document.getElementById('tabDocMode');
+      const webPreviewWrapper = document.getElementById('webPreviewWrapper');
+      const canvasWrapper = document.getElementById('canvasWrapper');
+      const documentWrapper = document.getElementById('documentWrapper');
+
+      if (state.mode === 'web') {
+        if (tabWebMode) tabWebMode.classList.add('active');
+        if (tabDesignMode) tabDesignMode.classList.remove('active');
+        if (tabDocMode) tabDocMode.classList.remove('active');
+        if (webPreviewWrapper) webPreviewWrapper.style.display = 'flex';
+        if (canvasWrapper) canvasWrapper.style.display = 'none';
+        if (documentWrapper) documentWrapper.style.display = 'none';
+        
+        const webContent = document.querySelector('.web-preview-content');
+        if (webContent && state.webHTML !== undefined) {
+          webContent.innerHTML = state.webHTML;
+        }
+      } else if (state.mode === 'document') {
+        if (tabWebMode) tabWebMode.classList.remove('active');
+        if (tabDesignMode) tabDesignMode.classList.remove('active');
+        if (tabDocMode) tabDocMode.classList.add('active');
+        if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
+        if (canvasWrapper) canvasWrapper.style.display = 'none';
+        if (documentWrapper) documentWrapper.style.display = 'block';
+
+        const docBody = document.querySelector('.document-body');
+        if (docBody && state.docHTML !== undefined) {
+          docBody.innerHTML = state.docHTML;
+        }
+      } else if (state.mode === 'design') {
+        if (tabWebMode) tabWebMode.classList.remove('active');
+        if (tabDesignMode) tabDesignMode.classList.add('active');
+        if (tabDocMode) tabDocMode.classList.remove('active');
+        if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
+        if (canvasWrapper) canvasWrapper.style.display = 'flex';
+        if (documentWrapper) documentWrapper.style.display = 'none';
+
+        if (state.carouselPages) {
+          carouselPages = JSON.parse(JSON.stringify(state.carouselPages));
+        }
+        currentPageIndex = state.currentPageIndex;
+        
+        const editableText = document.getElementById('editableText');
+        if (editableText && state.cardHTML !== undefined) {
+          editableText.innerHTML = state.cardHTML;
+        }
+        
+        const poetryCard = document.getElementById('poetryCard');
+        if (poetryCard) {
+          if (state.cardStyles !== undefined) {
+            poetryCard.setAttribute('style', state.cardStyles);
+          }
+          if (state.cardClasses !== undefined) {
+            poetryCard.className = state.cardClasses;
+          }
+        }
+        
+        if (state.bgImage) {
+          const cardBgImage = document.getElementById('cardBgImage');
+          const bgControlsGroup = document.getElementById('bgControlsGroup');
+          const bgUploadText = document.getElementById('bgUploadText');
+          if (cardBgImage) {
+            cardBgImage.src = state.bgImage.src;
+            cardBgImage.style.display = state.bgImage.display;
+          }
+          if (bgControlsGroup) {
+            bgControlsGroup.style.display = state.bgImage.controlsDisplay;
+          }
+          if (bgUploadText) {
+            bgUploadText.innerHTML = state.bgImage.dropzoneText;
+          }
+        }
+
+        if (state.watermark) {
+          const inputWatermark = document.getElementById('inputWatermark');
+          const cardWatermark = document.getElementById('cardWatermark');
+          if (inputWatermark) inputWatermark.value = state.watermark.value;
+          if (cardWatermark) {
+            cardWatermark.innerHTML = state.watermark.text;
+            cardWatermark.style.display = state.watermark.display;
+          }
+        }
+
+        if (state.ornaments) {
+          const inputTopOrnament = document.getElementById('inputTopOrnament');
+          const inputBottomOrnament = document.getElementById('inputBottomOrnament');
+          const cardTopOrnament = document.getElementById('cardTopOrnament');
+          const cardBottomOrnament = document.getElementById('cardBottomOrnament');
+          if (inputTopOrnament) inputTopOrnament.value = state.ornaments.topVal;
+          if (inputBottomOrnament) inputBottomOrnament.value = state.ornaments.bottomVal;
+          if (cardTopOrnament) {
+            cardTopOrnament.innerHTML = state.ornaments.topHTML;
+            cardTopOrnament.style.display = state.ornaments.topDisplay;
+          }
+          if (cardBottomOrnament) {
+            cardBottomOrnament.innerHTML = state.ornaments.bottomHTML;
+            cardBottomOrnament.style.display = state.ornaments.bottomDisplay;
+          }
+        }
+
+        renderCarouselControls();
+        updateCardPageIndicator();
+        updateWordCount();
+      }
+
+      // Restore CSS styles
+      if (state.styles) {
+        Object.keys(state.styles).forEach(v => {
+          if (state.styles[v]) {
+            document.documentElement.style.setProperty(v, state.styles[v]);
+          } else {
+            document.documentElement.style.removeProperty(v);
+          }
+        });
+        syncSidebarControls();
+      }
+    } catch (err) {
+      console.error("Error applying history state:", err);
+    } finally {
+      this.isApplyingState = false;
+    }
+  },
+
+  undo: function() {
+    if (this.undoStack.length <= 1) return;
+    const currentState = this.undoStack.pop();
+    this.redoStack.push(currentState);
+    const prevState = this.undoStack[this.undoStack.length - 1];
+    this.applyState(prevState);
+  },
+
+  redo: function() {
+    if (this.redoStack.length === 0) return;
+    const state = this.redoStack.pop();
+    this.undoStack.push(state);
+    this.applyState(state);
+  }
+};
+
+const syncSidebarControls = () => {
+  const rootStyle = document.documentElement.style;
+  const computedStyle = window.getComputedStyle(document.documentElement);
+
+  const getVar = (name) => {
+    return (rootStyle.getPropertyValue(name) || computedStyle.getPropertyValue(name)).trim();
+  };
+
+  if (sliderFontSize && valFontSize) {
+    const fs = parseFloat(getVar('--card-font-size')) || 24;
+    sliderFontSize.value = fs;
+    valFontSize.textContent = `${fs}px`;
+  }
+  if (sliderLineHeight && valLineHeight) {
+    const lh = parseFloat(getVar('--card-line-height')) || 1.8;
+    sliderLineHeight.value = lh;
+    valLineHeight.textContent = lh;
+  }
+  if (sliderLetterSpacing && valLetterSpacing) {
+    const ls = parseFloat(getVar('--card-letter-spacing')) || 0;
+    sliderLetterSpacing.value = ls;
+    valLetterSpacing.textContent = `${ls}px`;
+  }
+  if (pickerTextColor && hexTextColor) {
+    const color = getVar('--card-text-color') || '#ffffff';
+    pickerTextColor.value = color;
+    hexTextColor.textContent = color.toUpperCase();
+  }
+  if (pickerBgColor && hexBgColor) {
+    const color = getVar('--card-bg-color') || '#111111';
+    pickerBgColor.value = color;
+    hexBgColor.textContent = color.toUpperCase();
+  }
+  if (pickerOrnamentColor && hexOrnamentColor) {
+    const color = getVar('--card-ornament-color') || '#d4af37';
+    pickerOrnamentColor.value = color;
+    hexOrnamentColor.textContent = color.toUpperCase();
+  }
+  if (pickerHarakatColor && hexHarakatColor) {
+    const color = getVar('--haraka-color') || '#ff4a4a';
+    pickerHarakatColor.value = color;
+    hexHarakatColor.textContent = color.toUpperCase();
+  }
+  if (sliderOverlayOpacity && valOverlayOpacity) {
+    const val = Math.round((parseFloat(getVar('--overlay-opacity')) || 0.4) * 100);
+    sliderOverlayOpacity.value = val;
+    valOverlayOpacity.textContent = `${val}%`;
+  }
+  if (sliderBgBlur && valBgBlur) {
+    const val = parseFloat(getVar('--bg-blur')) || 0;
+    sliderBgBlur.value = val;
+    valBgBlur.textContent = `${val}px`;
+  }
+  if (sliderBgScale && valBgScale) {
+    const val = parseFloat(getVar('--bg-scale')) || 1;
+    sliderBgScale.value = val;
+    valBgScale.textContent = val;
+  }
+  if (sliderBgPosY && valBgPosY) {
+    const val = parseFloat(getVar('--bg-pos-y')) || 50;
+    sliderBgPosY.value = val;
+    valBgPosY.textContent = `${val}%`;
+  }
+  if (sliderBgPosX && valBgPosX) {
+    const val = parseFloat(getVar('--bg-pos-x')) || 50;
+    sliderBgPosX.value = val;
+    valBgPosX.textContent = `${val}%`;
+  }
+
+  const selectCardTexture = document.getElementById('selectCardTexture');
+  const sliderTextureOpacity = document.getElementById('sliderTextureOpacity');
+  const valTextureOpacity = document.getElementById('valTextureOpacity');
+  if (sliderTextureOpacity && valTextureOpacity) {
+    const val = Math.round((parseFloat(getVar('--texture-opacity')) || 1.0) * 100);
+    sliderTextureOpacity.value = val;
+    valTextureOpacity.textContent = `${val}%`;
+  }
+
+  if (selectCardTexture && poetryCard) {
+    if (poetryCard.classList.contains('texture-parchment')) {
+      selectCardTexture.value = 'parchment';
+    } else if (poetryCard.classList.contains('texture-silk')) {
+      selectCardTexture.value = 'silk';
+    } else if (poetryCard.classList.contains('texture-islamic')) {
+      selectCardTexture.value = 'islamic';
+    } else {
+      selectCardTexture.value = 'none';
+    }
+    const textureOpacityGroup = document.getElementById('textureOpacityGroup');
+    if (textureOpacityGroup) {
+      textureOpacityGroup.style.display = selectCardTexture.value !== 'none' ? 'block' : 'none';
+    }
+  }
+
+  if (selectBorderPattern && poetryCard) {
+    if (poetryCard.classList.contains('has-border-classic')) {
+      selectBorderPattern.value = 'classic';
+    } else if (poetryCard.classList.contains('has-border-double')) {
+      selectBorderPattern.value = 'double';
+    } else if (poetryCard.classList.contains('has-border-ornate')) {
+      selectBorderPattern.value = 'ornate';
+    } else {
+      selectBorderPattern.value = 'none';
+    }
+  }
+
+  const selectFontStyle = document.getElementById('selectFontStyle');
+  const selectFontWeight = document.getElementById('selectFontWeight');
+  if (selectFontStyle) {
+    const fontPoetry = getVar('--font-poetry');
+    const match = fontPoetry.match(/"([^"]+)"|'([^']+)'/);
+    if (match) {
+      const family = match[1] || match[2];
+      selectFontStyle.value = family;
+      if (selectWebFontSingle) selectWebFontSingle.value = family;
+    }
+  }
+  if (selectWebFontHeadings) {
+    const font = getVar('--font-web-headings');
+    const match = font.match(/"([^"]+)"|'([^']+)'/);
+    if (match) selectWebFontHeadings.value = match[1] || match[2];
+  }
+  if (selectWebFontBody) {
+    const font = getVar('--font-web-body');
+    const match = font.match(/"([^"]+)"|'([^']+)'/);
+    if (match) selectWebFontBody.value = match[1] || match[2];
+  }
+  if (selectWebFontButtons) {
+    const font = getVar('--font-web-buttons');
+    const match = font.match(/"([^"]+)"|'([^']+)'/);
+    if (match) selectWebFontButtons.value = match[1] || match[2];
+  }
+  if (chkWebMultipleFonts) {
+    const isMulti = localStorage.getItem('diwan-web-multiple-fonts') === 'true';
+    chkWebMultipleFonts.checked = isMulti;
+    const grpWebFontSingle = document.getElementById('grpWebFontSingle');
+    const grpWebTarget = document.getElementById('grpWebTarget');
+    const webMultiFontsControls = document.getElementById('webMultiFontsControls');
+    if (webPreviewWrapper) {
+      if (isMulti) {
+        webPreviewWrapper.classList.add('web-multi-fonts-active');
+        webPreviewWrapper.classList.remove('web-target-all', 'web-target-headings', 'web-target-buttons', 'web-target-none');
+        if (grpWebFontSingle) grpWebFontSingle.style.display = 'none';
+        if (grpWebTarget) grpWebTarget.style.display = 'none';
+        if (webMultiFontsControls) webMultiFontsControls.style.display = 'flex';
+      } else {
+        webPreviewWrapper.classList.remove('web-multi-fonts-active');
+        if (grpWebFontSingle) grpWebFontSingle.style.display = 'block';
+        if (grpWebTarget) grpWebTarget.style.display = 'block';
+        if (webMultiFontsControls) webMultiFontsControls.style.display = 'none';
+        const savedTarget = localStorage.getItem('diwan-web-target') || 'all';
+        webPreviewWrapper.classList.add(`web-target-${savedTarget}`);
+      }
+    }
+  }
+  if (selectFontWeight) {
+    selectFontWeight.value = getVar('--card-font-weight') || '400';
+  }
+
+  if (ratioButtons && poetryCard) {
+    ratioButtons.forEach(btn => {
+      const ratio = btn.getAttribute('data-ratio');
+      if (poetryCard.classList.contains(`ratio-${ratio}`)) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+};
+
 // Multilingual & Font Select state variables
 let currentLang = 'ar'; // 'ar' or 'en'
 let currentSiteLang = 'ar'; // UI Language: 'ar' or 'en'
 let customFontLoaded = false;
 let customFontName = '';
+const webCustomFonts = []; // Array of { value: string, name: string, displayName: string }
 
 const arabicFonts = [
   { value: 'ArabicPoetry', name: 'خط الديوان (الافتراضي)' }
@@ -814,6 +1286,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedMode = localStorage.getItem('diwan-view-mode') || 'design';
   switchViewMode(savedMode);
   updateWordCount();
+  
+  // Save initial history state
+  setTimeout(() => {
+    HistoryManager.saveState();
+  }, 100);
 });
 
 // Setup Event Listeners
@@ -973,6 +1450,7 @@ function setupEventListeners() {
       if (editableText) editableText.focus();
       document.execCommand(cmd, false, null);
       updateFormatButtonsState();
+      HistoryManager.saveState();
     });
   });
 
@@ -981,6 +1459,7 @@ function setupEventListeners() {
       if (editableText) editableText.focus();
       document.execCommand('bold', false, null);
       updateFormatButtonsState();
+      HistoryManager.saveState();
     });
   }
   if (btnItalic) {
@@ -988,6 +1467,7 @@ function setupEventListeners() {
       if (editableText) editableText.focus();
       document.execCommand('italic', false, null);
       updateFormatButtonsState();
+      HistoryManager.saveState();
     });
   }
   if (btnUnderline) {
@@ -995,6 +1475,7 @@ function setupEventListeners() {
       if (editableText) editableText.focus();
       document.execCommand('underline', false, null);
       updateFormatButtonsState();
+      HistoryManager.saveState();
     });
   }
 
@@ -1175,12 +1656,12 @@ function setupEventListeners() {
     });
   });
 
-  // 13. General Canvas Actions
   btnClear.addEventListener('click', () => {
     setEditableTextHTML('');
     carouselPages[currentPageIndex] = '';
     updateCardPageIndicator();
     editableText.focus();
+    HistoryManager.saveState();
   });
 
   btnReset.addEventListener('click', () => {
@@ -1188,6 +1669,7 @@ function setupEventListeners() {
     if(confirm(msg)) {
       applyDefaults();
       removeBackgroundImage();
+      HistoryManager.saveState();
     }
   });
 
@@ -1419,7 +1901,6 @@ function setupEventListeners() {
     });
   }
 
-  // --- Carousel Controls ---
   if (btnAddPage) {
     btnAddPage.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1436,6 +1917,7 @@ function setupEventListeners() {
       updateCardPageIndicator();
       
       editableText.focus();
+      HistoryManager.saveState();
     });
   }
 
@@ -1457,6 +1939,7 @@ function setupEventListeners() {
         renderCarouselControls();
         updateCardPageIndicator();
         applyDividers();
+        HistoryManager.saveState();
       }
     });
   }
@@ -1591,6 +2074,7 @@ function setupEventListeners() {
       switchLanguage(nextLang);
     });
   }
+
   const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
   if (btnToggleWritingLang) {
     btnToggleWritingLang.addEventListener('click', (e) => {
@@ -1602,10 +2086,12 @@ function setupEventListeners() {
   if (selectFontStyle) {
     selectFontStyle.addEventListener('change', () => {
       const font = selectFontStyle.value;
+      if (selectWebFontSingle) selectWebFontSingle.value = font;
       document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
       if (activeFontName) {
         activeFontName.textContent = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || '';
       }
+      HistoryManager.saveState();
     });
   }
   if (selectFontWeight) {
@@ -1647,6 +2133,122 @@ function setupEventListeners() {
   if (tabDocMode) {
     tabDocMode.addEventListener('click', () => switchViewMode('document'));
   }
+  if (tabWebMode) {
+    tabWebMode.addEventListener('click', () => switchViewMode('web'));
+  }
+
+  // Web Mode Template Event Listeners
+  if (btnWebTemplateSaas) btnWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
+  if (btnWebTemplateMagazine) btnWebTemplateMagazine.addEventListener('click', () => setWebTemplate('magazine'));
+  if (btnWebTemplatePortfolio) btnWebTemplatePortfolio.addEventListener('click', () => setWebTemplate('portfolio'));
+
+  // Web Mode Theme Event Listeners
+  if (btnWebThemeDark) btnWebThemeDark.addEventListener('click', () => setWebTheme('dark'));
+  if (btnWebThemeLight) btnWebThemeLight.addEventListener('click', () => setWebTheme('light'));
+  if (btnWebThemeAmber) btnWebThemeAmber.addEventListener('click', () => setWebTheme('amber'));
+
+  // Web Mode Target Event Listeners
+  if (btnWebTargetAll) btnWebTargetAll.addEventListener('click', () => setWebTarget('all'));
+  if (btnWebTargetHeadings) btnWebTargetHeadings.addEventListener('click', () => setWebTarget('headings'));
+  if (btnWebTargetButtons) btnWebTargetButtons.addEventListener('click', () => setWebTarget('buttons'));
+  if (btnWebTargetNone) btnWebTargetNone.addEventListener('click', () => setWebTarget('none'));
+
+  // Web Mode Multiple Fonts Event Listeners
+  if (chkWebMultipleFonts) {
+    chkWebMultipleFonts.addEventListener('change', () => {
+      updateWebMultipleFontsMode();
+      HistoryManager.saveState();
+    });
+  }
+
+  // Web Custom Font Uploader Event Listeners
+  if (webFontFileInput) {
+    webFontFileInput.addEventListener('change', handleWebFontFileInputChange);
+  }
+
+  if (btnWebUploadFonts) {
+    btnWebUploadFonts.addEventListener('click', () => {
+      if (webFontFileInput) webFontFileInput.click();
+    });
+
+    btnWebUploadFonts.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      btnWebUploadFonts.style.borderColor = 'var(--accent-gold)';
+      btnWebUploadFonts.style.background = 'rgba(212, 175, 55, 0.1)';
+    });
+
+    btnWebUploadFonts.addEventListener('dragleave', () => {
+      btnWebUploadFonts.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+      btnWebUploadFonts.style.background = 'rgba(212, 175, 55, 0.03)';
+    });
+
+    btnWebUploadFonts.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      btnWebUploadFonts.style.borderColor = 'rgba(212, 175, 55, 0.4)';
+      btnWebUploadFonts.style.background = 'rgba(212, 175, 55, 0.03)';
+
+      if (e.dataTransfer.files.length > 0 && webFontFileInput) {
+        webFontFileInput.files = e.dataTransfer.files;
+        await handleWebFontFileInputChange();
+      }
+    });
+  }
+
+  if (selectWebFontSingle) {
+    selectWebFontSingle.addEventListener('change', () => {
+      const font = selectWebFontSingle.value;
+      if (selectFontStyle) {
+        const hasOption = Array.from(selectFontStyle.options).some(opt => opt.value === font);
+        if (hasOption) {
+          selectFontStyle.value = font;
+          if (activeFontName) {
+            activeFontName.textContent = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || '';
+          }
+        }
+      }
+      document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
+      HistoryManager.saveState();
+    });
+  }
+
+  if (selectWebFontHeadings) {
+    selectWebFontHeadings.addEventListener('change', () => {
+      applyWebFont('headings', selectWebFontHeadings.value);
+      HistoryManager.saveState();
+    });
+  }
+
+  if (selectWebFontBody) {
+    selectWebFontBody.addEventListener('change', () => {
+      applyWebFont('body', selectWebFontBody.value);
+      HistoryManager.saveState();
+    });
+  }
+
+  if (selectWebFontButtons) {
+    selectWebFontButtons.addEventListener('change', () => {
+      applyWebFont('buttons', selectWebFontButtons.value);
+      HistoryManager.saveState();
+    });
+  }
+
+  // Web Preview Zoom Event Listeners
+  if (btnWebZoomIn) {
+    btnWebZoomIn.addEventListener('click', () => {
+      setWebPreviewZoom(webPreviewZoom + 0.05);
+    });
+  }
+  if (btnWebZoomOut) {
+    btnWebZoomOut.addEventListener('click', () => {
+      setWebPreviewZoom(webPreviewZoom - 0.05);
+    });
+  }
+  if (btnWebZoomReset) {
+    btnWebZoomReset.addEventListener('click', () => {
+      setWebPreviewZoom(1.0);
+    });
+  }
+
   
   // 17. Canvas Background Checkerboard Toggle
   if (btnToggleGrid) {
@@ -1906,15 +2508,535 @@ function setupEventListeners() {
       }
     });
   }
+
+  // FAQ Scroll Reveal Logic
+  const faqSection = document.querySelector('.faq-section');
+  if (canvasWrapper && faqSection) {
+    const checkFaqReveal = () => {
+      if (canvasWrapper.scrollTop > 50) {
+        faqSection.classList.add('faq-visible');
+      } else {
+        faqSection.classList.remove('faq-visible');
+      }
+    };
+    canvasWrapper.addEventListener('scroll', checkFaqReveal);
+    // Initial check in case of scroll restoration
+    checkFaqReveal();
+  }
+
+  // Custom Context Menu for Web Preview Text Scaling
+  const previewContextMenu = document.getElementById('previewContextMenu');
+  const ctxDecSize = document.getElementById('ctxDecSize');
+  const ctxIncSize = document.getElementById('ctxIncSize');
+  const ctxFontSizeInput = document.getElementById('ctxFontSizeInput');
+  const ctxResetFont = document.getElementById('ctxResetFont');
+  // ctxFontSelect is declared globally
+  let activeContextElement = null;
+
+  const pxToPt = (px) => {
+    return Math.round((px * 0.75) * 10) / 10;
+  };
+  const ptToPx = (pt) => {
+    return pt / 0.75;
+  };
+
+  const hideContextMenu = () => {
+    if (previewContextMenu) {
+      previewContextMenu.style.display = 'none';
+    }
+  };
+
+  const rgbToHex = (rgbStr) => {
+    if (!rgbStr) return '#ffffff';
+    const match = rgbStr.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/);
+    if (!match) return rgbStr;
+    const r = parseInt(match[1]);
+    const g = parseInt(match[2]);
+    const b = parseInt(match[3]);
+    const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    return hex.toLowerCase();
+  };
+
+  const updateContextMenuOptions = (target) => {
+    const ctxCurrentSizeText = document.getElementById('ctxCurrentSizeText');
+    const ctxFontSizeInput = document.getElementById('ctxFontSizeInput');
+    const ctxResetText = document.getElementById('ctxResetText');
+    const ctxBoldToggle = document.getElementById('ctxBoldToggle');
+
+    if (!target) return;
+
+    const isAr = (currentSiteLang === 'ar');
+    const computedStyle = window.getComputedStyle(target);
+    const sizeInPx = parseFloat(computedStyle.fontSize);
+    const sizeInPt = pxToPt(sizeInPx);
+
+    if (ctxCurrentSizeText) {
+      ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizeInPt}pt` : `Current Size: ${sizeInPt}pt`;
+    }
+    if (ctxFontSizeInput) {
+      ctxFontSizeInput.value = sizeInPt;
+    }
+    if (ctxResetText) {
+      let defaultSizeText = "";
+      if (target.dataset.originalFontSize) {
+        defaultSizeText = `${pxToPt(parseFloat(target.dataset.originalFontSize))}pt`;
+      } else {
+        defaultSizeText = `${sizeInPt}pt`;
+      }
+      ctxResetText.textContent = isAr ? `إعادة تعيين (${defaultSizeText})` : `Reset Size (${defaultSizeText})`;
+    }
+
+    // Bold status
+    if (ctxBoldToggle) {
+      const computedWeight = computedStyle.fontWeight;
+      const isBold = computedWeight === 'bold' || parseInt(computedWeight) >= 700 || target.style.fontWeight === 'bold';
+      if (isBold) {
+        ctxBoldToggle.classList.add('active');
+      } else {
+        ctxBoldToggle.classList.remove('active');
+      }
+    }
+
+    // Color status
+    const hasInlineColor = !!target.style.color;
+    const ctxResetColor = document.getElementById('ctxResetColor');
+    if (ctxResetColor) {
+      if (!hasInlineColor) {
+        ctxResetColor.classList.add('active');
+      } else {
+        ctxResetColor.classList.remove('active');
+      }
+    }
+
+    const targetColorHex = rgbToHex(computedStyle.color);
+    const colorDots = document.querySelectorAll('.ctx-color-dot:not(.ctx-color-reset)');
+    colorDots.forEach(dot => {
+      const dotColor = dot.dataset.color.toLowerCase();
+      if (hasInlineColor && dotColor === targetColorHex) {
+        dot.classList.add('active');
+      } else {
+        dot.classList.remove('active');
+      }
+    });
+
+    const ctxColorInput = document.getElementById('ctxColorInput');
+    if (ctxColorInput) {
+      ctxColorInput.value = targetColorHex;
+    }
+
+    // Font family override status
+    if (ctxFontSelect) {
+      const inlineFont = target.style.fontFamily;
+      if (!inlineFont) {
+        ctxFontSelect.value = 'inherit';
+      } else {
+        const match = inlineFont.match(/"([^"]+)"|'([^']+)'|([^,]+)/);
+        if (match) {
+          const family = (match[1] || match[2] || match[3] || '').trim();
+          let found = false;
+          for (let i = 0; i < ctxFontSelect.options.length; i++) {
+            if (ctxFontSelect.options[i].value === family) {
+              ctxFontSelect.value = family;
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            ctxFontSelect.value = 'inherit';
+          }
+        } else {
+          ctxFontSelect.value = 'inherit';
+        }
+      }
+    }
+  };
+
+  const isValidTextTarget = (el) => {
+    if (!el) return false;
+    
+    // Must be inside .web-preview-content
+    if (!el.closest('.web-preview-content')) return false;
+    
+    // List of layout containers to exclude
+    const containerClasses = [
+      'web-preview-content', 'web-template-content', 'web-hero', 'web-hero-content', 'web-hero-visual',
+      'web-hero-stats', 'web-stat-item', 'web-hero-buttons', 'visual-card',
+      'main-card-header', 'user-info-block', 'user-contact-row', 'main-card-body',
+      'cv-section-header', 'cv-item', 'cv-item-header', 'cv-skills-grid',
+      'score-circle-container', 'score-circle-svg-wrapper', 'score-details',
+      'web-brands-list', 'web-section-header', 'web-features-grid', 'web-features',
+      'web-testimonial-content', 'web-footer-top', 'web-footer-links', 'web-links-column',
+      'web-header-actions', 'web-nav', 'web-header', 'web-footer', 'web-brands-row',
+      'web-footer-brand', 'score-circle-svg', 'user-avatar-circle', 'floating-header',
+      'floating-meta', 'progress-bar-mini', 'progress-fill', 'score-circle-svg-wrapper'
+    ];
+    
+    // Check if the element or any of its classes is in containerClasses
+    const hasContainerClass = Array.from(el.classList).some(cls => containerClasses.includes(cls));
+    if (hasContainerClass) return false;
+    
+    // Ignore SVGs, paths, icons, lines
+    const tagName = el.tagName.toLowerCase();
+    if (tagName === 'svg' || tagName === 'path' || tagName === 'hr' || tagName === 'i') return false;
+    
+    return true;
+  };
+
+  // Event delegation for right-clicks on editable and non-editable text elements in preview
+  document.addEventListener('contextmenu', (e) => {
+    if (!previewContextMenu) return;
+    
+    let target = e.target;
+    
+    // First, check if there is a contenteditable="true" ancestor within the web preview
+    const editableAncestor = target.closest('.web-preview-content [contenteditable="true"]');
+    if (editableAncestor) {
+      target = editableAncestor;
+    } else {
+      // If no editable ancestor, check if the clicked element (or its parent) is a valid text target
+      if (!isValidTextTarget(target)) {
+        if (target.parentElement && isValidTextTarget(target.parentElement)) {
+          target = target.parentElement;
+        } else {
+          return; // Ignore right-clicks on structural layouts
+        }
+      }
+    }
+    
+    e.preventDefault();
+    activeContextElement = target;
+    
+    // Store original font size on target if not already saved
+    if (!target.dataset.originalFontSize) {
+      const computedStyle = window.getComputedStyle(target);
+      target.dataset.originalFontSize = computedStyle.fontSize;
+    }
+    
+    // Update dynamic size texts
+    updateContextMenuOptions(target);
+    
+    // Show context menu
+    previewContextMenu.style.display = 'flex';
+    
+    // Positioning details
+    const menuWidth = previewContextMenu.offsetWidth || 190;
+    const menuHeight = previewContextMenu.offsetHeight || 135;
+    
+    let left = e.clientX;
+    let top = e.clientY;
+    
+    // Adjust for viewport boundaries
+    if (left + menuWidth > window.innerWidth) {
+      left = window.innerWidth - menuWidth - 10;
+    }
+    if (top + menuHeight > window.innerHeight) {
+      top = window.innerHeight - menuHeight - 10;
+    }
+    
+    previewContextMenu.style.left = `${left}px`;
+    previewContextMenu.style.top = `${top}px`;
+  });
+
+  const applyFontSize = (sizePt) => {
+    if (activeContextElement) {
+      const sizePx = ptToPx(sizePt);
+      activeContextElement.dataset.customizedFontSize = "true";
+      activeContextElement.dataset.customizedFontSizeVal = sizePx;
+      
+      const scaledSize = Math.round(sizePx * webPreviewZoom);
+      activeContextElement.style.setProperty('font-size', `${scaledSize}px`, 'important');
+      
+      // Update info text
+      const ctxCurrentSizeText = document.getElementById('ctxCurrentSizeText');
+      const isAr = (currentSiteLang === 'ar');
+      if (ctxCurrentSizeText) {
+        ctxCurrentSizeText.textContent = isAr ? `الحجم الحالي: ${sizePt}pt` : `Current Size: ${sizePt}pt`;
+      }
+    }
+  };
+
+  // Handle Font Size Operations
+  if (ctxDecSize) {
+    ctxDecSize.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (ctxFontSizeInput) {
+        let val = parseFloat(ctxFontSizeInput.value) || 12;
+        val = Math.max(6, val - 1);
+        ctxFontSizeInput.value = val;
+        applyFontSize(val);
+      }
+    });
+  }
+
+  if (ctxIncSize) {
+    ctxIncSize.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (ctxFontSizeInput) {
+        let val = parseFloat(ctxFontSizeInput.value) || 12;
+        val = Math.min(120, val + 1);
+        ctxFontSizeInput.value = val;
+        applyFontSize(val);
+      }
+    });
+  }
+
+  if (ctxFontSizeInput) {
+    ctxFontSizeInput.addEventListener('input', (e) => {
+      let val = parseFloat(ctxFontSizeInput.value);
+      if (!isNaN(val)) {
+        val = Math.max(6, Math.min(120, val));
+        applyFontSize(val);
+      }
+    });
+    ctxFontSizeInput.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
+  if (ctxResetFont) {
+    ctxResetFont.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeContextElement) {
+        activeContextElement.style.removeProperty('font-size');
+        activeContextElement.style.removeProperty('font-weight');
+        activeContextElement.style.removeProperty('color');
+        
+        delete activeContextElement.dataset.customizedFontSize;
+        delete activeContextElement.dataset.customizedFontSizeVal;
+        delete activeContextElement.dataset.originalFontSize;
+        
+        // Reapply global zoom to it if necessary
+        if (webPreviewZoom !== 1.0) {
+          const computedStyle = window.getComputedStyle(activeContextElement);
+          const computedFontSize = computedStyle.fontSize;
+          const baseSize = computedFontSize ? parseFloat(computedFontSize) : 16;
+          activeContextElement.dataset.originalFontSize = baseSize;
+          const newSize = Math.round(baseSize * webPreviewZoom);
+          activeContextElement.style.setProperty('font-size', `${newSize}px`, 'important');
+        }
+        
+        setTimeout(() => {
+          updateContextMenuOptions(activeContextElement);
+        }, 10);
+        HistoryManager.saveState();
+      }
+    });
+  }
+
+  // Handle Bold Toggle
+  const ctxBoldToggle = document.getElementById('ctxBoldToggle');
+  if (ctxBoldToggle) {
+    ctxBoldToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeContextElement) {
+        const computedStyle = window.getComputedStyle(activeContextElement);
+        const computedWeight = computedStyle.fontWeight;
+        const isBold = computedWeight === 'bold' || parseInt(computedWeight) >= 700 || activeContextElement.style.fontWeight === 'bold';
+        
+        if (isBold) {
+          activeContextElement.style.setProperty('font-weight', 'normal', 'important');
+          ctxBoldToggle.classList.remove('active');
+        } else {
+          activeContextElement.style.setProperty('font-weight', 'bold', 'important');
+          ctxBoldToggle.classList.add('active');
+        }
+        HistoryManager.saveState();
+      }
+    });
+  }
+
+  // Handle Color Reset Click
+  const ctxResetColor = document.getElementById('ctxResetColor');
+  if (ctxResetColor) {
+    ctxResetColor.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeContextElement) {
+        activeContextElement.style.removeProperty('color');
+        
+        const presetDots = document.querySelectorAll('.ctx-color-dot:not(.ctx-color-reset)');
+        presetDots.forEach(d => d.classList.remove('active'));
+        ctxResetColor.classList.add('active');
+        
+        HistoryManager.saveState();
+      }
+    });
+  }
+
+  // Handle Color Dot Presets Click
+  const colorDots = document.querySelectorAll('.ctx-color-dot:not(.ctx-color-reset)');
+  colorDots.forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (activeContextElement) {
+        const selectedColor = dot.dataset.color;
+        activeContextElement.style.setProperty('color', selectedColor, 'important');
+        
+        colorDots.forEach(d => d.classList.remove('active'));
+        if (ctxResetColor) ctxResetColor.classList.remove('active');
+        dot.classList.add('active');
+        
+        const ctxColorInput = document.getElementById('ctxColorInput');
+        if (ctxColorInput) {
+          ctxColorInput.value = selectedColor;
+        }
+        
+        HistoryManager.saveState();
+      }
+    });
+  });
+
+  // Handle Custom Color Input Picker
+  const ctxColorInput = document.getElementById('ctxColorInput');
+  if (ctxColorInput) {
+    ctxColorInput.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+    
+    ctxColorInput.addEventListener('input', (e) => {
+      if (activeContextElement) {
+        const selectedColor = e.target.value;
+        activeContextElement.style.setProperty('color', selectedColor, 'important');
+        
+        if (ctxResetColor) ctxResetColor.classList.remove('active');
+        colorDots.forEach(dot => {
+          if (dot.dataset.color.toLowerCase() === selectedColor.toLowerCase()) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+    });
+
+    ctxColorInput.addEventListener('change', (e) => {
+      HistoryManager.saveState();
+    });
+  }
+
+  // Handle Font Family Swapping via Dropdown
+  if (ctxFontSelect) {
+    ctxFontSelect.addEventListener('change', (e) => {
+      e.stopPropagation();
+      if (activeContextElement) {
+        const val = ctxFontSelect.value;
+        if (val === 'inherit') {
+          activeContextElement.style.removeProperty('font-family');
+        } else {
+          activeContextElement.style.setProperty('font-family', `"${val}", sans-serif`, 'important');
+        }
+        HistoryManager.saveState();
+      }
+      hideContextMenu();
+    });
+  }
+
+  // Dismiss listeners
+  document.addEventListener('click', (e) => {
+    if (previewContextMenu && !previewContextMenu.contains(e.target)) {
+      hideContextMenu();
+    }
+  });
+
+  if (canvasWrapper) {
+    canvasWrapper.addEventListener('scroll', hideContextMenu);
+  }
+  window.addEventListener('scroll', hideContextMenu);
+  window.addEventListener('resize', hideContextMenu);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      hideContextMenu();
+    }
+    
+    // Custom History Undo/Redo Shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
+    const isCtrl = e.ctrlKey || e.metaKey;
+    if (isCtrl && !e.altKey) {
+      const key = e.key.toLowerCase();
+      if (key === 'z') {
+        e.preventDefault();
+        if (e.shiftKey) {
+          HistoryManager.redo();
+        } else {
+          HistoryManager.undo();
+        }
+      } else if (key === 'y') {
+        e.preventDefault();
+        HistoryManager.redo();
+      }
+    }
+  });
+
+  // Global listeners to save history state on input edits (debounced) and option changes
+  let globalInputTimeout;
+  document.addEventListener('input', (e) => {
+    clearTimeout(globalInputTimeout);
+    globalInputTimeout = setTimeout(() => {
+      HistoryManager.saveState();
+    }, 800);
+  });
+
+  document.addEventListener('change', (e) => {
+    HistoryManager.saveState();
+  });
 }
 
-// Switch View Mode (Design Card vs Word Document)
+// Switch View Mode (Design Card vs Word Document vs Web Landing Page Preview)
 function switchViewMode(mode) {
-  if (mode === 'document') {
+  if (canvasWrapper) {
+    canvasWrapper.scrollTop = 0;
+    // Trigger scroll event manually or check FAQ state directly to make sure FAQ is hidden initially
+    const faqSection = document.querySelector('.faq-section');
+    if (faqSection) faqSection.classList.remove('faq-visible');
+  }
+  if (mode === 'web') {
+    document.body.classList.add('view-mode-web');
+    document.body.classList.remove('view-mode-document', 'view-mode-design');
+    if (tabWebMode) tabWebMode.classList.add('active');
+    if (tabDesignMode) tabDesignMode.classList.remove('active');
+    if (tabDocMode) tabDocMode.classList.remove('active');
+    if (webPreviewWrapper) webPreviewWrapper.style.display = 'flex';
+    
+    // Apply default web preview settings
+    const savedTemplate = localStorage.getItem('diwan-web-template') || 'saas';
+    const savedTheme = localStorage.getItem('diwan-web-theme') || 'dark';
+    const savedTarget = localStorage.getItem('diwan-web-target') || 'all';
+    
+    setWebTemplate(savedTemplate);
+    setWebTheme(savedTheme);
+    setWebTarget(savedTarget);
+    setWebPreviewZoom(webPreviewZoom);
+
+    // Restore multi-font settings
+    if (chkWebMultipleFonts) {
+      const isMulti = localStorage.getItem('diwan-web-multiple-fonts') === 'true';
+      chkWebMultipleFonts.checked = isMulti;
+      
+      if (selectWebFontHeadings) {
+        const savedHead = localStorage.getItem('diwan-web-headings-font');
+        if (savedHead) selectWebFontHeadings.value = savedHead;
+      }
+      if (selectWebFontBody) {
+        const savedBody = localStorage.getItem('diwan-web-body-font');
+        if (savedBody) selectWebFontBody.value = savedBody;
+      }
+      if (selectWebFontButtons) {
+        const savedButtons = localStorage.getItem('diwan-web-buttons-font');
+        if (savedButtons) selectWebFontButtons.value = savedButtons;
+      }
+      if (selectWebFontSingle) {
+        const savedSingle = localStorage.getItem('diwan-poetry-font') || selectFontStyle?.value;
+        if (savedSingle) selectWebFontSingle.value = savedSingle;
+      }
+
+      updateWebMultipleFontsMode();
+      updateWebUploadedFontsList();
+    }
+  } else if (mode === 'document') {
     document.body.classList.add('view-mode-document');
-    document.body.classList.remove('view-mode-design');
+    document.body.classList.remove('view-mode-design', 'view-mode-web');
     if (tabDocMode) tabDocMode.classList.add('active');
     if (tabDesignMode) tabDesignMode.classList.remove('active');
+    if (tabWebMode) tabWebMode.classList.remove('active');
+    if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
     
     if (editableText) {
       editableText.setAttribute('placeholder', currentSiteLang === 'ar' ? 'اكتب مستندك هنا مثل الـ Word...' : 'Start typing your document here like Microsoft Word...');
@@ -1926,10 +3048,12 @@ function switchViewMode(mode) {
     setPaperStyle(savedStyle);
     setPaperTheme(savedTheme);
   } else {
-    document.body.classList.remove('view-mode-document');
+    document.body.classList.remove('view-mode-document', 'view-mode-web');
     document.body.classList.add('view-mode-design');
     if (tabDesignMode) tabDesignMode.classList.add('active');
     if (tabDocMode) tabDocMode.classList.remove('active');
+    if (tabWebMode) tabWebMode.classList.remove('active');
+    if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
     
     if (editableText) {
       editableText.removeAttribute('placeholder');
@@ -1951,6 +3075,173 @@ function switchViewMode(mode) {
       'view_mode': mode
     });
   }
+  HistoryManager.saveState();
+}
+
+// Clear Web Preview Inline Font Sizes and Cache
+function clearWebPreviewFonts() {
+  const previewContent = document.querySelector('.web-preview-content');
+  if (previewContent) {
+    const elements = previewContent.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, button, li, label, .web-logo, [contenteditable="true"]');
+    elements.forEach(el => {
+      if (el.dataset.customizedFontSize === "true") return; // Preserve custom context menu sizes!
+      el.style.removeProperty('font-size');
+      delete el.dataset.originalFontSize;
+    });
+    // Force a synchronous style recalculation/reflow so subsequent getComputedStyle reads are accurate
+    void previewContent.offsetHeight;
+  }
+}
+
+// Set Web Preview Template
+function setWebTemplate(template) {
+  if (!webPreviewWrapper) return;
+  clearWebPreviewFonts();
+  webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-magazine', 'web-tpl-portfolio');
+  webPreviewWrapper.classList.add(`web-tpl-${template}`);
+  
+  // Update active state on template toggle buttons
+  document.querySelectorAll('.control-section.web-only .ratio-btn[id^="btnWebTemplate"]').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btnWebTemplate${template.charAt(0).toUpperCase() + template.slice(1)}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  localStorage.setItem('diwan-web-template', template);
+  setWebPreviewZoom(webPreviewZoom);
+}
+
+// Set Web Preview Theme
+function setWebTheme(theme) {
+  if (!webPreviewWrapper) return;
+  webPreviewWrapper.classList.remove('web-theme-dark', 'web-theme-light', 'web-theme-amber');
+  webPreviewWrapper.classList.add(`web-theme-${theme}`);
+  
+  // Update active state on theme toggle buttons
+  document.querySelectorAll('.control-section.web-only .ratio-btn[id^="btnWebTheme"]').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btnWebTheme${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  localStorage.setItem('diwan-web-theme', theme);
+  setWebPreviewZoom(webPreviewZoom);
+}
+
+// Set Web Preview Zoom (Accessibility - Font Size Scale Only)
+let webPreviewZoom = parseFloat(localStorage.getItem('diwan-web-preview-zoom')) || 1.0;
+function setWebPreviewZoom(zoomVal) {
+  webPreviewZoom = Math.min(1.4, Math.max(0.75, zoomVal));
+  localStorage.setItem('diwan-web-preview-zoom', webPreviewZoom);
+  
+  const previewContent = document.querySelector('.web-preview-content');
+  if (!previewContent) return;
+  
+  const elements = previewContent.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, button, li, label, .web-logo, [contenteditable="true"]');
+  elements.forEach(el => {
+    // If the element is individually customized via context menu
+    if (el.dataset.customizedFontSize === "true") {
+      const baseCustomSize = parseFloat(el.dataset.customizedFontSizeVal) || 16;
+      if (webPreviewZoom === 1.0) {
+        el.style.setProperty('font-size', `${baseCustomSize}px`, 'important');
+      } else {
+        const newSize = Math.round(baseCustomSize * webPreviewZoom);
+        el.style.setProperty('font-size', `${newSize}px`, 'important');
+      }
+      return;
+    }
+
+    // If the zoom is default (1.0), remove the inline property so it falls back to stylesheet
+    if (webPreviewZoom === 1.0) {
+      el.style.removeProperty('font-size');
+      delete el.dataset.originalFontSize;
+      return;
+    }
+    
+    // Cache the original stylesheet font size if not cached
+    if (!el.dataset.originalFontSize) {
+      const computedStyle = window.getComputedStyle(el);
+      const computedFontSize = computedStyle.fontSize;
+      if (computedFontSize) {
+        el.dataset.originalFontSize = parseFloat(computedFontSize);
+      } else {
+        el.dataset.originalFontSize = 16;
+      }
+    }
+    
+    const origSize = parseFloat(el.dataset.originalFontSize);
+    const newSize = Math.round(origSize * webPreviewZoom);
+    el.style.setProperty('font-size', `${newSize}px`, 'important');
+  });
+}
+
+function applyWebFont(target, fontValue) {
+  if (!fontValue) return;
+  if (target === 'headings') {
+    document.documentElement.style.setProperty('--font-web-headings', `"${fontValue}", sans-serif`);
+    localStorage.setItem('diwan-web-headings-font', fontValue);
+  } else if (target === 'body') {
+    document.documentElement.style.setProperty('--font-web-body', `"${fontValue}", sans-serif`);
+    localStorage.setItem('diwan-web-body-font', fontValue);
+  } else if (target === 'buttons') {
+    document.documentElement.style.setProperty('--font-web-buttons', `"${fontValue}", sans-serif`);
+    localStorage.setItem('diwan-web-buttons-font', fontValue);
+  }
+}
+
+function updateWebMultipleFontsMode() {
+  const grpWebFontSingle = document.getElementById('grpWebFontSingle');
+  const grpWebTarget = document.getElementById('grpWebTarget');
+  const webMultiFontsControls = document.getElementById('webMultiFontsControls');
+
+  if (!chkWebMultipleFonts || !webPreviewWrapper) return;
+
+  const isMulti = chkWebMultipleFonts.checked;
+  localStorage.setItem('diwan-web-multiple-fonts', isMulti ? 'true' : 'false');
+
+  if (isMulti) {
+    webPreviewWrapper.classList.add('web-multi-fonts-active');
+    webPreviewWrapper.classList.remove('web-target-all', 'web-target-headings', 'web-target-buttons', 'web-target-none');
+    if (grpWebFontSingle) grpWebFontSingle.style.display = 'none';
+    if (grpWebTarget) grpWebTarget.style.display = 'none';
+    if (webMultiFontsControls) webMultiFontsControls.style.display = 'flex';
+    
+    if (selectWebFontHeadings) applyWebFont('headings', selectWebFontHeadings.value);
+    if (selectWebFontBody) applyWebFont('body', selectWebFontBody.value);
+    if (selectWebFontButtons) applyWebFont('buttons', selectWebFontButtons.value);
+  } else {
+    webPreviewWrapper.classList.remove('web-multi-fonts-active');
+    if (grpWebFontSingle) grpWebFontSingle.style.display = 'block';
+    if (grpWebTarget) grpWebTarget.style.display = 'block';
+    if (webMultiFontsControls) webMultiFontsControls.style.display = 'none';
+    
+    const savedTarget = localStorage.getItem('diwan-web-target') || 'all';
+    webPreviewWrapper.classList.add(`web-target-${savedTarget}`);
+    
+    if (selectWebFontSingle) {
+      const font = selectWebFontSingle.value;
+      if (selectFontStyle) {
+        const hasOption = Array.from(selectFontStyle.options).some(opt => opt.value === font);
+        if (hasOption) {
+          selectFontStyle.value = font;
+          if (activeFontName) {
+            activeFontName.textContent = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || '';
+          }
+        }
+      }
+      document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
+    }
+  }
+  
+  setWebPreviewZoom(webPreviewZoom);
+}
+
+// Set Web Preview Font Target
+function setWebTarget(target) {
+  if (!webPreviewWrapper) return;
+  webPreviewWrapper.classList.remove('web-target-all', 'web-target-headings', 'web-target-buttons', 'web-target-none');
+  webPreviewWrapper.classList.add(`web-target-${target}`);
+  
+  // Update active state on font target buttons
+  document.querySelectorAll('.control-section.web-only .ratio-btn[id^="btnWebTarget"]').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btnWebTarget${target.charAt(0).toUpperCase() + target.slice(1)}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  localStorage.setItem('diwan-web-target', target);
+  setWebPreviewZoom(webPreviewZoom);
 }
 
 // Set Paper Style (Blank / Lined / Grid)
@@ -2194,6 +3485,179 @@ function handleFontFileSelect() {
   };
   
   reader.readAsArrayBuffer(file);
+}
+
+// Custom Website Preview Font Uploader helpers
+async function loadFontFileWeb(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+      const arrayBuffer = e.target.result;
+      try {
+        const fontName = 'WebCustom_' + (file.name.substring(0, file.name.lastIndexOf('.')) || file.name).replace(/[^a-zA-Z0-9_-]/g, '');
+        
+        // Register in browser
+        const font = new FontFace(fontName, arrayBuffer, {
+          weight: '100 900',
+          style: 'normal'
+        });
+        const loaded = await font.load();
+        document.fonts.add(loaded);
+
+        // Inject dynamic style block for base64 persistence
+        const base64Reader = new FileReader();
+        base64Reader.onload = function(evt) {
+          const base64DataUrl = evt.target.result;
+          let styleEl = document.getElementById(`style-${fontName}`);
+          if (!styleEl) {
+            styleEl = document.createElement('style');
+            styleEl.id = `style-${fontName}`;
+            document.head.appendChild(styleEl);
+          }
+          styleEl.innerHTML = `
+            @font-face {
+              font-family: '${fontName}';
+              src: url('${base64DataUrl}') format('woff2'), url('${base64DataUrl}') format('woff'), url('${base64DataUrl}') format('truetype');
+              font-weight: 100 900;
+              font-style: normal;
+            }
+          `;
+        };
+        base64Reader.readAsDataURL(file);
+
+        // Add to our list
+        const exists = webCustomFonts.some(f => f.value === fontName);
+        if (!exists) {
+          webCustomFonts.push({
+            value: fontName,
+            displayName: file.name.substring(0, file.name.lastIndexOf('.')) || file.name,
+            name: file.name
+          });
+        }
+
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = () => reject(new Error("File reading failed."));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function handleWebFontFileInputChange() {
+  const files = Array.from(webFontFileInput.files);
+  if (files.length === 0) return;
+
+  if (btnWebUploadFontsText) {
+    btnWebUploadFontsText.textContent = currentSiteLang === 'ar' ? 'جاري تحميل الخطوط...' : 'Uploading fonts...';
+  }
+
+  const promises = files.map(file => loadFontFileWeb(file).catch(err => console.error("Error loading web font file:", file.name, err)));
+  await Promise.all(promises);
+
+  if (btnWebUploadFontsText) {
+    btnWebUploadFontsText.textContent = currentSiteLang === 'ar' ? 'اختر ملفات الخطوط (.ttf, .otf, .woff)' : 'Choose Font Files (.ttf, .otf, .woff)';
+  }
+
+  updateWebUploadedFontsList();
+  populateFontStyles(currentLang);
+  
+  // Force a redraw of the preview wrapper to apply fonts
+  const webContent = document.querySelector('.web-preview-content');
+  if (webContent) {
+    webContent.style.display = 'none';
+    webContent.offsetHeight;
+    webContent.style.display = '';
+  }
+
+  webFontFileInput.value = '';
+  HistoryManager.saveState();
+}
+
+function updateWebUploadedFontsList() {
+  if (!webUploadedFontsList) return;
+  webUploadedFontsList.innerHTML = '';
+  
+  if (webFontCountBadge) {
+    if (webCustomFonts.length > 0) {
+      webFontCountBadge.style.display = 'inline-block';
+      webFontCountBadge.textContent = webCustomFonts.length;
+    } else {
+      webFontCountBadge.style.display = 'none';
+    }
+  }
+
+  webCustomFonts.forEach((f, idx) => {
+    const item = document.createElement('div');
+    item.className = 'web-uploaded-font-item';
+    item.style.cssText = `
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #e0e0e0;
+      transition: all 0.2s ease;
+    `;
+
+    const span = document.createElement('span');
+    span.style.cssText = `
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 80%;
+      direction: ltr;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    `;
+    span.innerHTML = `<i class="fa-solid fa-font" style="color: var(--accent-gold);"></i> ${f.displayName}`;
+    item.appendChild(span);
+
+    const delBtn = document.createElement('button');
+    delBtn.style.cssText = `
+      background: none;
+      border: none;
+      color: #ff5c5c;
+      cursor: pointer;
+      padding: 2px 6px;
+      font-size: 14px;
+      transition: color 0.2s;
+    `;
+    delBtn.innerHTML = `<i class="fa-regular fa-trash-can"></i>`;
+    delBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeWebCustomFont(idx);
+    });
+    
+    // Hover effect
+    delBtn.addEventListener('mouseenter', () => { delBtn.style.color = '#ff3333'; });
+    delBtn.addEventListener('mouseleave', () => { delBtn.style.color = '#ff5c5c'; });
+
+    item.appendChild(delBtn);
+    webUploadedFontsList.appendChild(item);
+  });
+}
+
+function removeWebCustomFont(index) {
+  const fontObj = webCustomFonts[index];
+  if (!fontObj) return;
+
+  // Remove from the array
+  webCustomFonts.splice(index, 1);
+  
+  // Remove the CSS from the dynamic style tag if applicable
+  const styleEl = document.getElementById(`style-${fontObj.value}`);
+  if (styleEl) styleEl.remove();
+
+  // Re-render and re-populate
+  updateWebUploadedFontsList();
+  populateFontStyles(currentLang);
+  HistoryManager.saveState();
 }
 
 // Load background image
@@ -2698,29 +4162,66 @@ async function exportPoetryCard(format = 'png') {
 }
 
 // Populate font options dynamically
+// Populate font options dynamically
 function populateFontStyles(lang, selectedValue = null) {
   if (!selectFontStyle) return;
-  selectFontStyle.innerHTML = '';
   
+  const targetSelects = [
+    selectFontStyle,
+    selectWebFontSingle,
+    selectWebFontHeadings,
+    selectWebFontBody,
+    selectWebFontButtons,
+    ctxFontSelect
+  ];
+
+  targetSelects.forEach(sel => {
+    if (sel) sel.innerHTML = '';
+  });
+
   const fonts = lang === 'ar' ? arabicFonts : englishFonts;
   
+  // For context menu selector, add "inherit" first
+  if (ctxFontSelect) {
+    const optInherit = document.createElement('option');
+    optInherit.value = 'inherit';
+    optInherit.textContent = currentSiteLang === 'ar' ? 'الخط الافتراضي للقسم (ترشيح)' : 'Default Section Font (Inherit)';
+    ctxFontSelect.appendChild(optInherit);
+  }
+
+  // Helper to append option to all applicable select elements
+  function addOption(val, text, isWebOnly = false) {
+    targetSelects.forEach(sel => {
+      if (!sel) return;
+      // Skip web-only fonts for the card font select
+      if (sel === selectFontStyle && isWebOnly) return;
+      // Skip appending inherit to non-context-menu dropdowns
+      if (sel === ctxFontSelect && val === 'inherit') return;
+      const opt = document.createElement('option');
+      opt.value = val;
+      opt.textContent = text;
+      sel.appendChild(opt);
+    });
+  }
+
+  // If we have custom web-only uploaded fonts, append them
+  webCustomFonts.forEach(f => {
+    const prefix = currentSiteLang === 'ar' ? 'مرفوع: ' : 'Uploaded: ';
+    addOption(f.value, prefix + f.displayName, true);
+  });
+
   // If we have a custom uploaded font, prepend/append it
   if (customFontLoaded && customFontName) {
-    const opt = document.createElement('option');
-    opt.value = 'ArabicPoetryCustomUpload';
-    opt.textContent = currentSiteLang === 'ar' ? `مخصص: ${customFontName}` : `Custom: ${customFontName}`;
-    selectFontStyle.appendChild(opt);
+    const customText = currentSiteLang === 'ar' ? `مخصص: ${customFontName}` : `Custom: ${customFontName}`;
+    addOption('ArabicPoetryCustomUpload', customText);
   }
   
   fonts.forEach(f => {
-    const opt = document.createElement('option');
-    opt.value = f.value;
+    let text = f.name;
     if (f.value === 'ArabicPoetry') {
-      opt.textContent = currentSiteLang === 'ar' ? 'خط الشعر العربي (الافتراضي)' : 'Arabic Poetry (Default)';
-    } else {
-      opt.textContent = f.name;
+      text = currentSiteLang === 'ar' ? 'خط الشعر العربي (الافتراضي)' : 'Arabic Poetry (Default)';
     }
-    selectFontStyle.appendChild(opt);
+    addOption(f.value, text);
   });
   
   // Hide dropdown for Arabic if there is only 1 option (default, no custom uploaded font)
@@ -2729,15 +4230,32 @@ function populateFontStyles(lang, selectedValue = null) {
     grpFontStyle.style.display = showDropdown ? 'block' : 'none';
   }
   
-  if (selectedValue) {
-    selectFontStyle.value = selectedValue;
-  } else {
-    // Default select
+  // Set values
+  let valToSet = selectedValue;
+  if (!valToSet) {
     if (customFontLoaded) {
-      selectFontStyle.value = 'ArabicPoetryCustomUpload';
+      valToSet = 'ArabicPoetryCustomUpload';
     } else {
-      selectFontStyle.value = fonts[0].value;
+      valToSet = fonts[0].value;
     }
+  }
+
+  if (selectFontStyle) selectFontStyle.value = valToSet;
+  if (selectWebFontSingle) {
+    const savedSingle = localStorage.getItem('diwan-poetry-font');
+    selectWebFontSingle.value = savedSingle || valToSet;
+  }
+  if (selectWebFontHeadings) {
+    const savedHead = localStorage.getItem('diwan-web-headings-font');
+    selectWebFontHeadings.value = savedHead || valToSet;
+  }
+  if (selectWebFontBody) {
+    const savedBody = localStorage.getItem('diwan-web-body-font');
+    selectWebFontBody.value = savedBody || valToSet;
+  }
+  if (selectWebFontButtons) {
+    const savedButtons = localStorage.getItem('diwan-web-buttons-font');
+    selectWebFontButtons.value = savedButtons || valToSet;
   }
   
   // Apply font CSS
@@ -3009,7 +4527,164 @@ const uiTranslations = {
     format_pdf: "ملف PDF",
     format_zip: "ألبوم صور (ZIP)",
     export_compressing: "جاري ضغط صفحة",
-    doc_text_color_lbl: "لون النص"
+    doc_text_color_lbl: "لون النص",
+    tab_web_mode: "معاينة موقع (Web)",
+    web_page_settings: "تنسيق قالب الموقع",
+    web_page_settings_desc: "اختر قالب للموقع، ومظهر الألوان، وتحديد الخط المخصص.",
+    web_template_lbl: "قالب الموقع",
+    web_template_saas: "موقع تقني / SaaS",
+    web_template_magazine: "بوابة ثقافية",
+    web_template_portfolio: "معرض أعمال شخصي",
+    web_theme_lbl: "مظهر الألوان",
+    web_theme_dark: "داكن فاخر",
+    web_theme_light: "فاتح نظيف",
+    web_theme_amber: "عنبري ملكي",
+    web_multi_fonts_lbl: "تفعيل خطوط متعددة للموقع",
+    web_upload_fonts_lbl: "تحميل خطوط مخصصة للموقع",
+    web_upload_fonts_btn: "اختر ملفات الخطوط (.ttf, .otf, .woff)",
+    web_font_lbl: "خط الموقع الأساسي",
+    web_font_headings: "خط العناوين",
+    web_font_body: "خط النصوص والفقرات",
+    web_font_buttons: "خط الأزرار والقوائم",
+    web_target_lbl: "تطبيق الخط المخصص على",
+    web_target_all: "الموقع بأكمله",
+    web_target_headings: "العناوين فقط",
+    web_target_buttons: "الأزرار والقوائم",
+    web_target_none: "لا شيء",
+    web_logo_text: "منشئ سيرتي الذاتية الذكية",
+    web_nav_home: "المميزات",
+    web_nav_about: "آلية العمل",
+    web_nav_templates: "نماذج",
+    web_nav_features: "الأسعار",
+    web_nav_contact: "الأسئلة الشائعة",
+    web_btn_login: "تسجيل الدخول",
+    web_btn_start: "ابدأ الآن",
+    web_hero_badge: "الجيل الجديد من الذكاء الاصطناعي ✨",
+    web_hero_title: "سيرة ذاتية تناسب الوظيفة فعلاً.",
+    web_hero_desc: "ارفع سيرتك الذاتية واحصل على تقييم فوري من الذكاء الاصطناعي، ثم حسّنها بمقترحات مخصصة بناءً على الوصف الوظيفي — خلال دقيقة تقريباً.",
+    web_btn_primary: "ابدأ الآن ←",
+    web_btn_secondary: "اعرف كيف نعمل",
+    web_stat1_num: "94%",
+    web_stat1_lbl: "فرصة مقابلة أكثر في كبرى الشركات",
+    web_stat2_num: "50%-",
+    web_stat2_lbl: "الوقت اللازم لبناء سيرة جديدة",
+    web_stat3_num: "0",
+    web_stat3_lbl: "ريال تكلفة البداية المجانية",
+    web_visual_card1_title: "المستند النشط: سيرة مهنية",
+    web_visual_card1_score: "حالة التحسين: ممتاز",
+    web_visual_card1_time: "آخر تعديل: قبل دقيقتين",
+    web_visual_main_name: "حمزة صالح",
+    web_visual_main_title: "مهندس برمجيات أول / Software Engineer",
+    web_visual_main_email: "hamza@example.com",
+    web_visual_main_phone: "+966 50 555 1234",
+    web_visual_main_location: "الرياض، السعودية",
+    web_visual_main_sec1: "الخبرة المهنية / Professional Experience",
+    web_visual_main_role: "مطور واجهات أول - منصة تبيّن",
+    web_visual_main_desc: "تطوير وتحسين كفاءة المنصات الرقمية بنسبة 40٪ وزيادة سرعة استجابة الواجهات بأسلوب تقني متطور.",
+    web_visual_main_sec2: "المهارات والقدرات / Technical Skills",
+    web_visual_card2_title: "تطابق متطلبات الوظيفة",
+    web_visual_card2_desc: "السيرة الذاتية متوافقة بشكل ممتاز!",
+    web_brands_title: "انضم إلى أكثر من ٥٠,٠٠٠ مستخدم حصلوا على وظائف أحلامهم في:",
+    web_features_title: "ميزات منشئ السير الذاتية بالذكاء الاصطناعي",
+    web_features_desc: "كل ما تحتاجه لإنشاء سيرة ذاتية احترافية تتوافق مع متطلبات الوظائف وأنظمة الفرز في مكان واحد.",
+    web_feat1_title: "التخصيص الذكي للوظيفة",
+    web_feat1_desc: "تقوم خوارزمياتنا بتحليل وصف الوظيفة وضبط سيرتك الذاتية تلقائيًا لتسليط الضوء على المهارات المطلوبة.",
+    web_feat2_title: "توافق تام مع أنظمة ATS",
+    web_feat2_desc: "قوالب مصممة بعناية خالية من الجداول المعقدة لضمان قراءتها بنجاح بواسطة خوارزميات الفرز والتوظيف.",
+    web_feat3_title: "تصدير فوري بنسق PDF",
+    web_feat3_desc: "حمّل سيرتك الذاتية بصيغة PDF جاهزة تماماً للطباعة والإرسال بضغطة زر واحدة وتنسيق فائق الدقة.",
+    web_testimonial_text: "«بفضل هذا المنشئ الذكي، استطعت مواءمة سيرتي الذاتية مع وصف الوظيفة في أقل من دقيقة. تم استدعائي للمقابلة الشخصية في اليوم التالي مباشرة وحصلت على الوظيفة!»",
+    web_testimonial_author: "سارة العتيبي",
+    web_testimonial_title: "مهندسة برمجيات في أرامكو",
+    web_brand_desc: "المنصة الذكية الأسرع لتصميم وسرد سيرتك الذاتية بمواءمة تامة مع وصف الوظيفة المستهدفة.",
+    web_footer_col1_title: "المنتجات",
+    web_footer_col1_link1: "منشئ السير الذاتية",
+    web_footer_col1_link2: "أدوات مواءمة الوظائف",
+    web_footer_col2_title: "المصادر",
+    web_footer_col2_link1: "مدونة التوظيف والوظائف",
+    web_footer_col2_link2: "دليل كتابة السيرة",
+    web_copyright: "حقوق النشر © 2026 منشئ السيرة الذاتية الذكية. جميع الحقوق محفوظة.",
+    
+    // Magazine translation keys
+    mag_logo: "ديوان الثقافة",
+    mag_nav_mag: "المجلة",
+    mag_nav_poems: "قصائد الأدب",
+    mag_nav_phil: "فلسفة وفكر",
+    mag_nav_authors: "كتّاب ديوان",
+    mag_nav_about: "عن المجلة",
+    mag_btn_sub: "اشترك الآن",
+    mag_btn_login: "تسجيل الدخول",
+    mag_hero_title: "حين تصبح الكلمة وطناً، والقصيدة بيتاً.",
+    mag_hero_desc: "مجلة ثقافية أدبية تعنى بالشعر العربي المعاصر، النقد الأدبي، والفنون البصرية الراقية.",
+    mag_btn_primary: "اقرأ العدد الحالي",
+    mag_btn_secondary: "تصفح الأرشيف",
+    mag_feat_sec_title: "مقالات مختارة",
+    mag_feat_sec_desc: "حوارات فكرية وقراءات نقدية في الأدب المعاصر والتايبوغرافي",
+    mag_feat1_title: "جماليات الخط العربي في العصر الرقمي",
+    mag_feat1_desc: "قراءة فلسفية في تطور الحرف العربي وتأثير التكنولوجيا المعاصرة على هويته البصرية.",
+    mag_feat2_title: "أثر التشكيل وحركات الإعراب على موسيقى الشعر",
+    mag_feat2_desc: "كيف يسهم ضبط أواخر الكلمات وحركات الحروف في تشكيل البناء الموسيقي والتعبيري للقصيدة.",
+    mag_feat3_title: "مدارس الشعر الحر: ثورة اللفظ والمعنى",
+    mag_feat3_desc: "دراسة نقدية حول نشأة قصيدة التفعيلة وتحررها من القوالب التقليدية مع الحفاظ على روح الهوية.",
+    mag_quote_text: "«الشعر هو الفن الذي يجعلنا نلمس اللامرئي، ونسمع الصمت، ونرى ما وراء الكلمات. إنه تنفس الروح في جسد اللغة الحية.»",
+    mag_quote_author: "د. أمين الجرجاني",
+    mag_quote_title: "ناقد وباحث في جماليات الأدب العربي",
+    mag_footer_desc: "منبر أدبي يسعى لإحياء الفنون اللغوية العربية وإبراز جماليات التايبوغرافي العربي.",
+    mag_foot_col1_title: "الأقسام",
+    mag_foot_col1_link1: "دراسات نقدية",
+    mag_foot_col1_link2: "قصائد وأقاصيص",
+    mag_foot_col2_title: "المشاركة",
+    mag_foot_col2_link1: "أرسل مساهمتك",
+    mag_foot_col2_link2: "شروط النشر",
+    mag_copyright: "حقوق النشر © 2026 مجلة ديوان. جميع الحقوق محفوظة.",
+
+    // Portfolio translation keys
+    port_logo: "أنس بن أحمد",
+    port_nav_bio: "السيرة الأدبية",
+    port_nav_col: "الدواوين",
+    port_nav_poems: "القصائد المختارة",
+    port_nav_contact: "اتصل بي",
+    port_btn_book: "طلب لقاء شعري",
+    port_hero_title: "في محراب الحرف أكتب عمري قصيدة.",
+    port_hero_desc: "شاعر وكاتب معاصر، أفتش عن عمق المعاني في تفاصيل الحياة اليومية، وأصوغ المشاعر حبراً على ورق معتق يلامس الأفئدة.",
+    port_btn_primary: "اقرأ آخر القصائد",
+    port_btn_secondary: "تحميل ديواني الرقمي",
+    port_feat_sec_title: "دواوين ومؤلفات",
+    port_feat_sec_desc: "إصدارات شعرية وكتب منشورة تغني المكتبة العربية وتجسد الرحلة الوجدانية",
+    port_feat1_title: "ديوان: تراتيل الصمت",
+    port_feat1_desc: "مجموعة شعرية فازت بجائزة الإبداع العربي المعاصر، تستلهم سكون الصحراء وهمس الريح.",
+    port_feat2_title: "كتاب: فلسفة المجاز",
+    port_feat2_desc: "قراءات نقدية وخواطر فكرية حول تطور المجاز في البلاغة العربية الكلاسيكية والحديثة.",
+    port_feat3_title: "ديوان: موانئ الغربة",
+    port_feat3_desc: "قصائد وجدانية تحكي قصة الترحال والبحث عن الذات عبر عواصم العالم، بأسلوب تفعيلة متزن.",
+    port_quote_text: "«القصيدة بيت نسكنه حين تضيق بنا المدائن، وهي مرآة نرى فيها انعكاس أرواحنا في أجمل وأصدق صورة ممكنة.»",
+    port_quote_author: "أنس بن أحمد",
+    port_quote_title: "شاعر وأكاديمي في الأدب العربي",
+    port_footer_desc: "تواصل معي للتعاون الأدبي، الأمسيات الشعرية، أو القراءات النقدية والأكاديمية.",
+    port_foot_col1_title: "روابط سريعة",
+    port_foot_col1_link1: "الأمسيات القادمة",
+    port_foot_col1_link2: "المدونة الشخصية",
+    port_foot_col2_title: "تواصل",
+    port_foot_col2_link1: "راسلني مباشرة",
+    port_foot_col2_link2: "حساب تويتر",
+    port_copyright: "حقوق النشر © 2026 أنس بن أحمد. جميع الحقوق محفوظة.",
+
+    web_hint_lbl: "💡 نصيحة: يمكنك النقر فوق أي نص في الموقع وتعديله مباشرة لتجربة الخط عليه!",
+    ctx_enlarge_font: "تكبير الخط (+)",
+    ctx_shrink_font: "تصغير الخط (-)",
+    ctx_reset_font: "إعادة تعيين الحجم",
+    ctx_bold: "نص عريض (Bold)",
+    ctx_color: "لون النص",
+    web_target_none: "لا شيء",
+    ctx_font_header: "نوع الخط",
+    ctx_font_custom: "الخط المخصص",
+    ctx_font_default: "الخط الافتراضي للموقع",
+    ctx_font_serif: "خط كلاسيكي (Serif)",
+    ctx_font_mono: "خط متباعد (Monospace)",
+    web_zoom_lbl: "تغيير حجم خطوط المعاينة",
+    web_zoom_in: "تكبير",
+    web_zoom_out: "تصغير",
+    web_zoom_reset: "افتراضي"
   },
   en: {
     logo_title: "Font Editor",
@@ -3183,7 +4858,164 @@ const uiTranslations = {
     format_webp: "WebP Image",
     format_pdf: "PDF Document",
     format_zip: "Photo Album (ZIP)",
-    export_compressing: "Compressing page"
+    export_compressing: "Compressing page",
+    tab_web_mode: "Website Preview (Web)",
+    web_page_settings: "Website Template Settings",
+    web_page_settings_desc: "Choose a website template, color scheme, and custom font mapping.",
+    web_template_lbl: "Website Template",
+    web_template_saas: "SaaS / Tech Layout",
+    web_template_magazine: "Cultural Portal",
+    web_template_portfolio: "Personal Portfolio",
+    web_theme_lbl: "Color Theme",
+    web_theme_dark: "Premium Dark",
+    web_theme_light: "Clean Light",
+    web_theme_amber: "Royal Amber",
+    web_multi_fonts_lbl: "Enable Multiple Website Fonts",
+    web_upload_fonts_lbl: "Upload Custom Website Fonts",
+    web_upload_fonts_btn: "Choose Font Files (.ttf, .otf, .woff)",
+    web_font_lbl: "Primary Website Font",
+    web_font_headings: "Headings Font",
+    web_font_body: "Body & Paragraphs Font",
+    web_font_buttons: "Buttons & Navigation Font",
+    web_target_lbl: "Apply Custom Font To",
+    web_target_all: "Entire Website",
+    web_target_headings: "Headings Only",
+    web_target_buttons: "Buttons & Nav Only",
+    web_target_none: "None",
+    web_logo_text: "Smart Resume Builder",
+    web_nav_home: "Features",
+    web_nav_about: "How It Works",
+    web_nav_templates: "Templates",
+    web_nav_features: "Pricing",
+    web_nav_contact: "FAQ",
+    web_btn_login: "Login",
+    web_btn_start: "Get Started",
+    web_hero_badge: "Next-Gen AI Resume Builder ✨",
+    web_hero_title: "A Resume That Fits the Job Perfectly.",
+    web_hero_desc: "Upload your resume, get an instant AI score, and optimize it with tailored suggestions based on the job description — in under a minute.",
+    web_btn_primary: "Get Started →",
+    web_btn_secondary: "See How It Works",
+    web_stat1_num: "94%",
+    web_stat1_lbl: "More interview callbacks at top companies",
+    web_stat2_num: "-50%",
+    web_stat2_lbl: "Time to build a resume from scratch",
+    web_stat3_num: "$0",
+    web_stat3_lbl: "Cost to get started for free",
+    web_visual_card1_title: "Active Resume: Software Engineer",
+    web_visual_card1_score: "Status: Excellent",
+    web_visual_card1_time: "Last edited: 2 mins ago",
+    web_visual_main_name: "Hamza Saleh",
+    web_visual_main_title: "Lead Software Engineer",
+    web_visual_main_email: "hamza@example.com",
+    web_visual_main_phone: "+966 50 555 1234",
+    web_visual_main_location: "Riyadh, KSA",
+    web_visual_main_sec1: "Professional Experience",
+    web_visual_main_role: "Lead Frontend Developer - Tabyeen",
+    web_visual_main_desc: "Optimized digital platform performance by 40% and improved interface responsiveness using state-of-the-art architectures.",
+    web_visual_main_sec2: "Key Technical Skills",
+    web_visual_card2_title: "Job Description Match Score",
+    web_visual_card2_desc: "Your resume is highly optimized!",
+    web_brands_title: "Join over 50,000 successful users hired at top companies:",
+    web_features_title: "AI Resume Builder Features",
+    web_features_desc: "Everything you need to create a professional resume matching job requirements and ATS sorting systems in one place.",
+    web_feat1_title: "Smart Job Customization",
+    web_feat1_desc: "Our algorithms analyze the job description and automatically adjust your resume to highlight the required skills.",
+    web_feat2_title: "Full ATS Compatibility",
+    web_feat2_desc: "Carefully designed templates free of complex tables to ensure successful parsing by recruitment filtering systems.",
+    web_feat3_title: "Instant PDF Export",
+    web_feat3_desc: "Download your resume as a print-ready, high-resolution PDF file with a single click.",
+    web_testimonial_text: "\"Thanks to this smart builder, I aligned my resume with the job description in less than a minute. I got called for an interview the very next day and got hired!\"",
+    web_testimonial_author: "Sara Al-Otaibi",
+    web_testimonial_title: "Software Engineer at Aramco",
+    web_brand_desc: "The fastest smart platform to design and customize your resume for target job descriptions.",
+    web_footer_col1_title: "Products",
+    web_footer_col1_link1: "Resume Builder",
+    web_footer_col1_link2: "Job Matching Tools",
+    web_footer_col2_title: "Resources",
+    web_footer_col2_link1: "Careers Blog",
+    web_footer_col2_link2: "Resume Guide",
+    web_copyright: "Copyright © 2026 Smart Resume Builder. All rights reserved.",
+
+    // Magazine translation keys
+    mag_logo: "Diwan Al-Thaqafa",
+    mag_nav_mag: "Magazine",
+    mag_nav_poems: "Poems",
+    mag_nav_phil: "Philosophy",
+    mag_nav_authors: "Authors",
+    mag_nav_about: "About Us",
+    mag_btn_sub: "Subscribe",
+    mag_btn_login: "Login",
+    mag_hero_title: "When words become a homeland, and poems a home.",
+    mag_hero_desc: "A literary cultural magazine dedicated to contemporary Arabic poetry, literary criticism, and fine visual arts.",
+    mag_btn_primary: "Read Current Issue",
+    mag_btn_secondary: "Explore Archive",
+    mag_feat_sec_title: "Featured Articles",
+    mag_feat_sec_desc: "Intellectual dialogues and critical readings in contemporary literature and typography.",
+    mag_feat1_title: "Aesthetics of Arabic Calligraphy in the Digital Age",
+    mag_feat1_desc: "A philosophical reading of the evolution of the Arabic letter and the impact of modern technology on its visual identity.",
+    mag_feat2_title: "The Impact of Tashkeel and Diacritics on Poetic Rhythm",
+    mag_feat2_desc: "How correct word endings and letter diacritics shape the musical and expressive structure of the poem.",
+    mag_feat3_title: "Free Poetry Schools: The Revolution of Words & Meaning",
+    mag_feat3_desc: "A critical study on the emergence of Taf'ila poetry and its liberation from traditional forms while preserving identity.",
+    mag_quote_text: "\"Poetry is the art that makes us touch the invisible, hear the silence, and see beyond words. It is the breathing of the soul in the body of living language.\"",
+    mag_quote_author: "Dr. Amin Al-Jurjani",
+    mag_quote_title: "Critic & Researcher in Arabic Literary Aesthetics",
+    mag_footer_desc: "A literary platform dedicated to reviving Arabic language arts and showcasing the beauty of Arabic typography.",
+    mag_foot_col1_title: "Categories",
+    mag_foot_col1_link1: "Critical Studies",
+    mag_foot_col1_link2: "Poems & Stories",
+    mag_foot_col2_title: "Contribute",
+    mag_foot_col2_link1: "Submit Contribution",
+    mag_foot_col2_link2: "Publishing Terms",
+    mag_copyright: "Copyright © 2026 Diwan Magazine. All rights reserved.",
+
+    // Portfolio translation keys
+    port_logo: "Anas bin Ahmed",
+    port_nav_bio: "Biography",
+    port_nav_col: "Collections",
+    port_nav_poems: "Selected Poems",
+    port_nav_contact: "Contact Me",
+    port_btn_book: "Book for Recital",
+    port_hero_title: "In the sanctuary of letters, I write my life as a poem.",
+    port_hero_desc: "A contemporary poet and writer, searching for the depth of meaning in daily life, crafting emotions as ink on vintage paper that touches the heart.",
+    port_btn_primary: "Read Latest Poems",
+    port_btn_secondary: "Download Digital Diwan",
+    port_feat_sec_title: "Poetic Collections",
+    port_feat_sec_desc: "Poetic releases and published books enriching the Arabic library and embodying the spiritual journey.",
+    port_feat1_title: "Diwan: Hymns of Silence",
+    port_feat1_desc: "A poetry collection that won the Contemporary Arabic Creativity Award, inspired by desert silence and wind whispers.",
+    port_feat2_title: "Book: Philosophy of Metaphor",
+    port_feat2_desc: "Critical readings and intellectual thoughts on the evolution of metaphor in classical and modern Arabic rhetoric.",
+    port_feat3_title: "Diwan: Harbors of Exile",
+    port_feat3_desc: "Emotional poems telling the story of travel and self-discovery across world capitals, in a balanced Taf'ila style.",
+    port_quote_text: "\"A poem is a house we live in when cities become narrow, and a mirror in which we see the reflection of our souls in the most beautiful and honest way possible.\"",
+    port_quote_author: "Anas bin Ahmed",
+    port_quote_title: "Poet & Academic in Arabic Literature",
+    port_footer_desc: "Contact me for literary collaborations, poetry recitals, or critical and academic readings.",
+    port_foot_col1_title: "Quick Links",
+    port_foot_col1_link1: "Upcoming Recitals",
+    port_foot_col1_link2: "Personal Blog",
+    port_foot_col2_title: "Connect",
+    port_foot_col2_link1: "Email Me",
+    port_foot_col2_link2: "Twitter Profile",
+    port_copyright: "Copyright © 2026 Anas bin Ahmed. All rights reserved.",
+
+    web_hint_lbl: "💡 Tip: You can click on any text in the website mock-up and edit it directly to test your font!",
+    ctx_enlarge_font: "Enlarge Font (+)",
+    ctx_shrink_font: "Shrink Font (-)",
+    ctx_reset_font: "Reset Font Size",
+    ctx_bold: "Bold Text",
+    ctx_color: "Text Color",
+    web_target_none: "None",
+    ctx_font_header: "Font Family",
+    ctx_font_custom: "Custom Font",
+    ctx_font_default: "Default Website Font",
+    ctx_font_serif: "Classic Serif",
+    ctx_font_mono: "Monospace",
+    web_zoom_lbl: "Preview Font Scale",
+    web_zoom_in: "Enlarge",
+    web_zoom_out: "Shrink",
+    web_zoom_reset: "Reset"
   }
 };
 
@@ -3262,6 +5094,7 @@ function updateUISiteLanguage(lang) {
       btnToggleSiteLang.textContent = lang === 'ar' ? 'EN' : 'العربية';
     }
   }
+
   updateWritingLangButtonText();
 
   // 5. Watermark input default sync

@@ -162,7 +162,7 @@
       </div>
       
       <!-- Font Loader Section -->
-      <div class="control-section">
+      <div class="control-section font-loader-section">
         <h2 class="section-title"><i class="fa-solid fa-file-font icon"></i><span data-i18n="font_loader_title">تحميل خط مخصص</span></h2>
         <p class="section-desc" data-i18n="font_loader_desc">الخط الافتراضي محمل تلقائياً. لتحميل خط آخر لديك (OTF, TTF, WOFF, WOFF2)، اسحبه هنا أو انقر للاختيار.</p>
         
@@ -582,6 +582,144 @@
         </div>
       </div>
 
+      <!-- Web Preview Style (Visible in Web Mode only) -->
+      <div class="control-section web-only" style="display: none;">
+        <h2 class="section-title"><i class="fa-solid fa-laptop-code icon"></i><span data-i18n="web_page_settings">تنسيق قالب الموقع</span></h2>
+        <p class="section-desc" data-i18n="web_page_settings_desc">اختر قالب للموقع، ومظهر الألوان، وتحديد الخط المخصص.</p>
+        
+        <!-- Web Template Select -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="web_template_lbl">قالب الموقع</label>
+          <div class="ratio-grid web-template-grid">
+            <button class="ratio-btn active" id="btnWebTemplateSaas" data-template="saas">
+              <span data-i18n="web_template_saas">موقع تقني / SaaS</span>
+            </button>
+            <button class="ratio-btn" id="btnWebTemplateMagazine" data-template="magazine">
+              <span data-i18n="web_template_magazine">بوابة ثقافية</span>
+            </button>
+            <button class="ratio-btn" id="btnWebTemplatePortfolio" data-template="portfolio">
+              <span data-i18n="web_template_portfolio">معرض أعمال شخصي</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Web Theme Toggle (Dark / Light / Amber) -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="web_theme_lbl">مظهر الألوان</label>
+          <div class="ratio-grid web-theme-grid">
+            <button class="ratio-btn active" id="btnWebThemeDark" data-theme="dark">
+              <span data-i18n="web_theme_dark">داكن فاخر</span>
+            </button>
+            <button class="ratio-btn" id="btnWebThemeLight" data-theme="light">
+              <span data-i18n="web_theme_light">فاتح نظيف</span>
+            </button>
+            <button class="ratio-btn" id="btnWebThemeAmber" data-theme="amber">
+              <span data-i18n="web_theme_amber">عنبري ملكي</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Web Font Settings -->
+        <div class="control-group" id="grpWebFontMode">
+          <div class="checkbox-wrapper" style="display: flex; align-items: center; gap: 8px;">
+            <input type="checkbox" id="chkWebMultipleFonts" class="styled-checkbox" style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="chkWebMultipleFonts" class="checkbox-label" data-i18n="web_multi_fonts_lbl" style="font-weight: 600; cursor: pointer; user-select: none;">تفعيل خطوط متعددة للموقع</label>
+          </div>
+        </div>
+
+        <!-- Web Custom Font Uploader -->
+        <div class="control-group" id="grpWebCustomFontUpload" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; margin-bottom: 16px;">
+          <label class="control-label" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <span data-i18n="web_upload_fonts_lbl" style="font-weight: 600;">تحميل خطوط مخصصة للموقع</span>
+            <span class="upload-badge" id="webFontCountBadge" style="font-size: 11px; background: var(--accent-gold); color: #000; padding: 2px 6px; border-radius: 10px; font-weight: bold; display: none;">0</span>
+          </label>
+          
+          <button class="btn-action" id="btnWebUploadFonts" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px dashed rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.03); color: var(--accent-gold); border-radius: 6px; padding: 8px; transition: all 0.3s ease; font-size: 13px; font-weight: 500; cursor: pointer;">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span id="btnWebUploadFontsText" data-i18n="web_upload_fonts_btn">اختر ملفات الخطوط (.ttf, .otf, .woff)</span>
+          </button>
+          <input type="file" id="webFontFileInput" accept=".ttf,.otf,.woff,.woff2" multiple style="display: none;">
+          
+          <!-- List of uploaded fonts -->
+          <div id="webUploadedFontsList" style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px; max-height: 120px; overflow-y: auto; padding-right: 4px;">
+            <!-- Badges populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Single Font Select (Shown when Multi-Fonts is disabled) -->
+        <div class="control-group" id="grpWebFontSingle">
+          <label class="control-label" data-i18n="web_font_lbl">خط الموقع الأساسي</label>
+          <select id="selectWebFontSingle" class="styled-select">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Multiple Fonts Selection (Shown when Multi-Fonts is enabled) -->
+        <div id="webMultiFontsControls" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 16px; border: 1px dashed rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.02);">
+          <div class="control-group" style="margin-bottom: 0;">
+            <label class="control-label" style="font-size: 13px;" data-i18n="web_font_headings">خط العناوين</label>
+            <select id="selectWebFontHeadings" class="styled-select">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <div class="control-group" style="margin-bottom: 0;">
+            <label class="control-label" style="font-size: 13px;" data-i18n="web_font_body">خط النصوص والفقرات</label>
+            <select id="selectWebFontBody" class="styled-select">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+          <div class="control-group" style="margin-bottom: 0;">
+            <label class="control-label" style="font-size: 13px;" data-i18n="web_font_buttons">خط الأزرار والقوائم</label>
+            <select id="selectWebFontButtons" class="styled-select">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Web Target Toggle (All / Headings / Buttons) -->
+        <div class="control-group" id="grpWebTarget">
+          <label class="control-label" data-i18n="web_target_lbl">تطبيق الخط المخصص على</label>
+          <div class="ratio-grid web-target-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <button class="ratio-btn active" id="btnWebTargetAll" data-target="all">
+              <span data-i18n="web_target_all">الموقع بأكمله</span>
+            </button>
+            <button class="ratio-btn" id="btnWebTargetHeadings" data-target="headings">
+              <span data-i18n="web_target_headings">العناوين فقط</span>
+            </button>
+            <button class="ratio-btn" id="btnWebTargetButtons" data-target="buttons">
+              <span data-i18n="web_target_buttons">الأزرار والقوائم</span>
+            </button>
+            <button class="ratio-btn" id="btnWebTargetNone" data-target="none">
+              <span data-i18n="web_target_none">لا شيء</span>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- Web Preview Font Zoom Control -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="web_zoom_lbl">تغيير حجم خطوط المعاينة</label>
+          <div class="ratio-grid" style="grid-template-columns: repeat(3, 1fr); gap: 8px;">
+            <button class="ratio-btn" id="btnWebZoomOut">
+              <i class="fa-solid fa-minus" style="margin-inline-end: 4px;"></i>
+              <span data-i18n="web_zoom_out">تصغير</span>
+            </button>
+            <button class="ratio-btn" id="btnWebZoomReset">
+              <span data-i18n="web_zoom_reset">افتراضي</span>
+            </button>
+            <button class="ratio-btn" id="btnWebZoomIn">
+              <i class="fa-solid fa-plus" style="margin-inline-end: 4px;"></i>
+              <span data-i18n="web_zoom_in">تكبير</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Direct Live-Edit Tip Hint -->
+        <div class="control-group">
+          <p class="web-edit-hint" data-i18n="web_hint_lbl" style="font-size: 11.5px; opacity: 0.85; line-height: 1.4; color: var(--accent); margin: 0; background: rgba(var(--accent-rgb), 0.08); padding: 8px 12px; border-radius: 6px; border-inline-start: 3px solid var(--accent);"></p>
+        </div>
+      </div>
+
       <!-- Poetry Preset Samples -->
       <div class="control-section">
         <h2 class="section-title"><i class="fa-solid fa-scroll icon"></i><span id="titleSamples" data-i18n="samples_section_title">نماذج نصوص جاهزة</span></h2>
@@ -635,6 +773,10 @@
             <button class="tab-btn" id="tabDocMode" data-view="document">
               <i class="fa-solid fa-file-lines"></i>
               <span data-i18n="tab_doc_mode">صفحة مستند (Word)</span>
+            </button>
+            <button class="tab-btn" id="tabWebMode" data-view="web">
+              <i class="fa-solid fa-laptop-code"></i>
+              <span data-i18n="tab_web_mode">معاينة موقع (Web)</span>
             </button>
           </div>
         </div>
@@ -758,6 +900,417 @@
           </div>
           <!-- Page indicator overlay -->
           <div id="cardPageIndicator" class="card-page-indicator" style="display: none;">1 / 1</div>
+        </div>
+      </div>
+
+      <!-- Website Layout Viewport Preview -->
+      <div class="web-preview-wrapper web-tpl-saas web-theme-dark web-target-all" id="webPreviewWrapper" style="display: none;">
+        <!-- Mock Browser Topbar Frame -->
+        <div class="mock-browser-header">
+          <div class="browser-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="browser-address-bar">
+            <i class="fa-solid fa-lock browser-lock"></i>
+            <span>diwan.com/preview</span>
+          </div>
+        </div>
+
+        <!-- Inner Web Content Frame -->
+        <div class="web-preview-content">
+          <!-- SaaS / Tech Layout -->
+          <div id="webContentSaas" class="web-template-content">
+            <!-- Web Header -->
+            <header class="web-header">
+              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="web_logo_text">منشئ سيرتي الذاتية الذكية</div>
+              <nav class="web-nav">
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_home">المميزات</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_about">آلية العمل</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_templates">نماذج</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_features">الأسعار</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_nav_contact">الأسئلة الشائعة</a>
+              </nav>
+              <div class="web-header-actions">
+                <button class="web-btn web-btn-outline" contenteditable="true" spellcheck="false" data-i18n="web_btn_login">تسجيل الدخول</button>
+                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false" data-i18n="web_btn_start">ابدأ الآن</button>
+              </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="web-hero">
+              <div class="web-hero-content">
+
+                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="web_hero_title">سيرة ذاتية تناسب الوظيفة فعلاً.</h1>
+                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="web_hero_desc">ارفع سيرتك مرة واحدة، ألصق وصف الوظيفة، واحصل على ملف PDF أنيق وجاهز لـ ATS مصمم لهذا الدور تحديدًا — خلال دقيقة تقريبًا.</p>
+                <div class="web-hero-buttons">
+                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="web_btn_primary">ابدأ الآن ←</button>
+                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="web_btn_secondary">اعرف كيف نعمل</button>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="web-hero-stats">
+                  <div class="web-stat-item">
+                    <div class="web-stat-number" contenteditable="true" spellcheck="false" data-i18n="web_stat1_num">94%</div>
+                    <div class="web-stat-label" contenteditable="true" spellcheck="false" data-i18n="web_stat1_lbl">متوسط تغطية ATS في السير المفضلة</div>
+                  </div>
+                  <div class="web-stat-item">
+                    <div class="web-stat-number" contenteditable="true" spellcheck="false" data-i18n="web_stat2_num">57s~</div>
+                    <div class="web-stat-label" contenteditable="true" spellcheck="false" data-i18n="web_stat2_lbl">الوقت الوسيط من اللصق إلى PDF</div>
+                  </div>
+                  <div class="web-stat-item">
+                    <div class="web-stat-number" contenteditable="true" spellcheck="false" data-i18n="web_stat3_num">0</div>
+                    <div class="web-stat-label" contenteditable="true" spellcheck="false" data-i18n="web_stat3_lbl">خبرة فوتوشوب أو كانفا أو تصميم مطلوبة</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="web-hero-visual">
+                <!-- Floating Top Card -->
+                <div class="visual-card visual-card-floating-top">
+                  <div class="floating-header">
+                    <span class="active-dot"></span>
+                    <span class="floating-title" contenteditable="true" spellcheck="false" data-i18n="web_visual_card1_title">Active Resume: Financial Analyst</span>
+                  </div>
+                  <div class="floating-meta">
+                    <span class="meta-tag tag-score" contenteditable="true" spellcheck="false" data-i18n="web_visual_card1_score">Score: Excellent</span>
+                    <span class="meta-tag tag-format">PDF / Word</span>
+                  </div>
+                  <div class="progress-bar-mini">
+                    <div class="progress-fill" style="width: 88%;"></div>
+                  </div>
+                  <div class="floating-time" contenteditable="true" spellcheck="false" data-i18n="web_visual_card1_time">Last edited: 2 mins ago</div>
+                </div>
+                
+                <!-- Main Resume Mockup Card -->
+                <div class="visual-card visual-card-main">
+                  <div class="main-card-header">
+                    <div class="user-avatar-circle">
+                      <i class="fa-solid fa-user-tie"></i>
+                    </div>
+                    <div class="user-info-block">
+                      <div class="user-name" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_name">حمزة صالح</div>
+                      <div class="user-title" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_title">مهندس برمجيات أول / Software Engineer</div>
+                      <div class="user-contact-row">
+                        <span class="contact-item">
+                          <i class="fa-regular fa-envelope"></i>
+                          <span contenteditable="true" spellcheck="false" data-i18n="web_visual_main_email">hamza@example.com</span>
+                        </span>
+                        <span class="contact-item">
+                          <i class="fa-solid fa-phone"></i>
+                          <span contenteditable="true" spellcheck="false" data-i18n="web_visual_main_phone">+966 50 555 1234</span>
+                        </span>
+                        <span class="contact-item">
+                          <i class="fa-solid fa-location-dot"></i>
+                          <span contenteditable="true" spellcheck="false" data-i18n="web_visual_main_location">الرياض، السعودية</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="main-card-body">
+                    <div class="cv-section-header">
+                      <span class="cv-section-title" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_sec1">الخبرة المهنية / Professional Experience</span>
+                      <span class="cv-section-line"></span>
+                    </div>
+                    <div class="cv-item">
+                      <div class="cv-item-header">
+                        <span class="cv-item-role" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_role">مطور واجهات أول - منصة تبيّن</span>
+                        <span class="cv-item-date">2023 - Present</span>
+                      </div>
+                      <p class="cv-item-desc" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_desc">تطوير وتحسين كفاءة المنصات الرقمية بنسبة 40٪ وزيادة سرعة استجابة الواجهات بأسلوب تقني متطور.</p>
+                    </div>
+                    <div class="cv-section-header">
+                      <span class="cv-section-title" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_sec2">المهارات والقدرات / Technical Skills</span>
+                      <span class="cv-section-line"></span>
+                    </div>
+                    <div class="cv-skills-grid">
+                      <span class="skill-tag" contenteditable="true" spellcheck="false">React.js</span>
+                      <span class="skill-tag skill-highlight" contenteditable="true" spellcheck="false">CSS Grid / Flexbox</span>
+                      <span class="skill-tag" contenteditable="true" spellcheck="false">UX Design</span>
+                      <span class="skill-tag skill-highlight" contenteditable="true" spellcheck="false">Arabic Typography</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Floating Bottom Card -->
+                <div class="visual-card visual-card-floating-bottom">
+                  <div class="score-circle-container">
+                    <div class="score-circle-svg-wrapper">
+                      <svg class="score-circle-svg" viewBox="0 0 36 36">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle-stroke" stroke-dasharray="94, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span class="score-num" contenteditable="true" spellcheck="false">94%</span>
+                    </div>
+                  </div>
+                  <div class="score-details">
+                    <div class="score-title" contenteditable="true" spellcheck="false" data-i18n="web_visual_card2_title">تطابق متطلبات الوظيفة</div>
+                    <div class="score-desc" contenteditable="true" spellcheck="false" data-i18n="web_visual_card2_desc">السيرة الذاتية متوافقة بشكل ممتاز!</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            <!-- Brands Logos Row -->
+            <div class="web-brands-row">
+              <span class="web-brands-title" contenteditable="true" spellcheck="false" data-i18n="web_brands_title">أرسل مستخدمون حديثًا سيرهم لفرق كهذه وتلقوا الرد.</span>
+              <div class="web-brands-list">
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">tamara</span>
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">Accenture</span>
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">aramco</span>
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">tabby</span>
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">stc</span>
+                <span class="web-brand-item" contenteditable="true" spellcheck="false">Amazon</span>
+              </div>
+            </div>
+
+            <!-- Features Section -->
+            <section class="web-features">
+              <div class="web-section-header">
+                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="web_features_title">ميزات المنصة الذكية</h2>
+                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="web_features_desc">كل ما تحتاجه لتنسيق ومعاينة وتجربة خطوطك في مكان واحد وبأفضل أداء.</p>
+              </div>
+              <div class="web-features-grid">
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="web_feat1_title">تحميل الخطوط المباشر</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="web_feat1_desc">اسحب وأسقط أي خط بصيغ OTF أو TTF لمعاينته فوراً على كامل أجزاء الموقع والمستند.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-check-double"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="web_feat2_title">التشكيل والحركات</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="web_feat2_desc">نظام متطور لمعالجة وتلوين الحركات والتشكيل العربي بشكل منفصل لجمال تايبوغرافي لا يضاهى.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="web_feat3_title">تصدير بدقة فائقة</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="web_feat3_desc">حمّل تصميمك كصورة PNG شفافة عالية الجودة أو قم بطباعتها وحفظها كملف PDF بضغطة زر واحدة.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Testimonial Section -->
+            <section class="web-testimonial">
+              <div class="web-testimonial-content">
+                <i class="fa-solid fa-quote-right quote-icon"></i>
+                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="web_testimonial_text">«إن الخط العربي ليس مجرد وسيلة لنقل الكلمات، بل هو هندسة روحانية تتجلى من خلال القلم والورق لتخاطب الروح مباشرة قبل العين.»</p>
+                <div class="web-testimonial-author">
+                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="web_testimonial_author">ابن مقلة الكاتب</div>
+                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="web_testimonial_title">وزير وخطاط عباسي شهير</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="web-footer">
+              <div class="web-footer-top">
+                <div class="web-footer-brand">
+                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="web_logo_text">منشئ سيرتي الذاتية الذكية</div>
+                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="web_brand_desc">أول محرر ويب تفاعلي متكامل للخطوط العربية والإنجليزية بأحدث تقنيات الويب.</p>
+                </div>
+                <div class="web-footer-links">
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="web_footer_col1_title">المنتجات</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col1_link1">المحرر الذكي</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col1_link2">المكتبة البرمجية</a>
+                  </div>
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_title">المصادر</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_link1">المدونة الثقافية</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_link2">التعليم والدروس</a>
+                  </div>
+                </div>
+              </div>
+              <div class="web-footer-bottom">
+                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="web_copyright">حقوق النشر © 2026 ديوان. جميع الحقوق محفوظة.</p>
+              </div>
+            </footer>
+          </div>
+
+          <!-- Cultural Magazine / Portal Layout -->
+          <div id="webContentMagazine" class="web-template-content">
+            <!-- Magazine Header -->
+            <header class="web-header">
+              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="mag_logo">ديوان الثقافة</div>
+              <nav class="web-nav">
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_mag">المجلة</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_poems">قصائد الأدب</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_phil">فلسفة وفكر</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_authors">كتّاب ديوان</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_nav_about">عن المجلة</a>
+              </nav>
+              <div class="web-header-actions">
+                <button class="web-btn web-btn-outline" contenteditable="true" spellcheck="false" data-i18n="mag_btn_login">تسجيل الدخول</button>
+                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false" data-i18n="mag_btn_sub">اشترك الآن</button>
+              </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="web-hero">
+              <div class="web-hero-content">
+                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="mag_hero_title">حين تصبح الكلمة وطناً، والقصيدة بيتاً.</h1>
+                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="mag_hero_desc">مجلة ثقافية أدبية تعنى بالشعر العربي المعاصر، النقد الأدبي، والفنون البصرية الراقية.</p>
+                <div class="web-hero-buttons">
+                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="mag_btn_primary">اقرأ العدد الحالي</button>
+                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="mag_btn_secondary">تصفح الأرشيف</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="web-features">
+              <div class="web-section-header">
+                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat_sec_title">مقالات مختارة</h2>
+                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat_sec_desc">حوارات فكرية وقراءات نقدية في الأدب المعاصر والتايبوغرافي</p>
+              </div>
+              <div class="web-features-grid">
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat1_title">جماليات الخط العربي في العصر الرقمي</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat1_desc">قراءة فلسفية في تطور الحرف العربي وتأثير التكنولوجيا المعاصرة على هويته البصرية.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-book-open"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat2_title">أثر التشكيل وحركات الإعراب على موسيقى الشعر</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat2_desc">كيف يسهم ضبط أواخر الكلمات وحركات الحروف في تشكيل البناء الموسيقي والتعبيري للقصيدة.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-feather-point"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="mag_feat3_title">مدارس الشعر الحر: ثورة اللفظ والمعنى</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="mag_feat3_desc">دراسة نقدية حول نشأة قصيدة التفعيلة وتحررها من القوالب التقليدية مع الحفاظ على روح الهوية.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Testimonial Section -->
+            <section class="web-testimonial">
+              <div class="web-testimonial-content">
+                <i class="fa-solid fa-quote-right quote-icon"></i>
+                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="mag_quote_text">«الشعر هو الفن الذي يجعلنا نلمس اللامرئي، ونسمع الصمت، ونرى ما وراء الكلمات. إنه تنفس الروح في جسد اللغة الحية.»</p>
+                <div class="web-testimonial-author">
+                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="mag_quote_author">د. أمين الجرجاني</div>
+                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="mag_quote_title">ناقد وباحث في جماليات الأدب العربي</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="web-footer">
+              <div class="web-footer-top">
+                <div class="web-footer-brand">
+                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="mag_logo">ديوان الثقافة</div>
+                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="mag_footer_desc">منبر أدبي يسعى لإحياء الفنون اللغوية العربية وإبراز جماليات التايبوغرافي العربي.</p>
+                </div>
+                <div class="web-footer-links">
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_title">الأقسام</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_link1">دراسات نقدية</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col1_link2">قصائد وأقاصيص</a>
+                  </div>
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_title">المشاركة</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_link1">أرسل مساهمتك</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="mag_foot_col2_link2">شروط النشر</a>
+                  </div>
+                </div>
+              </div>
+              <div class="web-footer-bottom">
+                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="mag_copyright">حقوق النشر © 2026 مجلة ديوان. جميع الحقوق محفوظة.</p>
+              </div>
+            </footer>
+          </div>
+
+          <!-- Personal Portfolio Layout -->
+          <div id="webContentPortfolio" class="web-template-content">
+            <!-- Portfolio Header -->
+            <header class="web-header">
+              <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="port_logo">أنس بن أحمد</div>
+              <nav class="web-nav">
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_bio">السيرة الأدبية</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_col">الدواوين</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_poems">القصائد المختارة</a>
+                <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_nav_contact">اتصل بي</a>
+              </nav>
+              <div class="web-header-actions">
+                <button class="web-btn web-btn-primary" contenteditable="true" spellcheck="false" data-i18n="port_btn_book">طلب لقاء شعري</button>
+              </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="web-hero">
+              <div class="web-hero-content">
+                <h1 class="web-hero-title" contenteditable="true" spellcheck="false" data-i18n="port_hero_title">في محراب الحرف أكتب عمري قصيدة.</h1>
+                <p class="web-hero-desc" contenteditable="true" spellcheck="false" data-i18n="port_hero_desc">شاعر وكاتب معاصر، أفتش عن عمق المعاني في تفاصيل الحياة اليومية، وأصوغ المشاعر حبراً على ورق معتق يلامس الأفئدة.</p>
+                <div class="web-hero-buttons">
+                  <button class="web-btn web-btn-primary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="port_btn_primary">اقرأ آخر القصائد</button>
+                  <button class="web-btn web-btn-secondary web-btn-lg" contenteditable="true" spellcheck="false" data-i18n="port_btn_secondary">تحميل ديواني الرقمي</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="web-features">
+              <div class="web-section-header">
+                <h2 class="web-section-title" contenteditable="true" spellcheck="false" data-i18n="port_feat_sec_title">دواوين ومؤلفات</h2>
+                <p class="web-section-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat_sec_desc">إصدارات شعرية وكتب منشورة تغني المكتبة العربية وتجسد الرحلة الوجدانية</p>
+              </div>
+              <div class="web-features-grid">
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-scroll"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat1_title">ديوان: تراتيل الصمت</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat1_desc">مجموعة شعرية فازت بجائزة الإبداع العربي المعاصر، تستلهم سكون الصحراء وهمس الريح.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-feather"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat2_title">كتاب: فلسفة المجاز</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat2_desc">قراءات نقدية وخواطر فكرية حول تطور المجاز في البلاغة العربية الكلاسيكية والحديثة.</p>
+                </div>
+                <div class="web-feature-card">
+                  <div class="web-feature-icon"><i class="fa-solid fa-compass"></i></div>
+                  <h3 class="web-feature-title" contenteditable="true" spellcheck="false" data-i18n="port_feat3_title">ديوان: موانئ الغربة</h3>
+                  <p class="web-feature-desc" contenteditable="true" spellcheck="false" data-i18n="port_feat3_desc">قصائد وجدانية تحكي قصة الترحال والبحث عن الذات عبر عواصم العالم، بأسلوب تفعيلة متزن.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- Testimonial Section -->
+            <section class="web-testimonial">
+              <div class="web-testimonial-content">
+                <i class="fa-solid fa-quote-right quote-icon"></i>
+                <p class="web-testimonial-text" contenteditable="true" spellcheck="false" data-i18n="port_quote_text">«القصيدة بيت نسكنه حين تضيق بنا المدائن، وهي مرآة نرى فيها انعكاس أرواحنا في أجمل وأصدق صورة ممكنة.»</p>
+                <div class="web-testimonial-author">
+                  <div class="web-author-name" contenteditable="true" spellcheck="false" data-i18n="port_quote_author">أنس بن أحمد</div>
+                  <div class="web-author-title" contenteditable="true" spellcheck="false" data-i18n="port_quote_title">شاعر وأكاديمي في الأدب العربي</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="web-footer">
+              <div class="web-footer-top">
+                <div class="web-footer-brand">
+                  <div class="web-logo" contenteditable="true" spellcheck="false" data-i18n="port_logo">أنس بن أحمد</div>
+                  <p class="web-brand-desc" contenteditable="true" spellcheck="false" data-i18n="port_footer_desc">تواصل معي للتعاون الأدبي، الأمسيات الشعرية، أو القراءات النقدية والأكاديمية.</p>
+                </div>
+                <div class="web-footer-links">
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_title">روابط سريعة</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_link1">الأمسيات القادمة</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col1_link2">المدونة الشخصية</a>
+                  </div>
+                  <div class="web-links-column">
+                    <h4 contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_title">تواصل</h4>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_link1">راسلني مباشرة</a>
+                    <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="port_foot_col2_link2">حساب تويتر</a>
+                  </div>
+                </div>
+              </div>
+              <div class="web-footer-bottom">
+                <p class="web-copyright" contenteditable="true" spellcheck="false" data-i18n="port_copyright">حقوق النشر © 2026 أنس بن أحمد. جميع الحقوق محفوظة.</p>
+              </div>
+            </footer>
+          </div>
         </div>
       </div>
 
@@ -934,6 +1487,64 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Custom Context Menu for Web Preview Text Scaling -->
+    <div id="previewContextMenu" class="preview-context-menu" style="display: none;">
+      <div class="ctx-menu-info" id="ctxCurrentSizeInfo">
+        <i class="fa-solid fa-text-height"></i>
+        <span id="ctxCurrentSizeText">الحجم الحالي: --</span>
+      </div>
+      <div class="ctx-size-controller">
+        <button class="ctx-size-btn" id="ctxDecSize" title="تصغير">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <div class="ctx-size-input-wrapper">
+          <input type="number" id="ctxFontSizeInput" min="6" max="120" step="0.5" value="12">
+          <span class="ctx-unit-badge">pt</span>
+        </div>
+        <button class="ctx-size-btn" id="ctxIncSize" title="تكبير">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+      <hr class="ctx-divider">
+      <button class="ctx-menu-item" id="ctxBoldToggle">
+        <i class="fa-solid fa-bold"></i>
+        <span id="ctxBoldText" data-i18n="ctx_bold">نص عريض (Bold)</span>
+      </button>
+      <hr class="ctx-divider">
+      <div class="ctx-color-section">
+        <div class="ctx-menu-header" id="ctxColorHeader" data-i18n="ctx_color">لون النص</div>
+        <div class="ctx-color-row">
+          <button class="ctx-color-dot ctx-color-reset" id="ctxResetColor" title="إعادة اللون الافتراضي (Default Color)">
+            <i class="fa-solid fa-droplet-slash"></i>
+          </button>
+          <button class="ctx-color-dot" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid rgba(255,255,255,0.25);" title="أبيض (White)"></button>
+          <button class="ctx-color-dot" data-color="#111111" style="background-color: #111111; border: 1px solid rgba(255,255,255,0.15);" title="أسود (Charcoal)"></button>
+          <button class="ctx-color-dot" data-color="#c5a880" style="background-color: #c5a880;" title="ذهبي ملكي (Royal Gold)"></button>
+          <button class="ctx-color-dot" data-color="#ebdcb9" style="background-color: #ebdcb9;" title="عاجي إمبراطوري (Imperial Cream)"></button>
+          <button class="ctx-color-dot" data-color="#e9dcf5" style="background-color: #e9dcf5;" title="خزامي نجدي (Najdi Lavender)"></button>
+          <button class="ctx-color-dot" data-color="#e2a275" style="background-color: #e2a275;" title="مرجاني دمشقي (Damascene Coral)"></button>
+          <button class="ctx-color-dot" data-color="#a5c1e1" style="background-color: #a5c1e1;" title="أزرق ناعم (Soft Blue)"></button>
+          <button class="ctx-color-dot" data-color="#f87171" style="background-color: #f87171;" title="وردي دافئ (Rose Red)"></button>
+          <div class="ctx-color-picker-wrapper">
+            <i class="fa-solid fa-palette"></i>
+            <input type="color" id="ctxColorInput" title="لون مخصص">
+          </div>
+        </div>
+      </div>
+      <hr class="ctx-divider">
+      <button class="ctx-menu-item ctx-menu-item-danger" id="ctxResetFont">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+        <span id="ctxResetText">إعادة تعيين الحجم</span>
+      </button>
+      <hr class="ctx-divider">
+      <div class="ctx-menu-header" data-i18n="ctx_font_header">نوع الخط</div>
+      <div class="ctx-font-selector-wrapper" style="padding: 4px 12px 10px;">
+        <select id="ctxFontSelect" class="styled-select" style="width: 100%; height: 36px; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: #1a1715; color: #fff; cursor: pointer; font-size: 13px;">
+          <!-- Populated dynamically -->
+        </select>
       </div>
     </div>
 
