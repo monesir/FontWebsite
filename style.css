@@ -2245,7 +2245,7 @@ body.view-mode-design button.design-only {
 
 body.view-mode-document .canvas-area {
   min-height: auto !important;
-  background: none !important;
+  background: none;
   padding: 40px 24px !important;
   display: flex !important;
   flex-direction: column !important;
@@ -2254,9 +2254,9 @@ body.view-mode-document .canvas-area {
   gap: 40px !important;
 }
 
-body.view-mode-document .canvas-wrapper.has-grid .canvas-area {
-  background: none !important;
-  background-image: none !important;
+body.view-mode-document .canvas-panel-divider,
+body.view-mode-document .canvas-panel-pages-row {
+  display: none !important;
 }
 
 /* Document Mode Paper Styling */
@@ -2308,16 +2308,30 @@ body.view-mode-document .canvas-wrapper.has-grid .canvas-area {
 
 /* Document Sheet Styles (Lined & Grid) */
 .view-mode-document .poetry-card.paper-style-lined .writing-canvas {
-  background-image: linear-gradient(rgba(197, 168, 128, 0.22) 1px, transparent 1px) !important;
   background-size: 100% 36px !important;
   line-height: 36px !important;
 }
+.view-mode-document .poetry-card.paper-white.paper-style-lined .writing-canvas,
+.view-mode-document .poetry-card.paper-cream.paper-style-lined .writing-canvas {
+  background-image: linear-gradient(rgba(139, 115, 85, 0.25) 1px, transparent 1px) !important;
+}
+.view-mode-document .poetry-card.paper-dark.paper-style-lined .writing-canvas {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px) !important;
+}
 
 .view-mode-document .poetry-card.paper-style-grid .writing-canvas {
-  background-image: 
-    linear-gradient(rgba(197, 168, 128, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(197, 168, 128, 0.12) 1px, transparent 1px) !important;
   background-size: 30px 30px !important;
+}
+.view-mode-document .poetry-card.paper-white.paper-style-grid .writing-canvas,
+.view-mode-document .poetry-card.paper-cream.paper-style-grid .writing-canvas {
+  background-image: 
+    linear-gradient(rgba(139, 115, 85, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 115, 85, 0.2) 1px, transparent 1px) !important;
+}
+.view-mode-document .poetry-card.paper-dark.paper-style-grid .writing-canvas {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px) !important;
 }
 
 /* Adjust document editor margins */
