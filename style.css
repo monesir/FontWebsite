@@ -131,7 +131,7 @@ body {
 }
 
 .mobile-logo-text {
-  font-family: 'Aref Ruqaa', serif;
+  font-family: var(--font-poetry);
   font-size: 26px;
   font-weight: 700;
   color: var(--accent);
@@ -169,7 +169,7 @@ body {
 }
 
 .logo-text {
-  font-family: 'Aref Ruqaa', serif;
+  font-family: var(--font-poetry);
   font-size: 32px;
   font-weight: 700;
   background: linear-gradient(135deg, #ebdcb9 0%, #c5a880 55%, #9e7f55 100%);
