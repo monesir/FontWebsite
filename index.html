@@ -61,6 +61,9 @@
   }
   </script>
 
+  <!-- Preload Custom Font for Performance -->
+  <link rel="preload" href="/fonts/ArabicPoetry.otf" as="font" type="font/otf" crossorigin>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -249,19 +252,19 @@
         <div class="control-group">
           <div class="control-label" data-i18n="text_alignment">محاذاة النص</div>
           <div class="align-buttons">
-            <button class="btn-align" data-align="left" title="محاذاة لليسار" data-i18n-title="align_left"><i class="fa-solid fa-align-left"></i></button>
-            <button class="btn-align active" data-align="center" title="توسيط" data-i18n-title="align_center"><i class="fa-solid fa-align-center"></i></button>
-            <button class="btn-align" data-align="right" title="محاذاة لليمين" data-i18n-title="align_right"><i class="fa-solid fa-align-right"></i></button>
-            <button class="btn-align" data-align="justify" title="ضبط الأطراف" data-i18n-title="align_justify"><i class="fa-solid fa-align-justify"></i></button>
+            <button class="btn-align" data-align="left" title="محاذاة لليسار" aria-label="محاذاة لليسار" data-i18n-title="align_left"><i class="fa-solid fa-align-left"></i></button>
+            <button class="btn-align active" data-align="center" title="توسيط" aria-label="توسيط" data-i18n-title="align_center"><i class="fa-solid fa-align-center"></i></button>
+            <button class="btn-align" data-align="right" title="محاذاة لليمين" aria-label="محاذاة لليمين" data-i18n-title="align_right"><i class="fa-solid fa-align-right"></i></button>
+            <button class="btn-align" data-align="justify" title="ضبط الأطراف" aria-label="ضبط الأطراف" data-i18n-title="align_justify"><i class="fa-solid fa-align-justify"></i></button>
           </div>
         </div>
 
         <div class="control-group">
           <div class="control-label" data-i18n="text_formatting">تنسيق النص</div>
           <div class="format-buttons">
-            <button class="btn-format" id="btnBold" title="غامق" data-i18n-title="format_bold"><i class="fa-solid fa-bold"></i></button>
-            <button class="btn-format" id="btnItalic" title="مائل" data-i18n-title="format_italic"><i class="fa-solid fa-italic"></i></button>
-            <button class="btn-format" id="btnUnderline" title="تحته خط" data-i18n-title="format_underline"><i class="fa-solid fa-underline"></i></button>
+            <button class="btn-format" id="btnBold" title="غامق" aria-label="غامق" data-i18n-title="format_bold"><i class="fa-solid fa-bold"></i></button>
+            <button class="btn-format" id="btnItalic" title="مائل" aria-label="مائل" data-i18n-title="format_italic"><i class="fa-solid fa-italic"></i></button>
+            <button class="btn-format" id="btnUnderline" title="تحته خط" aria-label="تحته خط" data-i18n-title="format_underline"><i class="fa-solid fa-underline"></i></button>
           </div>
         </div>
         
@@ -595,10 +598,10 @@
           <div id="carouselPageList" class="carousel-page-list">
             <!-- Dynamically populated buttons: Page 1, Page 2... -->
           </div>
-          <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" data-i18n-title="add_page_title">
+          <button id="btnAddPage" class="btn-icon-add" title="إضافة صفحة جديدة" aria-label="إضافة صفحة جديدة" data-i18n-title="add_page_title">
             <i class="fa-solid fa-plus"></i>
           </button>
-          <button id="btnDeletePage" class="btn-icon-delete" title="حذف الصفحة الحالية" data-i18n-title="delete_page_title" disabled>
+          <button id="btnDeletePage" class="btn-icon-delete" title="حذف الصفحة الحالية" aria-label="حذف الصفحة الحالية" data-i18n-title="delete_page_title" disabled>
             <i class="fa-solid fa-trash-can"></i>
           </button>
         </div>
