@@ -1692,92 +1692,87 @@ html[lang="ar"] .arabic-ui-only {
 
 /* Top Action Bar Carousel styling - Corner Panel */
 
-/* Premium Unified Floating Card Control Panel */
-.canvas-pages-panel {
+/* Premium Separated Floating Card Controls */
+.canvas-floating-controls {
   position: absolute;
   top: 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  background: rgba(15, 15, 18, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-ui);
-  padding: 8px 12px;
-  border-radius: 20px; /* Elegant card-like curves */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  gap: 10px;
   z-index: 40;
   transition: all var(--transition-normal);
 }
 
 /* Logical directional overrides */
-html[dir="rtl"] .canvas-pages-panel {
+html[dir="rtl"] .canvas-floating-controls {
   right: 24px;
   left: auto;
+  align-items: flex-end;
 }
-html[dir="ltr"] .canvas-pages-panel {
+html[dir="ltr"] .canvas-floating-controls {
   left: 24px;
   right: auto;
+  align-items: flex-start;
 }
 
-/* Top Row: Utilities Layout */
+/* Row of separated utility buttons */
 .canvas-panel-utilities {
   display: flex;
   gap: 8px;
   align-items: center;
-  justify-content: center;
-  width: 100%;
 }
 
-/* Glassmorphic icon buttons styling */
-.canvas-pages-panel .btn-secondary.btn-icon-only {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: none;
+/* Separate floating glass utility button */
+.btn-utility-floating {
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-ui) !important;
+  background: rgba(15, 15, 18, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all var(--transition-fast);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
-.canvas-pages-panel .btn-secondary.btn-icon-only:hover {
+.btn-utility-floating:hover {
   background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2) !important;
   color: var(--text-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
-.canvas-pages-panel .btn-secondary.btn-icon-only:active {
+.btn-utility-floating:active {
   transform: translateY(0);
 }
 
-/* Elegant visual divider between top row and bottom row */
-.canvas-panel-divider {
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.06);
-  margin: 2px 0;
-}
-
-/* Bottom Row: Pages row layout */
-.canvas-panel-pages-row {
+/* Separated horizontal pages switcher bar below utilities */
+.canvas-pages-bar-wrapper {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
+  background: rgba(15, 15, 18, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-ui);
+  padding: 6px 10px;
+  border-radius: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  width: fit-content;
 }
 
-.canvas-pages-panel .carousel-page-list {
+.canvas-pages-bar-wrapper .carousel-page-list {
   display: flex;
   gap: 6px;
   align-items: center;
 }
 
-/* Custom pages manager elements styling */
-.canvas-pages-panel .carousel-btn-page {
+/* Custom pages buttons */
+.canvas-pages-bar-wrapper .carousel-btn-page {
   min-width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1792,17 +1787,17 @@ html[dir="ltr"] .canvas-pages-panel {
   justify-content: center;
   transition: all var(--transition-fast);
 }
-.canvas-pages-panel .carousel-btn-page:hover {
+.canvas-pages-bar-wrapper .carousel-btn-page:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-light);
 }
-.canvas-pages-panel .carousel-btn-page.active {
+.canvas-pages-bar-wrapper .carousel-btn-page.active {
   background: var(--accent);
   color: #000;
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.4);
 }
 
-.canvas-pages-panel .btn-icon-add {
+.canvas-pages-bar-wrapper .btn-icon-add {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1816,14 +1811,14 @@ html[dir="ltr"] .canvas-pages-panel {
   transition: all var(--transition-fast);
   font-size: 11px;
 }
-.canvas-pages-panel .btn-icon-add:hover {
+.canvas-pages-bar-wrapper .btn-icon-add:hover {
   background: var(--accent);
   color: #000;
   border-color: var(--accent);
   box-shadow: 0 2px 10px rgba(197, 168, 128, 0.3);
 }
 
-.canvas-pages-panel .btn-icon-delete {
+.canvas-pages-bar-wrapper .btn-icon-delete {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -1837,37 +1832,41 @@ html[dir="ltr"] .canvas-pages-panel {
   transition: all var(--transition-fast);
   font-size: 11px;
 }
-.canvas-pages-panel .btn-icon-delete:hover:not(:disabled) {
+.canvas-pages-bar-wrapper .btn-icon-delete:hover:not(:disabled) {
   background: rgb(239, 68, 68);
   color: #fff;
   box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
 }
-.canvas-pages-panel .btn-icon-delete:disabled {
+.canvas-pages-bar-wrapper .btn-icon-delete:disabled {
   opacity: 0.3;
   cursor: not-allowed;
   background: transparent;
   color: rgba(255, 255, 255, 0.15);
 }
 
-/* Mobile Responsiveness for combined panel */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .canvas-pages-panel {
+  .canvas-floating-controls {
     top: 10px;
-    padding: 6px 10px;
+    gap: 8px;
+  }
+  html[dir="rtl"] .canvas-floating-controls { right: 10px; }
+  html[dir="ltr"] .canvas-floating-controls { left: 10px; }
+
+  .btn-utility-floating {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .canvas-pages-bar-wrapper {
+    padding: 5px 8px;
     gap: 6px;
-    border-radius: 16px;
-  }
-  html[dir="rtl"] .canvas-pages-panel { right: 10px; }
-  html[dir="ltr"] .canvas-pages-panel { left: 10px; }
-
-  .canvas-panel-divider {
-    margin: 1px 0;
   }
 
-  .canvas-pages-panel .btn-secondary.btn-icon-only,
-  .canvas-pages-panel .carousel-btn-page,
-  .canvas-pages-panel .btn-icon-add,
-  .canvas-pages-panel .btn-icon-delete {
+  .canvas-pages-bar-wrapper .carousel-btn-page,
+  .canvas-pages-bar-wrapper .btn-icon-add,
+  .canvas-pages-bar-wrapper .btn-icon-delete {
     width: 26px;
     height: 26px;
     min-width: 26px;

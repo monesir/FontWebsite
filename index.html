@@ -685,27 +685,25 @@
       
       <!-- Centered Card Canvas Viewport -->
       <div class="canvas-wrapper" id="canvasWrapper">
-        <!-- Floating Pages Manager (Corner below top bar, left of sidebar in RTL) -->
-        <div class="canvas-pages-panel design-only">
-          <!-- Top Row: Utility Icons -->
+        <!-- Floating Pages & Canvas Controls (Corner below top bar, left of sidebar in RTL) -->
+        <div class="canvas-floating-controls design-only">
+          <!-- Row of Separated Utility Buttons -->
           <div class="canvas-panel-utilities">
-            <button id="btnToggleGrid" class="btn-secondary btn-icon-only" title="شبكة الخلفية / Checkerboard Grid" data-i18n-title="grid_btn_title">
+            <button id="btnToggleGrid" class="btn-utility-floating" title="شبكة الخلفية / Checkerboard Grid" data-i18n-title="grid_btn_title">
               <i class="fa-solid fa-border-all"></i>
             </button>
             
-            <button id="btnReset" class="btn-secondary btn-icon-only" title="إعادة تعيين" data-i18n-title="reset_btn_title">
+            <button id="btnReset" class="btn-utility-floating" title="إعادة تعيين" data-i18n-title="reset_btn_title">
               <i class="fa-solid fa-arrow-rotate-left"></i>
             </button>
             
-            <button id="btnClear" class="btn-secondary btn-icon-only" title="مسح النص" data-i18n-title="clear_btn_title">
+            <button id="btnClear" class="btn-utility-floating" title="مسح النص" data-i18n-title="clear_btn_title">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
 
-          <div class="canvas-panel-divider"></div>
-
-          <!-- Bottom Row: Pages Switcher -->
-          <div class="canvas-panel-pages-row">
+          <!-- Horizontal Pages Switcher Bar below the utilities -->
+          <div class="canvas-pages-bar-wrapper">
             <div id="carouselPageList" class="carousel-page-list">
               <!-- Dynamically populated buttons: Page 1, Page 2... -->
             </div>
