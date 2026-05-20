@@ -2389,11 +2389,7 @@ function applyDefaults() {
   customFontName = '';
   if (btnLangAr) btnLangAr.classList.add('active');
   if (btnLangEn) btnLangEn.classList.remove('active');
-  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
-  if (btnToggleWritingLang) {
-    const indicator = btnToggleWritingLang.querySelector('.writing-lang-indicator');
-    if (indicator) indicator.textContent = 'ع';
-  }
+  updateWritingLangButtonText();
   if (samplesListAr) samplesListAr.style.display = 'flex';
   if (samplesListEn) samplesListEn.style.display = 'none';
   if (titleSamples) titleSamples.textContent = 'نماذج من الشعر العربي';
@@ -2752,6 +2748,21 @@ function populateFontStyles(lang, selectedValue = null) {
   }
 }
 
+// Update text content of the writing language button dynamically
+function updateWritingLangButtonText() {
+  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
+  if (btnToggleWritingLang) {
+    const textSpan = btnToggleWritingLang.querySelector('.writing-lang-text');
+    if (textSpan) {
+      if (currentSiteLang === 'ar') {
+        textSpan.textContent = currentLang === 'ar' ? 'الكتابة: العربية' : 'الكتابة: الإنجليزية';
+      } else {
+        textSpan.textContent = currentLang === 'ar' ? 'Writing: Arabic' : 'Writing: English';
+      }
+    }
+  }
+}
+
 // Switch languages and adjust settings/presets
 function switchLanguage(lang) {
   currentLang = lang;
@@ -2820,14 +2831,7 @@ function switchLanguage(lang) {
     }
   }
   
-  const btnToggleWritingLang = document.getElementById('btnToggleWritingLang');
-  if (btnToggleWritingLang) {
-    const indicator = btnToggleWritingLang.querySelector('.writing-lang-indicator');
-    if (indicator) {
-      indicator.textContent = lang === 'ar' ? 'ع' : 'EN';
-    }
-  }
-  
+  updateWritingLangButtonText();
   applyDividers();
 }
 
@@ -3258,6 +3262,7 @@ function updateUISiteLanguage(lang) {
       btnToggleSiteLang.textContent = lang === 'ar' ? 'EN' : 'العربية';
     }
   }
+  updateWritingLangButtonText();
 
   // 5. Watermark input default sync
   if (inputWatermark) {
