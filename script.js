@@ -2158,6 +2158,25 @@ function setupEventListeners() {
   // Web Mode Multiple Fonts Event Listeners
   if (chkWebMultipleFonts) {
     chkWebMultipleFonts.addEventListener('change', () => {
+      if (chkWebMultipleFonts.checked) {
+        const lang = currentLang || 'ar';
+        const defaultHeadings = lang === 'ar' ? 'ThmanyahSerifDisplay' : 'Lora';
+        const defaultBody = lang === 'ar' ? 'ThmanyahSerifText' : 'Montserrat';
+        const defaultButtons = lang === 'ar' ? 'ThmanyahSans' : 'Montserrat';
+        
+        if (selectWebFontHeadings) {
+          selectWebFontHeadings.value = defaultHeadings;
+          localStorage.setItem('diwan-web-headings-font', defaultHeadings);
+        }
+        if (selectWebFontBody) {
+          selectWebFontBody.value = defaultBody;
+          localStorage.setItem('diwan-web-body-font', defaultBody);
+        }
+        if (selectWebFontButtons) {
+          selectWebFontButtons.value = defaultButtons;
+          localStorage.setItem('diwan-web-buttons-font', defaultButtons);
+        }
+      }
       updateWebMultipleFontsMode();
       HistoryManager.saveState();
     });
@@ -4450,7 +4469,7 @@ function populateFontStyles(lang, selectedValue = null) {
     if (savedHead) {
       selectWebFontHeadings.value = savedHead;
     } else {
-      selectWebFontHeadings.value = lang === 'ar' ? 'ThmanyahSerifDisplay' : resolvedVal;
+      selectWebFontHeadings.value = lang === 'ar' ? 'ThmanyahSerifDisplay' : 'Lora';
     }
   }
   if (selectWebFontBody) {
@@ -4458,7 +4477,7 @@ function populateFontStyles(lang, selectedValue = null) {
     if (savedBody) {
       selectWebFontBody.value = savedBody;
     } else {
-      selectWebFontBody.value = lang === 'ar' ? 'ThmanyahSerifText' : resolvedVal;
+      selectWebFontBody.value = lang === 'ar' ? 'ThmanyahSerifText' : 'Montserrat';
     }
   }
   if (selectWebFontButtons) {
@@ -4466,7 +4485,7 @@ function populateFontStyles(lang, selectedValue = null) {
     if (savedButtons) {
       selectWebFontButtons.value = savedButtons;
     } else {
-      selectWebFontButtons.value = lang === 'ar' ? 'ThmanyahSans' : resolvedVal;
+      selectWebFontButtons.value = lang === 'ar' ? 'ThmanyahSans' : 'Montserrat';
     }
   }
   
