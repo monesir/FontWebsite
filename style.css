@@ -6214,83 +6214,42 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
    Custom Font Target Distribution Rules
    -------------------------------------------------------------------------- */
 
-/* Target Entire Website */
-.web-preview-wrapper.web-target-all .web-preview-content,
-.web-preview-wrapper.web-target-all .web-preview-content * {
-  font-family: var(--font-poetry) !important;
-}
-
-/* Target Headings Only */
-.web-preview-wrapper.web-target-headings .web-logo,
-.web-preview-wrapper.web-target-headings .store-logo,
-.web-preview-wrapper.web-target-headings .web-hero-title,
-.web-preview-wrapper.web-target-headings .store-hero-title,
-.web-preview-wrapper.web-target-headings .web-section-title,
-.web-preview-wrapper.web-target-headings .web-feature-title,
-.web-preview-wrapper.web-target-headings .store-product-title,
-.web-preview-wrapper.web-target-headings .store-bento-card h3,
-.web-preview-wrapper.web-target-headings .store-newsletter-card h3,
-.web-preview-wrapper.web-target-headings .cart-drawer-header h3,
-.web-preview-wrapper.web-target-headings .web-testimonial-text,
-.web-preview-wrapper.web-target-headings .store-testimonial-text,
-.web-preview-wrapper.web-target-headings .cv-section-title,
-.web-preview-wrapper.web-target-headings .cv-item-role,
-.web-preview-wrapper.web-target-headings .user-name,
-.web-preview-wrapper.web-target-headings .floating-title,
-.web-preview-wrapper.web-target-headings .score-title,
-.web-preview-wrapper.web-target-headings .web-stat-number,
-.web-preview-wrapper.web-target-headings .web-brands-title,
-.web-preview-wrapper.web-target-headings .web-links-column h4,
-.web-preview-wrapper.web-target-headings .store-links-column h4,
-.web-preview-wrapper.web-target-headings .web-author-name,
-.web-preview-wrapper.web-target-headings .store-author-name {
-  font-family: var(--font-poetry) !important;
-}
-
-/* Target Buttons & Nav Only */
-.web-preview-wrapper.web-target-buttons .web-nav a,
-.web-preview-wrapper.web-target-buttons .store-nav a,
-.web-preview-wrapper.web-target-buttons .store-filter-tab,
-.web-preview-wrapper.web-target-buttons .web-btn {
-  font-family: var(--font-poetry) !important;
-}
-
-/* Multiple Fonts Target Distribution Rules */
-.web-preview-wrapper.web-multi-fonts-active .web-preview-content,
-.web-preview-wrapper.web-multi-fonts-active .web-preview-content * {
+/* Default Web Font Distribution Rules (Headings, Body, Buttons) */
+.web-preview-wrapper .web-preview-content,
+.web-preview-wrapper .web-preview-content * {
   font-family: var(--font-web-body, inherit);
 }
 
-.web-preview-wrapper.web-multi-fonts-active .web-logo,
-.web-preview-wrapper.web-multi-fonts-active .store-logo,
-.web-preview-wrapper.web-multi-fonts-active .web-hero-title,
-.web-preview-wrapper.web-multi-fonts-active .store-hero-title,
-.web-preview-wrapper.web-multi-fonts-active .web-section-title,
-.web-preview-wrapper.web-multi-fonts-active .web-feature-title,
-.web-preview-wrapper.web-multi-fonts-active .store-product-title,
-.web-preview-wrapper.web-multi-fonts-active .store-bento-card h3,
-.web-preview-wrapper.web-multi-fonts-active .store-newsletter-card h3,
-.web-preview-wrapper.web-multi-fonts-active .cart-drawer-header h3,
-.web-preview-wrapper.web-multi-fonts-active .web-testimonial-text,
-.web-preview-wrapper.web-multi-fonts-active .store-testimonial-text,
-.web-preview-wrapper.web-multi-fonts-active .cv-section-title,
-.web-preview-wrapper.web-multi-fonts-active .cv-item-role,
-.web-preview-wrapper.web-multi-fonts-active .user-name,
-.web-preview-wrapper.web-multi-fonts-active .floating-title,
-.web-preview-wrapper.web-multi-fonts-active .score-title,
-.web-preview-wrapper.web-multi-fonts-active .web-stat-number,
-.web-preview-wrapper.web-multi-fonts-active .web-brands-title,
-.web-preview-wrapper.web-multi-fonts-active .web-links-column h4,
-.web-preview-wrapper.web-multi-fonts-active .store-links-column h4,
-.web-preview-wrapper.web-multi-fonts-active .web-author-name,
-.web-preview-wrapper.web-multi-fonts-active .store-author-name {
+.web-preview-wrapper .web-logo,
+.web-preview-wrapper .store-logo,
+.web-preview-wrapper .web-hero-title,
+.web-preview-wrapper .store-hero-title,
+.web-preview-wrapper .web-section-title,
+.web-preview-wrapper .web-feature-title,
+.web-preview-wrapper .store-product-title,
+.web-preview-wrapper .store-bento-card h3,
+.web-preview-wrapper .store-newsletter-card h3,
+.web-preview-wrapper .cart-drawer-header h3,
+.web-preview-wrapper .web-testimonial-text,
+.web-preview-wrapper .store-testimonial-text,
+.web-preview-wrapper .cv-section-title,
+.web-preview-wrapper .cv-item-role,
+.web-preview-wrapper .user-name,
+.web-preview-wrapper .floating-title,
+.web-preview-wrapper .score-title,
+.web-preview-wrapper .web-stat-number,
+.web-preview-wrapper .web-brands-title,
+.web-preview-wrapper .web-links-column h4,
+.web-preview-wrapper .store-links-column h4,
+.web-preview-wrapper .web-author-name,
+.web-preview-wrapper .store-author-name {
   font-family: var(--font-web-headings, inherit) !important;
 }
 
-.web-preview-wrapper.web-multi-fonts-active .web-nav a,
-.web-preview-wrapper.web-multi-fonts-active .store-nav a,
-.web-preview-wrapper.web-multi-fonts-active .store-filter-tab,
-.web-preview-wrapper.web-multi-fonts-active .web-btn {
+.web-preview-wrapper .web-nav a,
+.web-preview-wrapper .store-nav a,
+.web-preview-wrapper .store-filter-tab,
+.web-preview-wrapper .web-btn {
   font-family: var(--font-web-buttons, inherit) !important;
 }
 

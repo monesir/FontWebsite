@@ -2210,6 +2210,7 @@ function setupEventListeners() {
       }
       document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
       localStorage.setItem('diwan-poetry-font', font);
+      updateWebMultipleFontsMode();
       HistoryManager.saveState();
     });
   }
@@ -3277,6 +3278,12 @@ function setWebPreviewZoom(zoomVal) {
   });
 }
 
+function updateWebFontProperties(headingsFont, bodyFont, buttonsFont) {
+  document.documentElement.style.setProperty('--font-web-headings', `"${headingsFont}", sans-serif`);
+  document.documentElement.style.setProperty('--font-web-body', `"${bodyFont}", sans-serif`);
+  document.documentElement.style.setProperty('--font-web-buttons', `"${buttonsFont}", sans-serif`);
+}
+
 function applyWebFont(target, fontValue) {
   if (!fontValue) return;
   if (target === 'headings') {
@@ -3301,6 +3308,11 @@ function updateWebMultipleFontsMode() {
   const isMulti = chkWebMultipleFonts.checked;
   localStorage.setItem('diwan-web-multiple-fonts', isMulti ? 'true' : 'false');
 
+  const lang = currentLang || 'ar';
+  const defaultHeadings = lang === 'ar' ? 'ThmanyahSerifDisplay' : 'Lora';
+  const defaultBody = lang === 'ar' ? 'ThmanyahSerifText' : 'Montserrat';
+  const defaultButtons = lang === 'ar' ? 'ThmanyahSans' : 'Montserrat';
+
   if (isMulti) {
     webPreviewWrapper.classList.add('web-multi-fonts-active');
     webPreviewWrapper.classList.remove('web-target-all', 'web-target-headings', 'web-target-buttons', 'web-target-none');
@@ -3308,9 +3320,16 @@ function updateWebMultipleFontsMode() {
     if (grpWebTarget) grpWebTarget.style.display = 'none';
     if (webMultiFontsControls) webMultiFontsControls.style.display = 'flex';
     
-    if (selectWebFontHeadings) applyWebFont('headings', selectWebFontHeadings.value);
-    if (selectWebFontBody) applyWebFont('body', selectWebFontBody.value);
-    if (selectWebFontButtons) applyWebFont('buttons', selectWebFontButtons.value);
+    const headFont = selectWebFontHeadings ? selectWebFontHeadings.value : defaultHeadings;
+    const bodyFont = selectWebFontBody ? selectWebFontBody.value : defaultBody;
+    const btnFont = selectWebFontButtons ? selectWebFontButtons.value : defaultButtons;
+
+    updateWebFontProperties(headFont, bodyFont, btnFont);
+
+    // Save multi-font values to localStorage
+    if (selectWebFontHeadings) localStorage.setItem('diwan-web-headings-font', selectWebFontHeadings.value);
+    if (selectWebFontBody) localStorage.setItem('diwan-web-body-font', selectWebFontBody.value);
+    if (selectWebFontButtons) localStorage.setItem('diwan-web-buttons-font', selectWebFontButtons.value);
   } else {
     webPreviewWrapper.classList.remove('web-multi-fonts-active');
     if (grpWebFontSingle) grpWebFontSingle.style.display = 'block';
@@ -3332,6 +3351,24 @@ function updateWebMultipleFontsMode() {
         }
       }
       document.documentElement.style.setProperty('--font-poetry', `"${font}", var(--font-poetry-fallback)`);
+      localStorage.setItem('diwan-poetry-font', font);
+
+      // Now determine the variables based on the font and active target:
+      if (font === 'ArabicPoetry') {
+        // Default fonts applied:
+        updateWebFontProperties(defaultHeadings, defaultBody, defaultButtons);
+      } else {
+        // A custom font or other font is selected/uploaded
+        if (savedTarget === 'all') {
+          updateWebFontProperties(font, font, font);
+        } else if (savedTarget === 'headings') {
+          updateWebFontProperties(font, defaultBody, defaultButtons);
+        } else if (savedTarget === 'buttons') {
+          updateWebFontProperties(defaultHeadings, defaultBody, font);
+        } else if (savedTarget === 'none') {
+          updateWebFontProperties(defaultHeadings, defaultBody, defaultButtons);
+        }
+      }
     }
   }
   
@@ -3349,6 +3386,7 @@ function setWebTarget(target) {
   const activeBtn = document.getElementById(`btnWebTarget${target.charAt(0).toUpperCase() + target.slice(1)}`);
   if (activeBtn) activeBtn.classList.add('active');
   localStorage.setItem('diwan-web-target', target);
+  updateWebMultipleFontsMode();
   setWebPreviewZoom(webPreviewZoom);
 }
 
@@ -3581,6 +3619,12 @@ function handleFontFileSelect() {
       populateFontStyles(currentLang, 'ArabicPoetryCustomUpload');
       updateFontStatus(true, `الخط النشط: ${file.name}`);
       
+      // Automatically switch web preview to use this custom font
+      if (selectWebFontSingle) {
+        selectWebFontSingle.value = 'ArabicPoetryCustomUpload';
+      }
+      updateWebMultipleFontsMode();
+      
       // Force repaint
       editableText.style.display = 'none';
       editableText.offsetHeight;
@@ -3669,7 +3713,19 @@ async function handleWebFontFileInputChange() {
   }
 
   updateWebUploadedFontsList();
-  populateFontStyles(currentLang);
+  if (webCustomFonts.length > 0) {
+    const lastFont = webCustomFonts[webCustomFonts.length - 1];
+    populateFontStyles(currentLang, lastFont.value);
+    
+    if (selectWebFontSingle) selectWebFontSingle.value = lastFont.value;
+    if (selectWebFontHeadings) selectWebFontHeadings.value = lastFont.value;
+    if (selectWebFontBody) selectWebFontBody.value = lastFont.value;
+    if (selectWebFontButtons) selectWebFontButtons.value = lastFont.value;
+    
+    updateWebMultipleFontsMode();
+  } else {
+    populateFontStyles(currentLang);
+  }
   
   // Force a redraw of the preview wrapper to apply fonts
   const webContent = document.querySelector('.web-preview-content');
@@ -4410,6 +4466,7 @@ function populateFontStyles(lang, selectedValue = null) {
   if (activeFontName) {
     activeFontName.textContent = selectFontStyle.options[selectFontStyle.selectedIndex]?.text || '';
   }
+  updateWebMultipleFontsMode();
 }
 
 // Update text content of the writing language button dynamically
