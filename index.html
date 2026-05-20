@@ -31,6 +31,18 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✒️</text></svg>">
 
+  <!-- Google Search Console Verification -->
+  <meta name="google-site-verification" content="google_site_verification_placeholder">
+
+  <!-- Google Analytics (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GA_MEASUREMENT_ID_PLACEHOLDER"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GA_MEASUREMENT_ID_PLACEHOLDER');
+  </script>
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,29 +82,19 @@
 </head>
 <body>
   
-  <!-- Mobile Header (Visible on Mobile only) -->
-  <header class="mobile-header">
-    <button id="btnMobileToggle" class="btn-menu" aria-label="القائمة الجانبية">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-    <div class="mobile-logo-text">محرر الخطوط</div>
-    <button id="btnMobileClose" class="btn-menu-close" style="display: none;">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </header>
+
 
   <div class="app-container">
     
     <!-- Sidebar Control Panel -->
     <aside class="sidebar mode-simple" id="sidebarPanel">
-      <!-- Floating Site Language Toggle inside Sidebar -->
-      <button class="site-lang-btn" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle Site Language">
-        <i class="fa-solid fa-globe"></i>
-        <span class="lang-text">English</span>
-      </button>
-      
       <div class="sidebar-header">
-        <h1 class="logo-text" data-i18n="logo_title">محرر الخطوط</h1>
+        <div class="sidebar-logo-row">
+          <h1 class="logo-text" data-i18n="logo_title">محرر الخطوط</h1>
+          <button id="btnSidebarClose" class="btn-sidebar-close mobile-only-flex" aria-label="إغلاق القائمة">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
         <span class="logo-subtext" data-i18n="logo_subtitle">Arabic & English Font Editor & Tester</span>
       </div>
       
@@ -144,7 +146,7 @@
       </div>
 
       <!-- Card Sizing & Dimensions -->
-      <div class="control-section">
+      <div class="control-section design-only">
         <h2 class="section-title"><i class="fa-solid fa-up-right-and-down-left-from-center icon"></i><span data-i18n="card_dimensions">أبعاد البطاقة (Aspect Ratio)</span></h2>
         <p class="section-desc" data-i18n="card_dimensions_desc">حدد حجم الإطار المناسب للنشر على شبكات التواصل الاجتماعي.</p>
         <div class="ratio-grid">
@@ -218,25 +220,36 @@
         <div class="control-group">
           <div class="control-label" data-i18n="text_alignment">محاذاة النص</div>
           <div class="align-buttons">
+            <button class="btn-align" data-align="left" title="محاذاة لليسار" data-i18n-title="align_left"><i class="fa-solid fa-align-left"></i></button>
             <button class="btn-align active" data-align="center" title="توسيط" data-i18n-title="align_center"><i class="fa-solid fa-align-center"></i></button>
             <button class="btn-align" data-align="right" title="محاذاة لليمين" data-i18n-title="align_right"><i class="fa-solid fa-align-right"></i></button>
             <button class="btn-align" data-align="justify" title="ضبط الأطراف" data-i18n-title="align_justify"><i class="fa-solid fa-align-justify"></i></button>
           </div>
         </div>
+
+        <div class="control-group">
+          <div class="control-label" data-i18n="text_formatting">تنسيق النص</div>
+          <div class="format-buttons">
+            <button class="btn-format" id="btnBold" title="غامق" data-i18n-title="format_bold"><i class="fa-solid fa-bold"></i></button>
+            <button class="btn-format" id="btnItalic" title="مائل" data-i18n-title="format_italic"><i class="fa-solid fa-italic"></i></button>
+            <button class="btn-format" id="btnUnderline" title="تحته خط" data-i18n-title="format_underline"><i class="fa-solid fa-underline"></i></button>
+          </div>
+        </div>
         
 
+
         <!-- Card Ornaments Inputs (Advanced Only) -->
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label" data-i18n="top_ornament_label">الزخرفة العلوية (Top Ornament)</div>
           <input type="text" id="inputTopOrnament" class="styled-input" value="❈ ❖ ❈" placeholder="مثال: ❈ ❖ ❈ (اتركه فارغاً للحذف)" data-i18n-placeholder="top_ornament_placeholder">
         </div>
 
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label" data-i18n="bottom_ornament_label">الزخرفة السفلية (Bottom Ornament)</div>
           <input type="text" id="inputBottomOrnament" class="styled-input" value="❈ ❖ ❈" placeholder="مثال: ❈ ❖ ❈ (اتركه فارغاً للحذف)" data-i18n-placeholder="bottom_ornament_placeholder">
         </div>
 
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label" data-i18n="ornament_presets_label">أنماط زخارف جاهزة</div>
           <div class="ornament-presets">
             <button class="orn-preset-btn" data-preset="❈ ❖ ❈" data-i18n="preset_classic">الكلاسيكي</button>
@@ -249,7 +262,7 @@
           </div>
         </div>
 
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label" data-i18n="ornament_color_label">لون الزخارف (Color)</div>
           <div class="picker-wrapper">
             <input type="color" id="pickerOrnamentColor2" value="#c5a880">
@@ -258,7 +271,7 @@
         </div>
 
         <!-- Verse Segment Dividers (Advanced Only) -->
-        <div class="control-group advanced-only border-top-divider" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.08);">
+        <div class="control-group advanced-only design-only border-top-divider" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.08);">
           <div class="control-label" data-i18n="dividers_label">فواصل الأبيات البينية (Dividers)</div>
           <select id="selectVerseDivider" class="styled-select">
             <option value="none" selected data-i18n="divider_none">بدون فاصل (تلقائي)</option>
@@ -270,7 +283,7 @@
           </select>
         </div>
 
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label">
             <span data-i18n="divider_size_label">حجم الفاصل البيني</span>
             <span id="valDividerSize" class="val-badge">16px</span>
@@ -278,7 +291,7 @@
           <input type="range" id="sliderDividerSize" min="10" max="30" step="1" value="16" class="range-slider">
         </div>
 
-        <div class="control-group advanced-only">
+        <div class="control-group advanced-only design-only">
           <div class="control-label" data-i18n="card_effects_label">تأثيرات البطاقة</div>
           <div class="toggle-buttons">
             <label class="toggle-switch">
@@ -289,7 +302,7 @@
           </div>
         </div>
       </div>
-      <div class="control-section">
+      <div class="control-section design-only">
         <h2 class="section-title"><i class="fa-solid fa-border-none icon"></i><span data-i18n="card_style_section_title">إطار ونمط البطاقة</span></h2>
         <div class="control-group">
           <div class="control-label" data-i18n="card_border_label">نمط إطار البطاقة</div>
@@ -415,7 +428,7 @@
       </div>
 
       <!-- Custom Background Image Section -->
-      <div class="control-section">
+      <div class="control-section design-only">
         <h2 class="section-title"><i class="fa-solid fa-image icon"></i><span data-i18n="bg_section_title">خلفية بطاقة مخصصة</span></h2>
         <p class="section-desc" data-i18n="bg_section_desc">أضف صورتك الخاصة في الخلفية مع التحكم بالتعتيم والضبابية.</p>
         
@@ -474,7 +487,7 @@
 
 
       <!-- Carousel Page Manager Section -->
-      <div class="control-section">
+      <div class="control-section design-only">
         <h2 class="section-title"><i class="fa-solid fa-copy icon"></i><span data-i18n="pages_section_title">صفحات التصميم (الألبوم)</span></h2>
         <p class="section-desc" data-i18n="pages_section_desc">أضف صفحات متعددة لتوليد ألبوم كامل بنفس التنسيق.</p>
         
@@ -505,6 +518,44 @@
         </div>
       </div>
 
+      <!-- Document Page Style (Visible in Document Mode only) -->
+      <div class="control-section document-only" style="display: none;">
+        <h2 class="section-title"><i class="fa-solid fa-file-pen icon"></i><span data-i18n="doc_page_settings">تنسيق ورقة الكتابة</span></h2>
+        <p class="section-desc" data-i18n="doc_page_settings_desc">اختر نمط الورقة المفضل لديك للكتابة والطباعة.</p>
+        
+        <!-- Paper Style Select -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="paper_style_lbl">نمط الورقة</label>
+          <div class="ratio-grid page-style-grid">
+            <button class="ratio-btn active" id="btnPaperBlank" data-style="blank">
+              <span data-i18n="paper_blank">بيضاء (سادة)</span>
+            </button>
+            <button class="ratio-btn" id="btnPaperLined" data-style="lined">
+              <span data-i18n="paper_lined">مسطرة</span>
+            </button>
+            <button class="ratio-btn" id="btnPaperGrid" data-style="grid">
+              <span data-i18n="paper_grid">مربعات</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Paper Theme Toggle (White / Cream / Dark) -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="paper_theme_lbl">لون الورقة</label>
+          <div class="ratio-grid page-theme-grid">
+            <button class="ratio-btn active" id="btnPaperThemeWhite" data-theme="white">
+              <span data-i18n="paper_theme_white">أبيض</span>
+            </button>
+            <button class="ratio-btn" id="btnPaperThemeCream" data-theme="cream">
+              <span data-i18n="paper_theme_cream">ورق شاموا</span>
+            </button>
+            <button class="ratio-btn" id="btnPaperThemeDark" data-theme="dark">
+              <span data-i18n="paper_theme_dark">داكن</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Poetry Preset Samples -->
       <div class="control-section">
         <h2 class="section-title"><i class="fa-solid fa-scroll icon"></i><span id="titleSamples" data-i18n="samples_section_title">نماذج نصوص جاهزة</span></h2>
@@ -525,23 +576,104 @@
         </div>
       </div>
       
-      <!-- Primary Save Button -->
-      <div class="sidebar-footer">
-        <button id="btnExport" class="btn-primary"><i class="fa-solid fa-download icon"></i><span data-i18n="export_btn">تحميل كصورة (PNG)</span></button>
-      </div>
     </aside>
     
     <!-- Main Content Area -->
     <main class="main-content">
       <!-- Top Action Navigation -->
       <header class="top-nav">
-        <div class="font-indicator">
-          <span data-i18n="active_font_lbl">الخط النشط: </span>
-          <strong id="activeFontName" data-i18n="default_font_name">Arabic Calligraphy (الافتراضي محمل)</strong>
+        <!-- Left Side: Mobile Toggle, Brand Title, Font Indicator, Word Counter -->
+        <div class="top-nav-left">
+
+          <!-- Font Name Indicator -->
+          <div class="font-indicator desktop-only">
+            <i class="fa-solid fa-font" style="color: var(--accent); margin-inline-end: 6px; font-size: 11px;"></i>
+            <span data-i18n="active_font_lbl">الخط النشط: </span>
+            <strong id="activeFontName" data-i18n="default_font_name">Arabic Calligraphy</strong>
+          </div>
+          
+          <!-- Word Counter -->
+          <div class="word-counter">
+            <i class="fa-solid fa-file-word" style="color: var(--accent); margin-inline-end: 6px; font-size: 11px;"></i>
+            <span class="desktop-only" data-i18n="word_counter_lbl">عدد الكلمات: </span>
+            <strong id="wordCount">0</strong>
+          </div>
         </div>
-        <div class="app-actions">
-          <button id="btnClear" class="btn-secondary" title="مسح النص" data-i18n-title="clear_btn_title"><i class="fa-solid fa-trash-can"></i> <span data-i18n="clear_btn_text">مسح</span></button>
-          <button id="btnReset" class="btn-secondary" title="إعادة تعيين" data-i18n-title="reset_btn_title"><i class="fa-solid fa-arrow-rotate-left"></i> <span data-i18n="reset_btn_text">تعيين</span></button>
+        
+        <!-- Middle Section: Centered View Switcher Tabs -->
+        <div class="top-nav-middle">
+          <div class="view-tabs">
+            <button class="tab-btn active" id="tabDesignMode" data-view="design">
+              <i class="fa-solid fa-image"></i>
+              <span data-i18n="tab_design_mode">بطاقة تصميم</span>
+            </button>
+            <button class="tab-btn" id="tabDocMode" data-view="document">
+              <i class="fa-solid fa-file-lines"></i>
+              <span data-i18n="tab_doc_mode">صفحة مستند (Word)</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Right Section: Actions & Buttons -->
+        <div class="top-nav-right">
+          <!-- Secondary Actions (Desktop: Inline row, Mobile: Styled floating dropdown) -->
+          <div class="header-actions">
+            <!-- Background Checkerboard Grid Toggle -->
+            <button id="btnToggleGrid" class="btn-secondary btn-icon-only" title="شبكة الخلفية / Checkerboard Grid">
+              <i class="fa-solid fa-border-all"></i>
+            </button>
+            
+            <button id="btnReset" class="btn-secondary" title="إعادة تعيين" data-i18n-title="reset_btn_title">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+              <span data-i18n="reset_btn_text">تعيين</span>
+            </button>
+            
+            <button id="btnClear" class="btn-secondary" title="مسح النص" data-i18n-title="clear_btn_title">
+              <i class="fa-solid fa-trash-can"></i>
+              <span data-i18n="clear_btn_text">مسح</span>
+            </button>
+          </div>
+
+          <!-- Split Save/Export Buttons -->
+          <div class="split-btn-container design-only">
+            <button id="btnExport" class="btn-primary split-btn-main">
+              <i class="fa-solid fa-download icon"></i>
+              <span data-i18n="export_btn">تحميل كـ PNG</span>
+            </button>
+            <button id="btnExportDropdownTrigger" class="btn-primary split-btn-arrow" aria-label="صيغ حفظ أخرى">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="split-dropdown-menu" id="exportCardDropdown">
+              <button class="split-dropdown-item" data-format="png">
+                <i class="fa-solid fa-image"></i>
+                <span data-i18n="format_png">صورة PNG</span>
+              </button>
+              <button class="split-dropdown-item" data-format="jpeg">
+                <i class="fa-solid fa-file-image"></i>
+                <span data-i18n="format_jpeg">صورة JPEG</span>
+              </button>
+              <button class="split-dropdown-item" data-format="webp">
+                <i class="fa-solid fa-photo-film"></i>
+                <span data-i18n="format_webp">صورة WebP</span>
+              </button>
+              <button class="split-dropdown-item" data-format="pdf">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span data-i18n="format_pdf">ملف PDF</span>
+              </button>
+            </div>
+          </div>
+
+
+          <!-- Site Language Toggle Button -->
+          <button class="btn-secondary" id="btnToggleSiteLang" title="تغيير لغة الموقع / Toggle UI Language" style="border: 1px solid var(--border-ui);">
+            <i class="fa-solid fa-globe"></i>
+            <span class="lang-text desktop-only">English</span>
+          </button>
+
+          <!-- Mobile Dropdown Kebab Menu Button -->
+          <button id="btnMoreActions" class="btn-secondary btn-icon-only" title="خيارات إضافية / More Options" style="margin-inline-start: 8px;">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+          </button>
         </div>
       </header>
       
@@ -570,9 +702,6 @@
           </div>
           
           <div class="card-body">
-            <!-- Title editable directly on card -->
-            <div id="cardTitle" class="card-title" contenteditable="true" spellcheck="false" placeholder="العنوان (اختياري)" data-i18n-placeholder="title_placeholder"></div>
-            
             <!-- Text area editable directly by user -->
             <div id="editableText" class="writing-canvas" contenteditable="true" spellcheck="false">
 الخَيْلُ وَاللّيْلُ وَالبَيْدَاءُ تَعْرِفُني
@@ -581,9 +710,6 @@
 أَنَا الَّذِي نَظَرَ الْأَعْمَى إِلَى أَدَبِي
 وَأَسْمَعَتْ كَلِمَاتِي مَنْ بِهِ صَمَمُ
             </div>
-            
-            <!-- Author editable directly on card -->
-            <div id="cardAuthor" class="card-author" contenteditable="true" spellcheck="false" placeholder="الاسم/التوقيع (اختياري)" data-i18n-placeholder="author_placeholder"></div>
           </div>
           
           <!-- Bottom decorative element -->
@@ -677,9 +803,59 @@
     
     <!-- Mobile overlay back drop for drawer -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
   </div>
-  
-  <script src="./script.js" type="module"></script>
+
+  <!-- Save As Modal Popup (نافذة منبثقة لحفظ المستند بأشكال متعددة) -->
+  <div id="saveDocModal" class="modal-overlay" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title" data-i18n="save_modal_title">حفظ وتصدير المستند</h3>
+          <button id="btnSaveModalClose" class="modal-close-btn" title="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc" data-i18n="save_modal_desc">اختر الصيغة المفضلة لتصدير وحفظ مستندك الحالي:</p>
+          
+          <div class="export-options-grid">
+            <!-- Option 1: PDF -->
+            <button class="export-option-card" id="btnExportPDF">
+              <div class="option-icon"><i class="fa-solid fa-file-pdf"></i></div>
+              <div class="option-info">
+                <span class="option-title" data-i18n="save_pdf_title">تصدير كملف PDF / طباعة</span>
+                <span class="option-detail" data-i18n="save_pdf_desc">توليد ملف مستند جاهز للطباعة أو الحفظ كـ PDF</span>
+              </div>
+            </button>
+            
+            <!-- Option 2: PNG -->
+            <button class="export-option-card" id="btnExportDocPNG">
+              <div class="option-icon"><i class="fa-solid fa-file-image"></i></div>
+              <div class="option-info">
+                <span class="option-title" data-i18n="save_png_title">حفظ كصورة PNG</span>
+                <span class="option-detail" data-i18n="save_png_desc">تصدير الصفحة الحالية كصورة رقمية عالية الجودة</span>
+              </div>
+            </button>
+            
+            <!-- Option 3: TXT -->
+            <button class="export-option-card" id="btnExportTXT">
+              <div class="option-icon"><i class="fa-solid fa-file-lines"></i></div>
+              <div class="option-info">
+                <span class="option-title" data-i18n="save_txt_title">ملف نصي عادي (TXT)</span>
+                <span class="option-detail" data-i18n="save_txt_desc">حفظ الكلمات كملف نصي بسيط بدون تنسيقات</span>
+              </div>
+            </button>
+
+            <!-- Option 4: HTML (Word Compatible) -->
+            <button class="export-option-card" id="btnExportHTML">
+              <div class="option-icon"><i class="fa-solid fa-file-code"></i></div>
+              <div class="option-info">
+                <span class="option-title" data-i18n="save_html_title">تصدير كملف صفحة (HTML)</span>
+                <span class="option-detail" data-i18n="save_html_desc">تصدير بتنسيقات الـ HTML المتوافقة مع برامج النصوص</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js" type="module"></script>
 </body>
 </html>

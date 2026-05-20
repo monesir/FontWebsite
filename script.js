@@ -1,4 +1,5 @@
 import * as htmlToImage from 'html-to-image';
+import html2pdf from 'html2pdf.js';
 
 /* ==========================================================================
    Arabic Poetry Font Playground - Production JavaScript Controller
@@ -18,13 +19,16 @@ const valFontSize = document.getElementById('valFontSize');
 const valLineHeight = document.getElementById('valLineHeight');
 const valLetterSpacing = document.getElementById('valLetterSpacing');
 const alignButtons = document.querySelectorAll('.btn-align');
+const btnBold = document.getElementById('btnBold');
+const btnItalic = document.getElementById('btnItalic');
+const btnUnderline = document.getElementById('btnUnderline');
 const toggleShadow = document.getElementById('toggleShadow');
 
 // Card Border Style Selector
 const selectBorderPattern = document.getElementById('selectBorderPattern');
 
 // Aspect Ratio Selectors
-const ratioButtons = document.querySelectorAll('.ratio-btn');
+const ratioButtons = document.querySelectorAll('.ratio-btn[data-ratio]');
 
 // Color Pickers
 const pickerTextColor = document.getElementById('pickerTextColor');
@@ -35,6 +39,14 @@ const hexTextColor = document.getElementById('hexTextColor');
 const hexBgColor = document.getElementById('hexBgColor');
 const hexOrnamentColor = document.getElementById('hexOrnamentColor');
 const hexOrnamentColor2 = document.getElementById('hexOrnamentColor2');
+
+// Arabic Diacritics Controls
+const toggleHarakatColor = document.getElementById('toggleHarakatColor');
+const harakatColorPickerGroup = document.getElementById('harakatColorPickerGroup');
+const pickerHarakatColor = document.getElementById('pickerHarakatColor');
+const hexHarakatColor = document.getElementById('hexHarakatColor');
+const toggleHideHarakat = document.getElementById('toggleHideHarakat');
+
 const themeButtons = document.querySelectorAll('.theme-lib-card');
 
 // Custom Background Image
@@ -62,18 +74,43 @@ const cardWatermark = document.getElementById('cardWatermark');
 
 // Mobile UI elements
 const btnMobileToggle = document.getElementById('btnMobileToggle');
-const btnMobileClose = document.getElementById('btnMobileClose');
+const btnSidebarClose = document.getElementById('btnSidebarClose');
 const sidebarPanel = document.getElementById('sidebarPanel');
 const sidebarOverlay = document.getElementById('sidebarOverlay');
+const btnMoreActions = document.getElementById('btnMoreActions');
+const headerActions = document.querySelector('.header-actions');
 
 // Content and Actions
 const sampleButtons = document.querySelectorAll('.sample-btn');
 const editableText = document.getElementById('editableText');
 const poetryCard = document.getElementById('poetryCard');
+const canvasWrapper = document.getElementById('canvasWrapper');
 const cardResizeHandle = document.getElementById('cardResizeHandle');
 const btnExport = document.getElementById('btnExport');
+const btnExportDropdownTrigger = document.getElementById('btnExportDropdownTrigger');
+const exportCardDropdown = document.getElementById('exportCardDropdown');
 const btnClear = document.getElementById('btnClear');
 const btnReset = document.getElementById('btnReset');
+
+// Document Mode & Grid controls
+const tabDesignMode = document.getElementById('tabDesignMode');
+const tabDocMode = document.getElementById('tabDocMode');
+const btnToggleGrid = document.getElementById('btnToggleGrid');
+const btnSaveDocAsBtn = document.getElementById('btnSaveDocAsBtn');
+const btnSaveDocDropdownTrigger = document.getElementById('btnSaveDocDropdownTrigger');
+const saveDocDropdown = document.getElementById('saveDocDropdown');
+const saveDocModal = document.getElementById('saveDocModal');
+const btnSaveModalClose = document.getElementById('btnSaveModalClose');
+const btnExportPDF = document.getElementById('btnExportPDF');
+const btnExportDocPNG = document.getElementById('btnExportDocPNG');
+const btnExportTXT = document.getElementById('btnExportTXT');
+const btnExportHTML = document.getElementById('btnExportHTML');
+const btnPaperBlank = document.getElementById('btnPaperBlank');
+const btnPaperLined = document.getElementById('btnPaperLined');
+const btnPaperGrid = document.getElementById('btnPaperGrid');
+const btnPaperThemeWhite = document.getElementById('btnPaperThemeWhite');
+const btnPaperThemeCream = document.getElementById('btnPaperThemeCream');
+const btnPaperThemeDark = document.getElementById('btnPaperThemeDark');
 
 // Advanced Mode Selector and Controls
 const btnModeSimple = document.getElementById('btnModeSimple');
@@ -192,6 +229,230 @@ const englishFonts = [
 ];
 
 /* ==========================================
+   Arabic Diacritics (Harakat) Highlighter
+   ========================================== */
+
+function getCaretOffsetDOM(element) {
+  const sel = window.getSelection();
+  if (sel.rangeCount === 0) return 0;
+  const range = sel.getRangeAt(0);
+  const targetNode = range.startContainer;
+  const targetOffset = range.startOffset;
+  
+  let offset = 0;
+  let found = false;
+  
+  function walk(node) {
+    if (found) return;
+    if (node === targetNode) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const sub = node.nodeValue.substring(0, targetOffset);
+        offset += sub.replace(/\u200D/g, '').length;
+      } else {
+        for (let i = 0; i < targetOffset && i < node.childNodes.length; i++) {
+          walkTextNodesOnly(node.childNodes[i]);
+        }
+      }
+      found = true;
+      return;
+    }
+    
+    if (node.nodeType === Node.TEXT_NODE) {
+      offset += node.nodeValue.replace(/\u200D/g, '').length;
+    } else {
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walk(node.childNodes[i]);
+        if (found) return;
+      }
+    }
+  }
+  
+  function walkTextNodesOnly(n) {
+    if (n.nodeType === Node.TEXT_NODE) {
+      offset += n.nodeValue.replace(/\u200D/g, '').length;
+    } else {
+      for (let i = 0; i < n.childNodes.length; i++) {
+        walkTextNodesOnly(n.childNodes[i]);
+      }
+    }
+  }
+  
+  walk(element);
+  return offset;
+}
+
+function setCaretOffsetDOM(element, offset) {
+  const sel = window.getSelection();
+  const range = document.createRange();
+  let currentOffset = 0;
+  let found = false;
+  
+  function walk(node) {
+    if (found) return;
+    if (node.nodeType === Node.TEXT_NODE) {
+      const val = node.nodeValue;
+      const cleanLen = val.replace(/\u200D/g, '').length;
+      if (currentOffset + cleanLen >= offset) {
+        let targetRelativeOffset = offset - currentOffset;
+        let originalIndex = 0;
+        let nonZwjCount = 0;
+        while (originalIndex < val.length && nonZwjCount < targetRelativeOffset) {
+          if (val[originalIndex] !== '\u200D') {
+            nonZwjCount++;
+          }
+          originalIndex++;
+        }
+        while (originalIndex < val.length && val[originalIndex] === '\u200D') {
+          originalIndex++;
+        }
+        
+        range.setStart(node, originalIndex);
+        range.collapse(true);
+        found = true;
+        return;
+      }
+      currentOffset += cleanLen;
+    } else {
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walk(node.childNodes[i]);
+        if (found) return;
+      }
+    }
+  }
+  
+  walk(element);
+  if (!found) {
+    try {
+      range.selectNodeContents(element);
+      range.collapse(false);
+      found = true;
+    } catch (e) {
+      console.warn('Failed to restore caret fallback:', e);
+    }
+  }
+  
+  if (found) {
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
+
+function cleanAllZWJs(element) {
+  const walk = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while (node = walk.nextNode()) {
+    textNodes.push(node);
+  }
+  textNodes.forEach(node => {
+    if (node.nodeValue.includes('\u200D')) {
+      node.nodeValue = node.nodeValue.replace(/\u200D/g, '');
+    }
+  });
+}
+
+function unwrapTashkeel(element) {
+  const spans = element.querySelectorAll('.haraka');
+  if (spans.length === 0) {
+    const hasZWJ = element.textContent.includes('\u200D');
+    if (hasZWJ) {
+      cleanAllZWJs(element);
+    }
+    return;
+  }
+  
+  let caretOffset = null;
+  const isActive = (document.activeElement === element);
+  if (isActive) {
+    caretOffset = getCaretOffsetDOM(element);
+  }
+  
+  spans.forEach(span => {
+    const parent = span.parentNode;
+    while (span.firstChild) {
+      parent.insertBefore(span.firstChild, span);
+    }
+    parent.removeChild(span);
+  });
+  
+  cleanAllZWJs(element);
+  element.normalize();
+  
+  if (isActive && caretOffset !== null) {
+    setCaretOffsetDOM(element, caretOffset);
+  }
+}
+
+function wrapTashkeel(element) {
+  if (!element) return;
+  
+  unwrapTashkeel(element);
+  
+  const coloringEnabled = toggleHarakatColor && toggleHarakatColor.checked;
+  const hidingEnabled = toggleHideHarakat && toggleHideHarakat.checked;
+  
+  if (!coloringEnabled && !hidingEnabled) {
+    return;
+  }
+  
+  let caretOffset = null;
+  const isActive = (document.activeElement === element);
+  if (isActive) {
+    caretOffset = getCaretOffsetDOM(element);
+  }
+  
+  const HAS_TASHKEEL_REGEX = /[\u064B-\u0652\u0653\u0670]/;
+  const TASHKEEL_REGEX = /([\u064B-\u0652\u0653\u0670])/g;
+  
+  const walk = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+  const textNodes = [];
+  let node;
+  while (node = walk.nextNode()) {
+    textNodes.push(node);
+  }
+  
+  for (let i = textNodes.length - 1; i >= 0; i--) {
+    const textNode = textNodes[i];
+    const text = textNode.nodeValue;
+    if (HAS_TASHKEEL_REGEX.test(text)) {
+      const parent = textNode.parentNode;
+      const fragments = document.createDocumentFragment();
+      let lastIndex = 0;
+      
+      TASHKEEL_REGEX.lastIndex = 0;
+      let match;
+      while ((match = TASHKEEL_REGEX.exec(text)) !== null) {
+        const matchIndex = match.index;
+        if (matchIndex > lastIndex) {
+          fragments.appendChild(document.createTextNode(text.substring(lastIndex, matchIndex)));
+        }
+        
+        fragments.appendChild(document.createTextNode('\u200D'));
+        
+        const span = document.createElement('span');
+        span.className = 'haraka';
+        span.textContent = match[0];
+        fragments.appendChild(span);
+        
+        fragments.appendChild(document.createTextNode('\u200D'));
+        
+        lastIndex = TASHKEEL_REGEX.lastIndex;
+      }
+      
+      if (lastIndex < text.length) {
+        fragments.appendChild(document.createTextNode(text.substring(lastIndex)));
+      }
+      
+      parent.replaceChild(fragments, textNode);
+    }
+  }
+  
+  if (isActive && caretOffset !== null) {
+    setCaretOffsetDOM(element, caretOffset);
+  }
+}
+
+/* ==========================================
    Verse Segment Dividers Feature
    ========================================== */
 
@@ -222,31 +483,70 @@ function applyDividers() {
   
   removeDividers();
   
+  if (document.body.classList.contains('view-mode-document')) {
+    return;
+  }
+  
   const symbol = getDividerSymbol();
   if (!symbol) return;
-  
-  const rawText = getRawPoetryText();
-  if (!rawText) return;
-  
-  const lines = rawText.split('\n');
-  if (lines.length <= 1) return;
   
   const size = sliderDividerSize ? sliderDividerSize.value : 16;
   const dividerHTML = `<div class="verse-divider" contenteditable="false" style="--verse-divider-size: ${size}px;">${symbol}</div>`;
   
-  let html = '';
-  for (let i = 0; i < lines.length; i++) {
-    html += lines[i];
-    if (i < lines.length - 1) {
-      if (lines[i] === '' || lines[i+1] === '') {
-        html += '<br>';
-      } else {
-        html += dividerHTML;
+  const children = Array.from(editableText.childNodes);
+  if (children.length === 0) return;
+  
+  const isBlock = node => {
+    if (node.nodeType !== Node.ELEMENT_NODE) return false;
+    const display = window.getComputedStyle(node).display;
+    return display === 'block' || display === 'flex' || display === 'grid' || node.tagName === 'DIV' || node.tagName === 'P';
+  };
+  
+  const hasBlocks = children.some(isBlock);
+  
+  if (!hasBlocks) {
+    // Inline text with <br> tags
+    for (let i = 0; i < children.length; i++) {
+      const node = children[i];
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'BR') {
+        const prev = children[i - 1];
+        const next = children[i + 1];
+        const isPrevBr = prev && prev.nodeType === Node.ELEMENT_NODE && prev.tagName === 'BR';
+        const isNextBr = next && next.nodeType === Node.ELEMENT_NODE && next.tagName === 'BR';
+        
+        if (!isPrevBr && !isNextBr) {
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = dividerHTML;
+          const dividerNode = tempDiv.firstChild;
+          node.parentNode.replaceChild(dividerNode, node);
+        }
       }
     }
+  } else {
+    // Block elements (like <div> or <p>)
+    const newChildren = [];
+    for (let i = 0; i < children.length; i++) {
+      const node = children[i];
+      newChildren.push(node);
+      
+      if (i < children.length - 1) {
+        const nextNode = children[i + 1];
+        if (isBlock(node) && isBlock(nextNode)) {
+          const text1 = node.textContent.trim();
+          const text2 = nextNode.textContent.trim();
+          
+          if (text1.length > 0 && text2.length > 0) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = dividerHTML;
+            const dividerNode = tempDiv.firstChild;
+            newChildren.push(dividerNode);
+          }
+        }
+      }
+    }
+    editableText.innerHTML = '';
+    newChildren.forEach(child => editableText.appendChild(child));
   }
-  
-  editableText.innerHTML = html;
 }
 
 /* ==========================================
@@ -280,6 +580,65 @@ function getRawPoetryText() {
   return lines.join('\n');
 }
 
+function getCleanHTML() {
+  if (!editableText) return '';
+  const temp = document.createElement('div');
+  temp.innerHTML = editableText.innerHTML;
+  
+  // Clean verse dividers
+  const dividers = temp.querySelectorAll('.verse-divider');
+  dividers.forEach(div => {
+    const br = document.createElement('br');
+    div.parentNode.replaceChild(br, div);
+  });
+  
+  // Clean haraka wrappers
+  const harakas = temp.querySelectorAll('.haraka');
+  harakas.forEach(span => {
+    const parent = span.parentNode;
+    while (span.firstChild) {
+      parent.insertBefore(span.firstChild, span);
+    }
+    parent.removeChild(span);
+  });
+  
+  // Clean Zero-Width Joiners (ZWJs)
+  let html = temp.innerHTML;
+  html = html.replace(/\u200D/g, '');
+  return html;
+}
+
+function updateWordCount() {
+  if (!editableText) return;
+  const text = editableText.innerText || editableText.textContent || '';
+  const cleanText = text.trim();
+  if (!cleanText) {
+    const countEl = document.getElementById('wordCount');
+    if (countEl) countEl.textContent = '0';
+    return;
+  }
+  const words = cleanText.split(/\s+/);
+  const count = words.filter(word => word.length > 0).length;
+  const countEl = document.getElementById('wordCount');
+  if (countEl) countEl.textContent = count;
+}
+
+function setEditableTextHTML(text) {
+  if (!editableText) return;
+  if (!text) {
+    editableText.innerHTML = '';
+    updateWordCount();
+    return;
+  }
+  if (/<[a-z][\s\S]*>/i.test(text)) {
+    editableText.innerHTML = text;
+  } else {
+    editableText.innerHTML = text.replace(/\n/g, '<br>');
+  }
+  wrapTashkeel(editableText);
+  updateWordCount();
+}
+
 function renderCarouselControls() {
   if (!carouselPageList) return;
   
@@ -306,14 +665,14 @@ function switchPage(targetIndex) {
   if (targetIndex < 0 || targetIndex >= carouselPages.length) return;
   
   // Save current page text first
-  carouselPages[currentPageIndex] = getRawPoetryText();
+  carouselPages[currentPageIndex] = getCleanHTML();
   
   // Switch
   currentPageIndex = targetIndex;
   
   // Load target text
   const targetText = carouselPages[currentPageIndex];
-  editableText.innerHTML = targetText.replace(/\n/g, '<br>');
+  setEditableTextHTML(targetText);
   
   renderCarouselControls();
   updateCardPageIndicator();
@@ -394,15 +753,68 @@ document.addEventListener('DOMContentLoaded', () => {
   
   updateUISiteLanguage(savedSiteLang);
   switchLanguage(savedSiteLang);
+
+  // Restore grid background state
+  if (localStorage.getItem('diwan-canvas-grid') === 'true') {
+    if (canvasWrapper) canvasWrapper.classList.add('has-grid');
+    if (btnToggleGrid) btnToggleGrid.classList.add('active');
+  }
+
+  // Restore Arabic Diacritics settings
+  const harakatColorEnabled = localStorage.getItem('diwan-harakat-color-enabled') === 'true';
+  const harakatColor = localStorage.getItem('diwan-harakat-color') || '#ff4a4a';
+  const harakatHideEnabled = localStorage.getItem('diwan-harakat-hide-enabled') === 'true';
+
+  if (toggleHarakatColor) {
+    toggleHarakatColor.checked = harakatColorEnabled;
+    if (harakatColorPickerGroup) {
+      harakatColorPickerGroup.style.display = harakatColorEnabled ? 'flex' : 'none';
+    }
+  }
+  if (pickerHarakatColor) {
+    pickerHarakatColor.value = harakatColor;
+    if (hexHarakatColor) hexHarakatColor.textContent = harakatColor;
+    document.documentElement.style.setProperty('--haraka-color', harakatColor);
+  }
+  if (toggleHideHarakat) {
+    toggleHideHarakat.checked = harakatHideEnabled;
+    if (harakatHideEnabled) {
+      document.body.classList.add('hide-harakat');
+    } else {
+      document.body.classList.remove('hide-harakat');
+    }
+  }
+  wrapTashkeel(editableText);
+
+  // Restore saved view mode
+  const savedMode = localStorage.getItem('diwan-view-mode') || 'design';
+  switchViewMode(savedMode);
+  updateWordCount();
 });
 
 // Setup Event Listeners
 function setupEventListeners() {
   
   // 1. Mobile Sidebar Controls Toggle
-  btnMobileToggle.addEventListener('click', openSidebar);
-  btnMobileClose.addEventListener('click', closeSidebar);
-  sidebarOverlay.addEventListener('click', closeSidebar);
+  if (btnMobileToggle) btnMobileToggle.addEventListener('click', openSidebar);
+  if (btnSidebarClose) btnSidebarClose.addEventListener('click', closeSidebar);
+  if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+  // 1b. Mobile More Actions Kebab Toggle
+  if (btnMoreActions && headerActions) {
+    btnMoreActions.addEventListener('click', (e) => {
+      e.stopPropagation();
+      headerActions.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+      headerActions.classList.remove('active');
+    });
+    
+    headerActions.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
 
   // 2. Custom OTF Font File Uploader (Supports Drag and Drop)
   fontDropzone.addEventListener('click', () => fontFileInput.click());
@@ -472,15 +884,95 @@ function setupEventListeners() {
     valLetterSpacing.textContent = `${val}px`;
   });
 
-  // 5. Text Alignment Buttons
+  // 5. Text Alignment & Rich Formatting Buttons (Works like Word globally in all modes)
+  const updateFormatButtonsState = () => {
+    if (btnBold) {
+      if (document.queryCommandState('bold')) {
+        btnBold.classList.add('active');
+      } else {
+        btnBold.classList.remove('active');
+      }
+    }
+    if (btnItalic) {
+      if (document.queryCommandState('italic')) {
+        btnItalic.classList.add('active');
+      } else {
+        btnItalic.classList.remove('active');
+      }
+    }
+    if (btnUnderline) {
+      if (document.queryCommandState('underline')) {
+        btnUnderline.classList.add('active');
+      } else {
+        btnUnderline.classList.remove('active');
+      }
+    }
+    
+    // Also update alignment buttons active state based on command state
+    if (alignButtons.length > 0) {
+      alignButtons.forEach(btn => {
+        const align = btn.dataset.align;
+        let state = false;
+        if (align === 'center') state = document.queryCommandState('justifyCenter');
+        else if (align === 'right') state = document.queryCommandState('justifyRight');
+        else if (align === 'left') state = document.queryCommandState('justifyLeft');
+        else if (align === 'justify') state = document.queryCommandState('justifyFull');
+        
+        if (state) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+  };
+
+  if (editableText) {
+    editableText.addEventListener('keyup', updateFormatButtonsState);
+    editableText.addEventListener('mouseup', updateFormatButtonsState);
+    editableText.addEventListener('focus', updateFormatButtonsState);
+    document.addEventListener('selectionchange', () => {
+      if (document.activeElement === editableText) {
+        updateFormatButtonsState();
+      }
+    });
+  }
+
   alignButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      alignButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       const align = btn.dataset.align;
-      document.documentElement.style.setProperty('--card-text-align', align);
+      let cmd = 'justifyCenter';
+      if (align === 'right') cmd = 'justifyRight';
+      else if (align === 'left') cmd = 'justifyLeft';
+      else if (align === 'justify') cmd = 'justifyFull';
+      
+      if (editableText) editableText.focus();
+      document.execCommand(cmd, false, null);
+      updateFormatButtonsState();
     });
   });
+
+  if (btnBold) {
+    btnBold.addEventListener('click', () => {
+      if (editableText) editableText.focus();
+      document.execCommand('bold', false, null);
+      updateFormatButtonsState();
+    });
+  }
+  if (btnItalic) {
+    btnItalic.addEventListener('click', () => {
+      if (editableText) editableText.focus();
+      document.execCommand('italic', false, null);
+      updateFormatButtonsState();
+    });
+  }
+  if (btnUnderline) {
+    btnUnderline.addEventListener('click', () => {
+      if (editableText) editableText.focus();
+      document.execCommand('underline', false, null);
+      updateFormatButtonsState();
+    });
+  }
 
   // 6. Visual Shadow Toggles
   toggleShadow.addEventListener('change', (e) => {
@@ -645,7 +1137,7 @@ function setupEventListeners() {
     btn.addEventListener('click', () => {
       const sampleKey = btn.dataset.sample;
       if (POETRY_SAMPLES[sampleKey]) {
-        editableText.innerHTML = POETRY_SAMPLES[sampleKey].replace(/\n/g, '<br>');
+        setEditableTextHTML(POETRY_SAMPLES[sampleKey]);
         carouselPages[currentPageIndex] = POETRY_SAMPLES[sampleKey];
         applyDividers();
         closeSidebar(); // auto-close sidebar on mobile for better focus
@@ -655,7 +1147,7 @@ function setupEventListeners() {
 
   // 13. General Canvas Actions
   btnClear.addEventListener('click', () => {
-    editableText.innerHTML = '';
+    setEditableTextHTML('');
     carouselPages[currentPageIndex] = '';
     updateCardPageIndicator();
     editableText.focus();
@@ -669,7 +1161,71 @@ function setupEventListeners() {
     }
   });
 
-  btnExport.addEventListener('click', exportPoetryCard);
+  // 13b. Split Export/Save Buttons & Dropdowns
+  if (btnExport) {
+    btnExport.addEventListener('click', exportPoetryCard);
+  }
+  
+  if (btnSaveDocAsBtn) {
+    btnSaveDocAsBtn.addEventListener('click', () => {
+      exportDocAsPDF();
+    });
+  }
+
+  // Toggle dropdowns
+  if (btnExportDropdownTrigger && exportCardDropdown) {
+    btnExportDropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      exportCardDropdown.classList.toggle('active');
+      if (saveDocDropdown) saveDocDropdown.classList.remove('active');
+    });
+  }
+
+  if (btnSaveDocDropdownTrigger && saveDocDropdown) {
+    btnSaveDocDropdownTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      saveDocDropdown.classList.toggle('active');
+      if (exportCardDropdown) exportCardDropdown.classList.remove('active');
+    });
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    if (exportCardDropdown) exportCardDropdown.classList.remove('active');
+    if (saveDocDropdown) saveDocDropdown.classList.remove('active');
+  });
+
+  // Handle Card Export Dropdown Item clicks
+  if (exportCardDropdown) {
+    exportCardDropdown.querySelectorAll('.split-dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const format = e.currentTarget.getAttribute('data-format');
+        exportCardDropdown.classList.remove('active');
+        if (format === 'png' || format === 'jpeg' || format === 'webp' || format === 'pdf') {
+          exportPoetryCard(format);
+        }
+      });
+    });
+  }
+
+  // Handle Document Save Dropdown Item clicks
+  if (saveDocDropdown) {
+    saveDocDropdown.querySelectorAll('.split-dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        const format = e.currentTarget.getAttribute('data-format');
+        saveDocDropdown.classList.remove('active');
+        if (format === 'pdf') {
+          exportDocAsPDF();
+        } else if (format === 'docx') {
+          exportDocAsDOCX();
+        } else if (format === 'txt') {
+          exportDocAsTXT();
+        } else if (format === 'html') {
+          exportDocAsHTML();
+        }
+      });
+    });
+  }
 
   // Custom Card Resizing Init
   initCardResize();
@@ -838,14 +1394,14 @@ function setupEventListeners() {
     btnAddPage.addEventListener('click', (e) => {
       e.preventDefault();
       // Save current text first
-      carouselPages[currentPageIndex] = getRawPoetryText();
+      carouselPages[currentPageIndex] = getCleanHTML();
       
       // Add page
       carouselPages.push('');
       currentPageIndex = carouselPages.length - 1;
       
       // Load empty page
-      editableText.innerHTML = '';
+      setEditableTextHTML('');
       renderCarouselControls();
       updateCardPageIndicator();
       
@@ -866,7 +1422,7 @@ function setupEventListeners() {
         }
         
         const targetText = carouselPages[currentPageIndex];
-        editableText.innerHTML = targetText.replace(/\n/g, '<br>');
+        setEditableTextHTML(targetText);
         
         renderCarouselControls();
         updateCardPageIndicator();
@@ -881,17 +1437,111 @@ function setupEventListeners() {
     });
   }
 
-  // Editable text Focus/Blur hooks for safe dividers
+  // Editable text Focus/Blur hooks for safe dividers and diacritics
   if (editableText) {
+    let inputDebounceTimeout;
+    
     editableText.addEventListener('input', () => {
-      carouselPages[currentPageIndex] = getRawPoetryText();
+      carouselPages[currentPageIndex] = getCleanHTML();
+      updateWordCount();
+      
+      const coloringEnabled = toggleHarakatColor && toggleHarakatColor.checked;
+      const hidingEnabled = toggleHideHarakat && toggleHideHarakat.checked;
+      
+      if (coloringEnabled || hidingEnabled) {
+        clearTimeout(inputDebounceTimeout);
+        inputDebounceTimeout = setTimeout(() => {
+          if (document.activeElement === editableText) {
+            wrapTashkeel(editableText);
+          }
+        }, 1500);
+      }
     });
+
+    editableText.addEventListener('keydown', () => {
+      // If there are still .haraka spans, unwrap them immediately on keypress so browser types on clean text
+      if (editableText.querySelector('.haraka')) {
+        unwrapTashkeel(editableText);
+      }
+    });
+
     editableText.addEventListener('focus', () => {
       removeDividers();
+      unwrapTashkeel(editableText);
     });
+
     editableText.addEventListener('blur', () => {
-      carouselPages[currentPageIndex] = getRawPoetryText();
+      carouselPages[currentPageIndex] = getCleanHTML();
       applyDividers();
+      wrapTashkeel(editableText);
+      updateWordCount();
+    });
+
+    // Intercept copy event to sanitize clipboard data
+    editableText.addEventListener('copy', (e) => {
+      const selection = window.getSelection();
+      if (!selection.isCollapsed) {
+        const range = selection.getRangeAt(0);
+        const container = document.createElement('div');
+        container.appendChild(range.cloneContents());
+        
+        // Clean spans and ZWJs
+        const harakas = container.querySelectorAll('.haraka');
+        harakas.forEach(span => {
+          const parent = span.parentNode;
+          while (span.firstChild) {
+            parent.insertBefore(span.firstChild, span);
+          }
+          parent.removeChild(span);
+        });
+        
+        let text = container.textContent;
+        text = text.replace(/\u200D/g, ''); // Remove ZWJs
+        
+        e.clipboardData.setData('text/plain', text);
+        e.preventDefault();
+      }
+    });
+  }
+
+  // Arabic Diacritics Event Listeners
+  if (toggleHarakatColor) {
+    toggleHarakatColor.addEventListener('change', (e) => {
+      const checked = e.target.checked;
+      localStorage.setItem('diwan-harakat-color-enabled', checked);
+      if (checked) {
+        if (harakatColorPickerGroup) harakatColorPickerGroup.style.display = 'flex';
+      } else {
+        if (harakatColorPickerGroup) harakatColorPickerGroup.style.display = 'none';
+      }
+      wrapTashkeel(editableText);
+      carouselPages[currentPageIndex] = getCleanHTML();
+    });
+  }
+
+  if (pickerHarakatColor) {
+    pickerHarakatColor.addEventListener('input', (e) => {
+      const val = e.target.value;
+      document.documentElement.style.setProperty('--haraka-color', val);
+      if (hexHarakatColor) hexHarakatColor.textContent = val;
+      localStorage.setItem('diwan-harakat-color', val);
+    });
+    pickerHarakatColor.addEventListener('change', () => {
+      carouselPages[currentPageIndex] = getCleanHTML();
+    });
+  }
+
+  if (toggleHideHarakat) {
+    toggleHideHarakat.addEventListener('change', (e) => {
+      const checked = e.target.checked;
+      localStorage.setItem('diwan-harakat-hide-enabled', checked);
+      if (checked) {
+        document.body.classList.add('hide-harakat');
+      } else {
+        document.body.classList.remove('hide-harakat');
+      }
+      wrapTashkeel(editableText);
+      carouselPages[currentPageIndex] = getCleanHTML();
     });
   }
 
@@ -951,6 +1601,333 @@ function setupEventListeners() {
       });
     }
   });
+
+  // 16. Document Mode View Switcher
+  if (tabDesignMode) {
+    tabDesignMode.addEventListener('click', () => switchViewMode('design'));
+  }
+  if (tabDocMode) {
+    tabDocMode.addEventListener('click', () => switchViewMode('document'));
+  }
+  
+  // 17. Canvas Background Checkerboard Toggle
+  if (btnToggleGrid) {
+    btnToggleGrid.addEventListener('click', () => {
+      if (canvasWrapper) {
+        canvasWrapper.classList.toggle('has-grid');
+        btnToggleGrid.classList.toggle('active');
+        localStorage.setItem('diwan-canvas-grid', canvasWrapper.classList.contains('has-grid'));
+      }
+    });
+  }
+
+  // 18. Document Paper Styling
+  if (btnPaperBlank) btnPaperBlank.addEventListener('click', () => setPaperStyle('blank'));
+  if (btnPaperLined) btnPaperLined.addEventListener('click', () => setPaperStyle('lined'));
+  if (btnPaperGrid) btnPaperGrid.addEventListener('click', () => setPaperStyle('grid'));
+
+  // 19. Document Paper Color Themes
+  if (btnPaperThemeWhite) btnPaperThemeWhite.addEventListener('click', () => setPaperTheme('white'));
+  if (btnPaperThemeCream) btnPaperThemeCream.addEventListener('click', () => setPaperTheme('cream'));
+  if (btnPaperThemeDark) btnPaperThemeDark.addEventListener('click', () => setPaperTheme('dark'));
+
+  // 20. Save As Modal & Export Actions
+  if (saveDocModal) {
+    const closeModal = () => {
+      saveDocModal.classList.remove('active');
+      setTimeout(() => {
+        saveDocModal.style.display = 'none';
+      }, 300);
+    };
+
+    if (btnSaveModalClose) {
+      btnSaveModalClose.addEventListener('click', closeModal);
+    }
+
+    saveDocModal.addEventListener('click', (e) => {
+      if (e.target === saveDocModal) {
+        closeModal();
+      }
+    });
+
+    // Option 1: PDF Export / Print
+    if (btnExportPDF) {
+      btnExportPDF.addEventListener('click', () => {
+        closeModal();
+        exportDocAsPDF();
+      });
+    }
+
+    // Option 2: PNG Image Export
+    if (btnExportDocPNG) {
+      btnExportDocPNG.addEventListener('click', () => {
+        closeModal();
+        setTimeout(() => {
+          if (btnExport) {
+            btnExport.click();
+          }
+        }, 350);
+      });
+    }
+
+    // Option 3: Text file (TXT)
+    if (btnExportTXT) {
+      btnExportTXT.addEventListener('click', () => {
+        closeModal();
+        const temp = document.createElement('div');
+        temp.innerHTML = editableText.innerHTML;
+        temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
+        let bodyText = temp.innerText.trim();
+        const blob = new Blob([bodyText], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'document.txt';
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+    }
+
+    // Option 4: HTML File (Word-compatible)
+    if (btnExportHTML) {
+      btnExportHTML.addEventListener('click', () => {
+        closeModal();
+        const temp = document.createElement('div');
+        temp.innerHTML = editableText.innerHTML;
+        temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
+        let bodyHtml = temp.innerHTML;
+        const paperTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+        let bgStyle = 'background: #ffffff; color: #111111;';
+        if (paperTheme === 'cream') bgStyle = 'background: #fcf8f0; color: #2e261a;';
+        else if (paperTheme === 'dark') bgStyle = 'background: #18181b; color: #f4f4f5;';
+        const lang = localStorage.getItem('siteLanguage') || 'ar';
+        const dir = lang === 'en' ? 'ltr' : 'rtl';
+
+        const fullHtml = `<!DOCTYPE html>
+<html lang="${lang}" dir="${dir}">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: 'Cairo', 'Amiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 50px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+      ${bgStyle}
+    }
+    .content {
+      white-space: pre-wrap;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">${bodyHtml}</div>
+</body>
+</html>`;
+
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'document.html';
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+    }
+  }
+
+  // 21. Document Mode Click-to-Focus
+  if (poetryCard && editableText) {
+    poetryCard.addEventListener('click', (e) => {
+      if (document.body.classList.contains('view-mode-document')) {
+        if (e.target.closest('#editableText')) {
+          return;
+        }
+        if (document.activeElement !== editableText) {
+          editableText.focus();
+          
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.selectNodeContents(editableText);
+          range.collapse(false);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
+    });
+
+    // Word-like "Click and Type" Double-click handler
+    poetryCard.addEventListener('dblclick', (e) => {
+      if (!document.body.classList.contains('view-mode-document')) return;
+      
+      const rect = editableText.getBoundingClientRect();
+      const clickY = e.clientY - rect.top;
+      const clickX = e.clientX - rect.left;
+      const canvasWidth = rect.width;
+      
+      // If clicked on an existing block child that is empty or has only <br>:
+      const target = e.target;
+      const targetBlock = target.closest('#editableText > div, #editableText > p');
+      
+      if (targetBlock && (targetBlock.textContent.trim() === '' || targetBlock.innerHTML === '<br>')) {
+        const relativeX = clickX / canvasWidth;
+        let align = 'right';
+        if (currentLang === 'en') {
+          align = relativeX < 0.3 ? 'left' : (relativeX > 0.7 ? 'right' : 'center');
+        } else {
+          align = relativeX > 0.7 ? 'right' : (relativeX < 0.3 ? 'left' : 'center');
+        }
+        targetBlock.style.textAlign = align;
+        carouselPages[currentPageIndex] = getCleanHTML();
+        
+        // Update format buttons alignment state
+        updateFormatButtonsState();
+        
+        e.preventDefault();
+        return;
+      }
+      
+      // Let's find the bottom of the current text content
+      let contentHeight = 0;
+      if (editableText.lastChild) {
+        try {
+          const range = document.createRange();
+          range.selectNode(editableText.lastChild);
+          const rangeRect = range.getBoundingClientRect();
+          contentHeight = rangeRect.bottom - rect.top;
+        } catch (err) {
+          contentHeight = rect.height;
+        }
+      }
+      
+      // If click is below existing text content
+      if (clickY > contentHeight + 15) {
+        const style = window.getComputedStyle(editableText);
+        const fontSize = parseFloat(style.fontSize) || 16;
+        const lineHeight = parseFloat(style.lineHeight) || (fontSize * 1.5);
+        
+        const distance = clickY - contentHeight;
+        const linesToAdd = Math.max(1, Math.floor(distance / lineHeight));
+        
+        removeDividers();
+        
+        // Ensure editableText is not empty. If it is empty and has no child nodes, create a default block.
+        if (editableText.childNodes.length === 0) {
+          const firstDiv = document.createElement('div');
+          firstDiv.innerHTML = '<br>';
+          editableText.appendChild(firstDiv);
+        }
+        
+        for (let i = 0; i < linesToAdd; i++) {
+          const div = document.createElement('div');
+          div.innerHTML = '<br>';
+          editableText.appendChild(div);
+        }
+        
+        const lastDiv = editableText.lastChild;
+        if (lastDiv) {
+          const relativeX = clickX / canvasWidth;
+          let align = 'right'; // default for RTL Arabic
+          if (currentLang === 'en') {
+            align = relativeX < 0.3 ? 'left' : (relativeX > 0.7 ? 'right' : 'center');
+          } else {
+            align = relativeX > 0.7 ? 'right' : (relativeX < 0.3 ? 'left' : 'center');
+          }
+          
+          lastDiv.style.textAlign = align;
+          
+          // Focus the cursor inside the last added line
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(lastDiv);
+          range.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(range);
+          lastDiv.focus();
+        }
+        
+        carouselPages[currentPageIndex] = getCleanHTML();
+        applyDividers();
+        updateWordCount();
+        
+        // Update format buttons alignment state
+        updateFormatButtonsState();
+        
+        // Prevent default double click selection behavior
+        e.preventDefault();
+      }
+    });
+  }
+}
+
+// Switch View Mode (Design Card vs Word Document)
+function switchViewMode(mode) {
+  if (mode === 'document') {
+    document.body.classList.add('view-mode-document');
+    document.body.classList.remove('view-mode-design');
+    if (tabDocMode) tabDocMode.classList.add('active');
+    if (tabDesignMode) tabDesignMode.classList.remove('active');
+    
+    if (editableText) {
+      editableText.setAttribute('placeholder', currentSiteLang === 'ar' ? 'اكتب مستندك هنا مثل الـ Word...' : 'Start typing your document here like Microsoft Word...');
+    }
+
+    // Apply default paper class if none are set
+    const savedStyle = localStorage.getItem('diwan-paper-style') || 'blank';
+    const savedTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+    setPaperStyle(savedStyle);
+    setPaperTheme(savedTheme);
+  } else {
+    document.body.classList.remove('view-mode-document');
+    document.body.classList.add('view-mode-design');
+    if (tabDesignMode) tabDesignMode.classList.add('active');
+    if (tabDocMode) tabDocMode.classList.remove('active');
+    
+    if (editableText) {
+      editableText.removeAttribute('placeholder');
+    }
+
+    // Cleanup paper classes from card
+    if (poetryCard) {
+      poetryCard.classList.remove('paper-white', 'paper-cream', 'paper-dark', 'paper-style-blank', 'paper-style-lined', 'paper-style-grid');
+    }
+  }
+  localStorage.setItem('diwan-view-mode', mode);
+
+  applyDividers();
+  wrapTashkeel(editableText);
+
+  // Track event in Google Analytics if loaded
+  if (typeof gtag === 'function') {
+    gtag('event', 'switch_view_mode', {
+      'view_mode': mode
+    });
+  }
+}
+
+// Set Paper Style (Blank / Lined / Grid)
+function setPaperStyle(style) {
+  if (!poetryCard) return;
+  poetryCard.classList.remove('paper-style-blank', 'paper-style-lined', 'paper-style-grid');
+  poetryCard.classList.add(`paper-style-${style}`);
+  
+  document.querySelectorAll('.page-style-grid .ratio-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btnPaper${style.charAt(0).toUpperCase() + style.slice(1)}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  localStorage.setItem('diwan-paper-style', style);
+}
+
+// Set Paper Theme (White / Cream / Dark)
+function setPaperTheme(theme) {
+  if (!poetryCard) return;
+  poetryCard.classList.remove('paper-white', 'paper-cream', 'paper-dark');
+  poetryCard.classList.add(`paper-${theme}`);
+  
+  document.querySelectorAll('.page-theme-grid .ratio-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(`btnPaperTheme${theme.charAt(0).toUpperCase() + theme.slice(1)}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  localStorage.setItem('diwan-paper-theme', theme);
 }
 
 // Custom drag-to-resize logic for the poetry card
@@ -1069,15 +2046,11 @@ function checkAutoloadedFont() {
 function openSidebar() {
   sidebarPanel.classList.add('active');
   sidebarOverlay.classList.add('active');
-  btnMobileToggle.style.display = 'none';
-  btnMobileClose.style.display = 'flex';
 }
 
 function closeSidebar() {
   sidebarPanel.classList.remove('active');
   sidebarOverlay.classList.remove('active');
-  btnMobileToggle.style.display = 'flex';
-  btnMobileClose.style.display = 'none';
 }
 
 // Convert Hex colors to RGBA for alpha borders (aesthetic)
@@ -1346,7 +2319,7 @@ function applyDefaults() {
   }
 
   // Text
-  editableText.innerHTML = DEFAULTS.sampleText.replace(/\n/g, '<br>');
+  setEditableTextHTML(DEFAULTS.sampleText);
 
   // Update Carousel Controls & Card
   renderCarouselControls();
@@ -1397,6 +2370,25 @@ function applyDefaults() {
     window.updateOrnaments();
   }
 
+  // Reset Arabic Diacritics
+  if (toggleHarakatColor) {
+    toggleHarakatColor.checked = false;
+    localStorage.removeItem('diwan-harakat-color-enabled');
+    if (harakatColorPickerGroup) harakatColorPickerGroup.style.display = 'none';
+  }
+  if (pickerHarakatColor) {
+    pickerHarakatColor.value = '#ff4a4a';
+    if (hexHarakatColor) hexHarakatColor.textContent = '#ff4a4a';
+    document.documentElement.style.setProperty('--haraka-color', '#ff4a4a');
+    localStorage.removeItem('diwan-harakat-color');
+  }
+  if (toggleHideHarakat) {
+    toggleHideHarakat.checked = false;
+    document.body.classList.remove('hide-harakat');
+    localStorage.removeItem('diwan-harakat-hide-enabled');
+  }
+  wrapTashkeel(editableText);
+
   closeSidebar();
 }
 
@@ -1419,71 +2411,44 @@ function updateFontStatus(success, message) {
   text.textContent = message;
 }
 
-// Export Card as Image (PNG)
+// Export Card as Image (PNG/JPEG/WebP)
 // Helper to capture poetryCard at a specific scale and restore styling afterwards
-function capturePage() {
+function capturePage(format = 'png') {
   return new Promise((resolve, reject) => {
-    // 1. Save original inline styling and their priorities to restore perfectly after rendering
-    const originalWidth = poetryCard.style.width;
-    const originalHeight = poetryCard.style.height;
-    const originalAspectRatio = poetryCard.style.aspectRatio;
-    const originalMaxWidth = poetryCard.style.maxWidth;
-    const originalMaxHeight = poetryCard.style.maxHeight;
-    const originalBorderRadius = poetryCard.style.borderRadius;
-
-    const widthPriority = poetryCard.style.getPropertyPriority('width');
-    const heightPriority = poetryCard.style.getPropertyPriority('height');
-    const aspectPriority = poetryCard.style.getPropertyPriority('aspect-ratio');
-    const maxWPriority = poetryCard.style.getPropertyPriority('max-width');
-    const maxHPriority = poetryCard.style.getPropertyPriority('max-height');
-    const radiusPriority = poetryCard.style.getPropertyPriority('border-radius');
-
-    // 2. Explicitly force dimensions in pixels during snapshot to bypass html2canvas aspect-ratio rendering bugs
+    // 1. Get exact active layout dimensions of the poetry card on screen
     const rect = poetryCard.getBoundingClientRect();
-    let exportWidth = rect.width;
-    let exportHeight = rect.height;
+    const exportWidth = rect.width;
+    const exportHeight = rect.height;
 
-    // Standard base sizes for consistent high-resolution outputs:
-    if (poetryCard.classList.contains('ratio-1-1')) {
-      exportWidth = 800;
-      exportHeight = 800;
-    } else if (poetryCard.classList.contains('ratio-9-16')) {
-      exportWidth = 720;
-      exportHeight = 1280;
-    } else if (poetryCard.classList.contains('ratio-16-9')) {
-      exportWidth = 1200;
-      exportHeight = 675;
-    } else {
-      const scaleFactor = 800 / rect.width;
-      exportWidth = 800;
-      exportHeight = rect.height * scaleFactor;
-    }
+    // 2. Clone the live element to perform off-screen background rendering without visual shifts
+    const clone = poetryCard.cloneNode(true);
+    clone.id = 'poetryCardClone';
+    clone.classList.add('is-exporting-card');
 
-    // Force the dimensions on the element temporarily with !important to bypass CSS rules
-    poetryCard.style.setProperty('width', `${exportWidth}px`, 'important');
-    poetryCard.style.setProperty('height', `${exportHeight}px`, 'important');
-    poetryCard.style.setProperty('max-width', 'none', 'important');
-    poetryCard.style.setProperty('max-height', 'none', 'important');
-    poetryCard.style.setProperty('aspect-ratio', 'auto', 'important');
-    poetryCard.style.setProperty('border-radius', '0', 'important');
+    // Force the exact layout dimensions on the clone to guarantee matching rendering & wrapping
+    clone.style.width = `${exportWidth}px`;
+    clone.style.height = `${exportHeight}px`;
+    clone.style.minWidth = `${exportWidth}px`;
+    clone.style.maxWidth = `${exportWidth}px`;
+    clone.style.minHeight = `${exportHeight}px`;
+    clone.style.maxHeight = `${exportHeight}px`;
 
-    function restoreStyles() {
-      if (originalWidth) poetryCard.style.setProperty('width', originalWidth, widthPriority); else { poetryCard.style.removeProperty('width'); poetryCard.style.width = ''; }
-      if (originalHeight) poetryCard.style.setProperty('height', originalHeight, heightPriority); else { poetryCard.style.removeProperty('height'); poetryCard.style.height = ''; }
-      if (originalAspectRatio) poetryCard.style.setProperty('aspect-ratio', originalAspectRatio, aspectPriority); else { poetryCard.style.removeProperty('aspect-ratio'); poetryCard.style.aspectRatio = ''; }
-      if (originalMaxWidth) poetryCard.style.setProperty('max-width', originalMaxWidth, maxWPriority); else { poetryCard.style.removeProperty('max-width'); poetryCard.style.maxWidth = ''; }
-      if (originalMaxHeight) poetryCard.style.setProperty('max-height', originalMaxHeight, maxHPriority); else { poetryCard.style.removeProperty('max-height'); poetryCard.style.maxHeight = ''; }
-      if (originalBorderRadius) poetryCard.style.setProperty('border-radius', originalBorderRadius, radiusPriority); else { poetryCard.style.removeProperty('border-radius'); poetryCard.style.borderRadius = ''; }
-    }
+    // Create an off-screen wrapper to compute layout without shifting live DOM
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = `position: absolute; left: -9999px; top: -9999px; width: ${exportWidth}px; height: ${exportHeight}px; overflow: hidden; pointer-events: none; z-index: -9999;`;
+    wrapper.appendChild(clone);
+
+    // Append to document.body so the browser can calculate its layout/metrics
+    document.body.appendChild(wrapper);
 
     // Wait for fonts to ensure proper rendering inside the canvas context
     document.fonts.ready.then(() => {
       // Wait a brief tick to ensure layout recalculation by browser
       setTimeout(() => {
-        htmlToImage.toPng(poetryCard, {
+        const options = {
           width: exportWidth,
           height: exportHeight,
-          pixelRatio: 2.5, // Crisp retina-like scaling (output width is ~2000px, premium quality)
+          pixelRatio: 3.0, // High-definition 3x resolution scale (perfect for prints & sharing)
           cacheBust: true,
           filter: (node) => {
             if (node.classList && node.classList.contains('card-resize-handle')) {
@@ -1497,28 +2462,57 @@ function capturePage() {
             maxWidth: 'none',
             maxHeight: 'none',
             aspectRatio: 'auto',
-            borderRadius: '0'
+            borderRadius: '0',
+            position: 'relative', // Override absolute off-screen positioning for render context
+            left: '0',
+            top: '0'
           }
-        }).then(dataUrl => {
-          restoreStyles();
-          resolve(dataUrl);
-        }).catch(err => {
-          restoreStyles();
-          reject(err);
-        });
+        };
+
+        if (format === 'jpeg') {
+          options.backgroundColor = '#121216';
+          htmlToImage.toJpeg(clone, options).then(dataUrl => {
+            wrapper.remove();
+            resolve(dataUrl);
+          }).catch(err => {
+            wrapper.remove();
+            reject(err);
+          });
+        } else if (format === 'webp') {
+          htmlToImage.toCanvas(clone, options).then(canvas => {
+            const dataUrl = canvas.toDataURL('image/webp', 0.95);
+            wrapper.remove();
+            resolve(dataUrl);
+          }).catch(err => {
+            wrapper.remove();
+            reject(err);
+          });
+        } else {
+          // default is png
+          htmlToImage.toPng(clone, options).then(dataUrl => {
+            wrapper.remove();
+            resolve(dataUrl);
+          }).catch(err => {
+            wrapper.remove();
+            reject(err);
+          });
+        }
       }, 100);
     });
   });
 }
 
 // Asynchronous multi-page batch export
-async function exportPoetryCard() {
+async function exportPoetryCard(format = 'png') {
+  if (typeof format !== 'string') {
+    format = 'png';
+  }
   btnExport.disabled = true;
   const originalHTML = btnExport.innerHTML;
   btnExport.innerHTML = '<i class="fa-solid fa-spinner fa-spin icon"></i> جاري الحفظ...';
 
   // Save active page's current text
-  carouselPages[currentPageIndex] = getRawPoetryText();
+  carouselPages[currentPageIndex] = getCleanHTML();
 
   // Close mobile sidebar to clean viewport just in case
   closeSidebar();
@@ -1528,52 +2522,89 @@ async function exportPoetryCard() {
   try {
     if (carouselPages.length <= 1) {
       // Single page standard export
-      const dataUrl = await capturePage();
-      const downloadLink = document.createElement('a');
-      const date = new Date();
-      const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-      downloadLink.download = `محرر_الخطوط_${timeStr}.png`;
-      downloadLink.href = dataUrl;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    } else {
-      // Multi-page export
-      for (let i = 0; i < carouselPages.length; i++) {
-        btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin icon"></i> تصدير صفحة ${i + 1}/${carouselPages.length}...`;
-        
-        // Temporarily switch page
-        currentPageIndex = i;
-        const targetText = carouselPages[i];
-        editableText.innerHTML = targetText.replace(/\n/g, '<br>');
-        updateCardPageIndicator();
-        applyDividers();
-        
-        // Capture
-        const dataUrl = await capturePage();
-        
-        // Download
+      if (format === 'pdf') {
+        const opt = {
+          margin: 0,
+          filename: 'poetry_card.pdf',
+          image: { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'px', format: [poetryCard.offsetWidth, poetryCard.offsetHeight], orientation: poetryCard.offsetWidth > poetryCard.offsetHeight ? 'landscape' : 'portrait' }
+        };
+        await html2pdf().set(opt).from(poetryCard).save();
+      } else {
+        const dataUrl = await capturePage(format);
         const downloadLink = document.createElement('a');
         const date = new Date();
         const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
-        downloadLink.download = `محرر_الخطوط_صفحة_${i + 1}_${timeStr}.png`;
+        downloadLink.download = `محرر_الخطوط_${timeStr}.${format}`;
         downloadLink.href = dataUrl;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
-        
-        // Wait 300ms to prevent browser download triggers overlapping
-        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+    } else {
+      // Multi-page export
+      if (format === 'pdf') {
+        const opt = {
+          margin: 0,
+          filename: 'poetry_cards_album.pdf',
+          image: { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'px', format: [poetryCard.offsetWidth, poetryCard.offsetHeight], orientation: poetryCard.offsetWidth > poetryCard.offsetHeight ? 'landscape' : 'portrait' }
+        };
+        // Multi-page PDF requires a wrapper container for html2pdf
+        const pdfWorker = html2pdf().set(opt);
+        for (let i = 0; i < carouselPages.length; i++) {
+          btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin icon"></i> تصدير صفحة ${i + 1}/${carouselPages.length}...`;
+          currentPageIndex = i;
+          setEditableTextHTML(carouselPages[i]);
+          updateCardPageIndicator();
+          applyDividers();
+          
+          if (i === 0) {
+            await pdfWorker.from(poetryCard).toPdf().get('pdf');
+          } else {
+            await pdfWorker.get('pdf').then(pdf => { pdf.addPage(); }).from(poetryCard).toContainer().toCanvas().toPdf().get('pdf');
+          }
+        }
+        await pdfWorker.save();
+      } else {
+        for (let i = 0; i < carouselPages.length; i++) {
+          btnExport.innerHTML = `<i class="fa-solid fa-spinner fa-spin icon"></i> تصدير صفحة ${i + 1}/${carouselPages.length}...`;
+          
+          // Temporarily switch page
+          currentPageIndex = i;
+          const targetText = carouselPages[i];
+          setEditableTextHTML(targetText);
+          updateCardPageIndicator();
+          applyDividers();
+          
+          // Capture
+          const dataUrl = await capturePage(format);
+          
+          // Download
+          const downloadLink = document.createElement('a');
+          const date = new Date();
+          const timeStr = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
+          downloadLink.download = `محرر_الخطوط_صفحة_${i + 1}_${timeStr}.${format}`;
+          downloadLink.href = dataUrl;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          
+          // Wait 300ms to prevent browser download triggers overlapping
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
       }
     }
   } catch (err) {
     console.error(err);
-    alert(uiTranslations[currentSiteLang]?.export_error || "حدث خطأ أثناء استخراج الصورة. الرجاء إعادة المحاولة.");
+    alert(uiTranslations[currentSiteLang]?.export_error || "حدث خطأ أثناء استخراج الملف. الرجاء إعادة المحاولة.");
   } finally {
     // Restore original active page
     currentPageIndex = originalPageIndex;
     const targetText = carouselPages[currentPageIndex];
-    editableText.innerHTML = targetText.replace(/\n/g, '<br>');
+    setEditableTextHTML(targetText);
     updateCardPageIndicator();
     applyDividers();
     renderCarouselControls();
@@ -1671,7 +2702,7 @@ function switchLanguage(lang) {
     // Swap text to Shakespeare sonnet if text is current Mutanabbi sample
     const rawText = getRawPoetryText();
     if (rawText.includes('الخَيْلُ وَاللّيْلُ')) {
-      editableText.innerHTML = POETRY_SAMPLES.shakespeare.replace(/\n/g, '<br>');
+      setEditableTextHTML(POETRY_SAMPLES.shakespeare);
       carouselPages[currentPageIndex] = POETRY_SAMPLES.shakespeare;
     }
   } else {
@@ -1695,9 +2726,9 @@ function switchLanguage(lang) {
     populateFontStyles('ar');
     
     // Swap text back to Mutanabbi sample if text is currently Shakespeare sample
-    const rawText = getRawPoetryText();
-    if (rawText.includes('Shall I compare')) {
-      editableText.innerHTML = POETRY_SAMPLES.mutanabbi.replace(/\n/g, '<br>');
+    const rawTextIndex = getRawPoetryText();
+    if (rawTextIndex.includes('Shall I compare')) {
+      setEditableTextHTML(POETRY_SAMPLES.mutanabbi);
       carouselPages[currentPageIndex] = POETRY_SAMPLES.mutanabbi;
     }
   }
@@ -1739,6 +2770,10 @@ const uiTranslations = {
     line_height_label: "تباعد الأسطر",
     letter_spacing_label: "تباعد الحروف للإنجليزية",
     text_alignment: "محاذاة النص",
+    text_formatting: "تنسيق النص",
+    format_bold: "غامق",
+    format_italic: "مائل",
+    format_underline: "تحته خط",
     top_ornament_label: "الزخرفة العلوية",
     bottom_ornament_label: "الزخرفة السفلية",
     ornament_presets_label: "زخارف سريعة جاهزة",
@@ -1803,13 +2838,15 @@ const uiTranslations = {
     sample_antara: "عنترة بن شداد",
     sample_imru: "امرؤ القيس",
     sample_custom_poetry: "نص منسق (شطرين)",
-    export_btn: "تحميل كصورة",
+    export_btn: "تحميل كـ PNG",
     active_font_lbl: "الخط النشط: ",
+    word_counter_lbl: "عدد الكلمات: ",
     default_font_name: "الخط العربي الافتراضي",
     clear_btn_text: "مسح",
     reset_btn_text: "ضبط",
     app_footer_desc: "محرر الخطوط - أداة تفاعلية لتصميم واختبار الخطوط العربية والإنجليزية. اكتب نصوصك، جرب مختلف الأنماط، ونسق تصاميمك بدقة واحترافية.",
     align_center: "محاذاة للوسط",
+    align_left: "محاذاة لليسار",
     align_right: "محاذاة لليمين",
     align_justify: "ضبط الهوامش (موزع)",
     add_page_title: "إضافة صفحة جديدة",
@@ -1833,10 +2870,58 @@ const uiTranslations = {
     faq_q4: "لماذا تظهر بعض الخطوط العربية مقطوعة أو متداخلة مع الزخارف؟ وكيف أحل ذلك؟",
     faq_a4: "بعض الخطوط العربية الكلاسيكية (مثل الديواني والثلث) تحتوي على حروف صاعدة أو هابطة ممتدة بشكل كبير. لحل تداخلها، يمكنك استخدام خيار <strong>تباعد الأسطر (Line Height)</strong> في قائمة التنسيق لزيادة المسافة الرأسية، أو ضبط حجم الخط ليتناسب تماماً مع أبعاد البطاقة.",
     faq_q5: "هل الخطوط التي أرفعها يتم حفظها أو مشاركتها مع أي جهة؟",
-    faq_a5: "خصوصيتك هي أولويتنا القصوى. جميع عمليات معالجة وتحميل الخطوط والملفات التي تقوم برفعها تتم بالكامل <strong>داخل متصفح جهازك فقط (Client-side)</strong>. لا نقوم بحفظ أي ملفات على خوادمنا، مما يضمن أمان وخصوصية ملفاتك وخطوطك التجارية."
+    faq_a5: "خصوصيتك هي أولويتنا القصوى. جميع عمليات معالجة وتحميل الخطوط والملفات التي تقوم برفعها تتم بالكامل <strong>داخل متصفح جهازك فقط (Client-side)</strong>. لا نقوم بحفظ أي ملفات على خوادمنا، مما يضمن أمان وخصوصية ملفاتك وخطوطك التجارية.",
+    tab_design_mode: "بطاقة تصميم",
+    tab_doc_mode: "صفحة مستند (Word)",
+    doc_page_settings: "تنسيق ورقة الكتابة",
+    doc_page_settings_desc: "اختر نمط الورقة المفضل لديك للكتابة والطباعة.",
+    paper_style_lbl: "نمط الورقة",
+    paper_blank: "بيضاء (سادة)",
+    paper_lined: "مسطرة",
+    paper_grid: "مربعات",
+    paper_theme_lbl: "لون الورقة",
+    paper_theme_white: "أبيض",
+    paper_theme_cream: "ورق شاموا",
+    paper_theme_dark: "داكن",
+    print_btn: "طباعة أو حفظ PDF",
+    save_doc_as_btn: "حفظ كـ...",
+    save_modal_title: "حفظ وتصدير المستند",
+    save_modal_desc: "اختر الصيغة المفضلة لتصدير وحفظ مستندك الحالي:",
+    save_pdf_title: "تصدير كملف PDF / طباعة",
+    save_pdf_desc: "توليد ملف مستند جاهز للطباعة أو الحفظ كـ PDF",
+    save_png_title: "حفظ كصورة PNG",
+    save_png_desc: "تصدير الصفحة الحالية كصورة رقمية عالية الجودة",
+    save_txt_title: "ملف نصي عادي (TXT)",
+    save_txt_desc: "حفظ الكلمات كملف نصي بسيط بدون تنسيقات",
+    save_html_title: "تصدير كملف صفحة (HTML)",
+    save_html_desc: "تصدير بتنسيقات الـ HTML المتوافقة مع برامج النصوص"
   },
   en: {
     logo_title: "Font Editor",
+    tab_design_mode: "Design Card",
+    tab_doc_mode: "Document Page (Word)",
+    doc_page_settings: "Paper Sheet Settings",
+    doc_page_settings_desc: "Select your preferred paper style for writing and printing.",
+    paper_style_lbl: "Paper Style",
+    paper_blank: "Blank",
+    paper_lined: "Lined",
+    paper_grid: "Grid",
+    paper_theme_lbl: "Paper Theme",
+    paper_theme_white: "White",
+    paper_theme_cream: "Cream",
+    paper_theme_dark: "Dark",
+    print_btn: "Print or Export PDF",
+    save_doc_as_btn: "Save As...",
+    save_modal_title: "Save & Export Document",
+    save_modal_desc: "Select your preferred format to export and save your current document:",
+    save_pdf_title: "Export as PDF / Print",
+    save_pdf_desc: "Generate document file ready to print or save as PDF",
+    save_png_title: "Save as PNG Image",
+    save_png_desc: "Export current page as high-quality digital image",
+    save_txt_title: "Plain Text File (TXT)",
+    save_txt_desc: "Save words as simple text file without formatting",
+    save_html_title: "Export as Page File (HTML)",
+    save_html_desc: "Export formatted HTML document compatible with word processors",
     logo_subtitle: "Arabic & English Font Editor & Tester",
     mode_simple: "Simple Mode",
     mode_advanced: "Advanced Mode",
@@ -1867,6 +2952,10 @@ const uiTranslations = {
     line_height_label: "Line Height",
     letter_spacing_label: "Letter Spacing (English)",
     text_alignment: "Text Alignment",
+    text_formatting: "Text Formatting",
+    format_bold: "Bold",
+    format_italic: "Italic",
+    format_underline: "Underline",
     top_ornament_label: "Top Ornament",
     bottom_ornament_label: "Bottom Ornament",
     ornament_presets_label: "Quick Ornament Presets",
@@ -1933,11 +3022,13 @@ const uiTranslations = {
     sample_custom_poetry: "Two-Column Formatted Text",
     export_btn: "Download Card (PNG)",
     active_font_lbl: "Active Font: ",
+    word_counter_lbl: "Word Count: ",
     default_font_name: "Arabic Calligraphy (Default Loaded)",
     clear_btn_text: "Clear",
     reset_btn_text: "Reset",
     app_footer_desc: "Font Editor - Write, test, and style Arabic and English fonts easily.",
     align_center: "Align Center",
+    align_left: "Align Left",
     align_right: "Align Right",
     align_justify: "Justify Text",
     add_page_title: "Add New Page",
@@ -2024,7 +3115,12 @@ function updateUISiteLanguage(lang) {
   // 4. Toggle button text update
   const btnToggleSiteLang = document.getElementById('btnToggleSiteLang');
   if (btnToggleSiteLang) {
-    btnToggleSiteLang.textContent = lang === 'ar' ? 'EN' : 'العربية';
+    const langText = btnToggleSiteLang.querySelector('.lang-text');
+    if (langText) {
+      langText.textContent = lang === 'ar' ? 'English' : 'العربية';
+    } else {
+      btnToggleSiteLang.textContent = lang === 'ar' ? 'EN' : 'العربية';
+    }
   }
 
   // 5. Watermark input default sync
@@ -2043,3 +3139,163 @@ function updateUISiteLanguage(lang) {
   }
 }
 
+// Export Document as DOCX Word file
+function exportDocAsDOCX() {
+  const temp = document.createElement('div');
+  temp.innerHTML = editableText.innerHTML;
+  temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
+  let bodyHtml = temp.innerHTML;
+  
+  const docHtml = `
+  <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+  <head>
+    <meta charset="utf-8">
+    <title>Document</title>
+    <!--[if gte mso 9]>
+    <xml>
+      <w:WordDocument>
+        <w:View>Print</w:View>
+        <w:Zoom>100</w:Zoom>
+        <w:DoNotOptimizeForBrowser/>
+      </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+      body {
+        font-family: 'Cairo', 'Amiri', 'Segoe UI', Arial, sans-serif;
+        line-height: 1.6;
+        direction: rtl;
+      }
+      p, div {
+        margin: 0 0 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    ${bodyHtml}
+  </body>
+  </html>`;
+
+  const blob = new Blob(['\ufeff' + docHtml], { type: 'application/msword;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'document.doc'; // Works perfectly with MS Word natively!
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+// Export Document as TXT plain text
+function exportDocAsTXT() {
+  const temp = document.createElement('div');
+  temp.innerHTML = editableText.innerHTML;
+  temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
+  let bodyText = temp.innerText.trim();
+  const blob = new Blob([bodyText], { type: 'text/plain;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'document.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+// Export Document as HTML file
+function exportDocAsHTML() {
+  const temp = document.createElement('div');
+  temp.innerHTML = editableText.innerHTML;
+  temp.querySelectorAll('.verse-divider').forEach(el => el.remove());
+  let bodyHtml = temp.innerHTML;
+  const paperTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+  let bgStyle = 'background: #ffffff; color: #111111;';
+  if (paperTheme === 'cream') bgStyle = 'background: #fcf8f0; color: #2e261a;';
+  else if (paperTheme === 'dark') bgStyle = 'background: #18181b; color: #f4f4f5;';
+  const lang = localStorage.getItem('siteLanguage') || 'ar';
+  const dir = lang === 'en' ? 'ltr' : 'rtl';
+
+  const fullHtml = `<!DOCTYPE html>
+<html lang="${lang}" dir="${dir}">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: 'Cairo', 'Amiri', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 50px;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.8;
+      ${bgStyle}
+    }
+    .content {
+      white-space: pre-wrap;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">${bodyHtml}</div>
+</body>
+</html>`;
+
+  const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'document.html';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+// Export Document as PDF using html2pdf
+function exportDocAsPDF() {
+  const originalHTML = btnSaveDocAsBtn.innerHTML;
+  btnSaveDocAsBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin icon"></i> جاري التصدير...';
+  
+  const tempContainer = document.createElement('div');
+  tempContainer.innerHTML = editableText.innerHTML;
+  tempContainer.querySelectorAll('.verse-divider').forEach(el => el.remove());
+  
+  const printWrapper = document.createElement('div');
+  const paperTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
+  let bgColor = '#ffffff';
+  let textColor = '#111111';
+  if (paperTheme === 'cream') { bgColor = '#fcf8f0'; textColor = '#2e261a'; }
+  else if (paperTheme === 'dark') { bgColor = '#18181b'; textColor = '#f4f4f5'; }
+  
+  const computedStyles = window.getComputedStyle(document.documentElement);
+  const currentFont = computedStyles.getPropertyValue('--font-poetry').trim() || "'Cairo', sans-serif";
+  const currentWeight = computedStyles.getPropertyValue('--card-font-weight').trim() || "500";
+  
+  printWrapper.style.cssText = `
+    font-family: ${currentFont};
+    font-weight: ${currentWeight};
+    padding: 30px;
+    width: 800px;
+    min-height: 1131px;
+    direction: ${localStorage.getItem('siteLanguage') === 'en' ? 'ltr' : 'rtl'};
+    white-space: pre-wrap;
+    line-height: 1.8;
+    font-size: 18px;
+    background-color: ${bgColor};
+    color: ${textColor};
+  `;
+  printWrapper.innerHTML = tempContainer.innerHTML;
+  
+  const opt = {
+    margin:       10,
+    filename:     'document.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, backgroundColor: bgColor },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  
+  html2pdf().set(opt).from(printWrapper).save().then(() => {
+    btnSaveDocAsBtn.innerHTML = originalHTML;
+  }).catch(() => {
+    btnSaveDocAsBtn.innerHTML = originalHTML;
+  });
+}
