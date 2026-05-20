@@ -164,7 +164,7 @@ body {
 
 /* Sidebar Language Switcher - Far Top Corner */
 .language-switcher-sidebar {
-  position: absolute;
+  position: fixed;
   top: 14px;
   width: 32px;
   height: 32px;
@@ -173,7 +173,9 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(15, 15, 18, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-ui) !important;
   color: var(--text-muted);
   transition: all var(--transition-fast);
@@ -1351,6 +1353,10 @@ html[lang="ar"] .arabic-ui-only {
   
   .sidebar.active {
     transform: translateX(0);
+  }
+  
+  .language-switcher-sidebar {
+    position: absolute;
   }
   
   /* Dark overlay background for mobile */
