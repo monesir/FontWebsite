@@ -73,6 +73,21 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <link rel="stylesheet" href="./style.css">
+    
+    <script>
+      window.addEventListener('error', function(e) {
+        const errorBox = document.createElement('div');
+        errorBox.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:999999;padding:20px;font-family:monospace;';
+        errorBox.innerHTML = `<h3>JavaScript Error!</h3><p><strong>Message:</strong> ${e.message}</p><p><strong>File:</strong> ${e.filename}:${e.lineno}:${e.colno}</p><pre>${e.error ? e.error.stack : ''}</pre>`;
+        document.body.prepend(errorBox);
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        const errorBox = document.createElement('div');
+        errorBox.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:999999;padding:20px;font-family:monospace;';
+        errorBox.innerHTML = `<h3>Unhandled Promise Rejection!</h3><p><strong>Reason:</strong> ${e.reason}</p>`;
+        document.body.prepend(errorBox);
+      });
+    </script>
 
   <!-- JSON-LD Structured Data Schema for Google Search -->
   <script type="application/ld+json">
@@ -691,6 +706,48 @@
         </div>
       </div>
 
+      
+      <!-- Mobile Preview Style (Visible in Mobile Mode only) -->
+      <div class="control-section mobile-only" style="display: none;">
+        <h2 class="section-title"><i class="fa-solid fa-mobile-screen icon"></i><span data-i18n="mobile_page_settings">تنسيق قوالب الهاتف</span></h2>
+        <p class="section-desc" data-i18n="mobile_page_settings_desc">اختر قالب وشكل الهاتف.</p>
+
+        <!-- Template Select -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="mobile_template_lbl">قالب الهاتف</label>
+          <div class="ratio-grid page-style-grid" style="grid-template-columns: 1fr 1fr;">
+            <button class="ratio-btn active" id="tabMobileTemplateSettings" data-template="settings">
+              <i class="fa-solid fa-gear" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_tpl_settings">الإعدادات</span>
+            </button>
+            <button class="ratio-btn" id="tabMobileTemplateChat" data-template="chat">
+              <i class="fa-solid fa-comment-dots" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_tpl_chat">محادثة</span>
+            </button>
+            <button class="ratio-btn" id="tabMobileTemplateSocial" data-template="social">
+              <i class="fa-solid fa-users" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_tpl_social">تواصل</span>
+            </button>
+            <button class="ratio-btn" id="tabMobileTemplateMusic" data-template="music">
+              <i class="fa-solid fa-music" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_tpl_music">صوتيات</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Theme Select -->
+        <div class="control-group">
+          <label class="control-label" data-i18n="mobile_theme_lbl">لون القالب</label>
+          <div class="ratio-grid page-theme-grid">
+            <button class="ratio-btn active" id="btnMobileThemeLight" data-theme="light">
+              <i class="fa-solid fa-sun" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_theme_light">فاتح</span>
+            </button>
+            <button class="ratio-btn" id="btnMobileThemeDark" data-theme="dark">
+              <i class="fa-solid fa-moon" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_theme_dark">داكن</span>
+            </button>
+            <button class="ratio-btn" id="btnMobileThemeAmber" data-theme="amber">
+              <i class="fa-solid fa-crown" style="margin-inline-end: 5px;"></i><span data-i18n="mobile_theme_amber">عنبري</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Poetry Preset Samples -->
       <div class="control-section">
         <h2 class="section-title"><i class="fa-solid fa-scroll icon"></i><span id="titleSamples" data-i18n="samples_section_title">نماذج نصوص جاهزة</span></h2>
@@ -901,6 +958,18 @@
                 <i class="fa-solid fa-chart-line"></i>
                 <span data-i18n="web_template_dashboard">لوحة</span>
               </div>
+              <div class="browser-tab" id="tabWebTemplateNotion" data-template="notion">
+                <i class="fa-solid fa-book-open"></i>
+                <span data-i18n="web_template_notion">Docs</span>
+              </div>
+              <div class="browser-tab" id="tabWebTemplateChat" data-template="chat">
+                <i class="fa-brands fa-discord"></i>
+                <span data-i18n="web_template_chat">Chat</span>
+              </div>
+              <div class="browser-tab" id="tabWebTemplateMobile" data-template="mobile">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <span data-i18n="web_template_mobile">تطبيق جوال</span>
+              </div>
             </div>
           </div>
           <div class="web-theme-selector-row">
@@ -983,7 +1052,7 @@
                   </div>
                   <div class="floating-meta">
                     <span class="meta-tag tag-score" contenteditable="true" spellcheck="false" data-i18n="web_visual_card1_score">Score: Excellent</span>
-                    <span class="meta-tag tag-format">PDF / Word</span>
+                    <span class="meta-tag tag-format" contenteditable="true" spellcheck="false">PDF / Word</span>
                   </div>
                   <div class="progress-bar-mini">
                     <div class="progress-fill" style="width: 88%;"></div>
@@ -1024,7 +1093,7 @@
                     <div class="cv-item">
                       <div class="cv-item-header">
                         <span class="cv-item-role" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_role">مطور واجهات أول - منصة تبيّن</span>
-                        <span class="cv-item-date">2023 - Present</span>
+                        <span class="cv-item-date" contenteditable="true" spellcheck="false">2023 - Present</span>
                       </div>
                       <p class="cv-item-desc" contenteditable="true" spellcheck="false" data-i18n="web_visual_main_desc">تطوير وتحسين كفاءة المنصات الرقمية بنسبة 40٪ وزيادة سرعة استجابة الواجهات بأسلوب تقني متطور.</p>
                     </div>
@@ -1139,7 +1208,7 @@
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col1_link1">المحرر الذكي</a>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col1_link2">المكتبة البرمجية</a>
                   </div>
-                  <div class="web-links-column">
+                  <div class="web-footer-links">
                     <h4 contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_title">المصادر</h4>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_link1">المدونة الثقافية</a>
                     <a href="#" onclick="return false;" contenteditable="true" spellcheck="false" data-i18n="web_footer_col2_link2">التعليم والدروس</a>
@@ -1153,7 +1222,7 @@
           </div>
 
           <!-- Electronics E-commerce Storefront Layout -->
-                    <div id="webContentStore" class="web-template-content">
+          <div id="webContentStore" class="web-template-content">
             <!-- Store Navigation Header -->
             <header class="store-header">
               <div class="store-header-left">
@@ -1172,10 +1241,10 @@
                   <input type="text" class="store-search-input" placeholder="ابحث عن منتج..." data-i18n-placeholder="store_search_placeholder" spellcheck="false">
                 </div>
                 <button class="store-wishlist-btn" title="Wishlist"><i class="fa-regular fa-heart"></i></button>
-                <button class="store-cart-toggle-btn web-btn web-btn-primary" contenteditable="true" spellcheck="false">
+                <button class="store-cart-toggle-btn web-btn web-btn-primary">
                   <i class="fa-solid fa-bag-shopping"></i>
-                  <span class="cart-badge">0</span>
-                  <span class="cart-btn-label" data-i18n="store_cart_btn">سلة المشتريات (3)</span>
+                  <span class="cart-badge" contenteditable="true" spellcheck="false">0</span>
+                  <span class="cart-btn-label" data-i18n="store_cart_btn" contenteditable="true" spellcheck="false">سلة المشتريات (3)</span>
                 </button>
               </div>
             </header>
@@ -1190,7 +1259,7 @@
                   <h1 class="store-hero-title" contenteditable="true" spellcheck="false" data-i18n="store_hero_title">بوابة الابتكار الرقمي بين يديك</h1>
                   <p class="store-hero-desc" contenteditable="true" spellcheck="false" data-i18n="store_hero_desc">اكتشف الجيل الجديد من الأجهزة الذكية والملحقات المصممة خصيصاً للارتقاء بإنتاجيتك وأسلوب حياتك العصري بأعلى معايير الجودة.</p>
                   <div class="store-hero-price-tag">
-                    <span class="price-label" data-i18n="store_hero_starts_at">تبدأ الأسعار من</span>
+                    <span class="price-label" data-i18n="store_hero_starts_at" contenteditable="true" spellcheck="false">تبدأ الأسعار من</span>
                     <span class="price-value" contenteditable="true" spellcheck="false" data-i18n="store_hero_starts_price">$189</span>
                   </div>
                   <div class="store-hero-buttons">
@@ -1286,7 +1355,7 @@
                       <i class="fa-solid fa-star"></i>
                       <i class="fa-solid fa-star"></i>
                     </div>
-                    <span class="rating-text">(4.9)</span>
+                    <span class="rating-text" contenteditable="true" spellcheck="false">(4.9)</span>
                   </div>
 
                   <!-- Specs list -->
@@ -1299,12 +1368,12 @@
                   <!-- Pricing and Action -->
                   <div class="store-product-footer">
                     <div class="store-price-container">
-                      <span class="store-original-price">$349</span>
+                      <span class="store-original-price" contenteditable="true" spellcheck="false">$349</span>
                       <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod1_price">$299</span>
                     </div>
-                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="headphones" contenteditable="true" spellcheck="false">
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="headphones">
                       <i class="fa-solid fa-cart-plus"></i>
-                      <span data-i18n="store_prod1_btn">أضف إلى السلة</span>
+                      <span data-i18n="store_prod1_btn" contenteditable="true" spellcheck="false">أضف إلى السلة</span>
                     </button>
                   </div>
                 </div>
@@ -1340,7 +1409,7 @@
                       <i class="fa-solid fa-star"></i>
                       <i class="fa-solid fa-star-half-stroke"></i>
                     </div>
-                    <span class="rating-text">(4.8)</span>
+                    <span class="rating-text" contenteditable="true" spellcheck="false">(4.8)</span>
                   </div>
 
                   <ul class="store-product-specs">
@@ -1351,12 +1420,12 @@
 
                   <div class="store-product-footer">
                     <div class="store-price-container">
-                      <span class="store-original-price">$219</span>
+                      <span class="store-original-price" contenteditable="true" spellcheck="false">$219</span>
                       <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod2_price">$189</span>
                     </div>
-                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="keyboard" contenteditable="true" spellcheck="false">
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="keyboard">
                       <i class="fa-solid fa-cart-plus"></i>
-                      <span data-i18n="store_prod2_btn">أضف إلى السلة</span>
+                      <span data-i18n="store_prod2_btn" contenteditable="true" spellcheck="false">أضف إلى السلة</span>
                     </button>
                   </div>
                 </div>
@@ -1372,7 +1441,7 @@
                       <div class="watch-case">
                         <div class="watch-screen">
                           <div class="watch-content">
-                            <span class="watch-time">10:09</span>
+                            <span class="watch-time" contenteditable="true" spellcheck="false">10:09</span>
                             <span class="watch-ring"></span>
                           </div>
                         </div>
@@ -1393,7 +1462,7 @@
                       <i class="fa-solid fa-star"></i>
                       <i class="fa-solid fa-star"></i>
                     </div>
-                    <span class="rating-text">(4.7)</span>
+                    <span class="rating-text" contenteditable="true" spellcheck="false">(4.7)</span>
                   </div>
 
                   <ul class="store-product-specs">
@@ -1404,12 +1473,12 @@
 
                   <div class="store-product-footer">
                     <div class="store-price-container">
-                      <span class="store-original-price">$299</span>
+                      <span class="store-original-price" contenteditable="true" spellcheck="false">$299</span>
                       <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod3_price">$249</span>
                     </div>
-                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="watch" contenteditable="true" spellcheck="false">
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="watch">
                       <i class="fa-solid fa-cart-plus"></i>
-                      <span data-i18n="store_prod3_btn">أضف إلى السلة</span>
+                      <span data-i18n="store_prod3_btn" contenteditable="true" spellcheck="false">أضف إلى السلة</span>
                     </button>
                   </div>
                 </div>
@@ -1440,7 +1509,7 @@
                       <i class="fa-solid fa-star"></i>
                       <i class="fa-solid fa-star"></i>
                     </div>
-                    <span class="rating-text">(4.9)</span>
+                    <span class="rating-text" contenteditable="true" spellcheck="false">(4.9)</span>
                   </div>
 
                   <ul class="store-product-specs">
@@ -1451,12 +1520,12 @@
 
                   <div class="store-product-footer">
                     <div class="store-price-container">
-                      <span class="store-original-price">$649</span>
+                      <span class="store-original-price" contenteditable="true" spellcheck="false">$649</span>
                       <span class="store-sale-price" contenteditable="true" spellcheck="false" data-i18n="store_prod4_price">$549</span>
                     </div>
-                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="display" contenteditable="true" spellcheck="false">
+                    <button class="web-btn web-btn-outline store-add-cart-btn" data-id="display">
                       <i class="fa-solid fa-cart-plus"></i>
-                      <span data-i18n="store_prod4_btn">أضف إلى السلة</span>
+                      <span data-i18n="store_prod4_btn" contenteditable="true" spellcheck="false">أضف إلى السلة</span>
                     </button>
                   </div>
                 </div>
@@ -1468,18 +1537,18 @@
               <div class="store-bento-grid">
                 <div class="store-bento-card bento-wide">
                   <div class="bento-icon"><i class="fa-solid fa-truck-fast"></i></div>
-                  <h3 contenteditable="true" data-i18n="store_bento1_title">شحن فائق السرعة مجاني</h3>
-                  <p contenteditable="true" data-i18n="store_bento1_desc">شحن وتوصيل مجاني سريع لجميع الطلبات التي تتجاوز قيمتها 150 دولارًا أمريكيًا شامل التغطية الكاملة والتأمين.</p>
+                  <h3 contenteditable="true" spellcheck="false" data-i18n="store_bento1_title">شحن فائق السرعة مجاني</h3>
+                  <p contenteditable="true" spellcheck="false" data-i18n="store_bento1_desc">شحن وتوصيل مجاني سريع لجميع الطلبات التي تتجاوز قيمتها 150 دولارًا أمريكيًا شامل التغطية الكاملة والتأمين.</p>
                 </div>
                 <div class="store-bento-card">
                   <div class="bento-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                  <h3 contenteditable="true" data-i18n="store_bento2_title">ضمان معتمد لمدة سنتين</h3>
-                  <p contenteditable="true" data-i18n="store_bento2_desc">نقدم ضمانًا محليًا وعالميًا شاملاً لمدة 24 شهرًا ضد جميع العيوب المصنعية مع دعم فني متكامل.</p>
+                  <h3 contenteditable="true" spellcheck="false" data-i18n="store_bento2_title">ضمان معتمد لمدة سنتين</h3>
+                  <p contenteditable="true" spellcheck="false" data-i18n="store_bento2_desc">نقدم ضمانًا محليًا وعالميًا شاملاً لمدة 24 شهرًا ضد جميع العيوب المصنعية مع دعم فني متكامل.</p>
                 </div>
                 <div class="store-bento-card">
                   <div class="bento-icon"><i class="fa-solid fa-rotate-left"></i></div>
-                  <h3 contenteditable="true" data-i18n="store_bento3_title">إرجاع مرن وسلس</h3>
-                  <p contenteditable="true" data-i18n="store_bento3_desc">سياسة استرجاع واستبدال مرنة لمدة 14 يومًا بضمان استرداد الأموال بالكامل بدون أي تعقيدات.</p>
+                  <h3 contenteditable="true" spellcheck="false" data-i18n="store_bento3_title">إرجاع مرن وسلس</h3>
+                  <p contenteditable="true" spellcheck="false" data-i18n="store_bento3_desc">سياسة استرجاع واستبدال مرنة لمدة 14 يومًا بضمان استرداد الأموال بالكامل بدون أي تعقيدات.</p>
                 </div>
               </div>
             </section>
@@ -1502,13 +1571,13 @@
             <!-- Newsletter Signup Block -->
             <section class="store-newsletter-section">
               <div class="store-newsletter-card">
-                <h3 contenteditable="true" data-i18n="store_news_title">كن أول من يعرف بالمنتجات الجديدة</h3>
-                <p contenteditable="true" data-i18n="store_news_desc">اشترك في نشرتنا البريدية لتلقي تحديثات الإصدارات الجديدة، العروض الحصرية، وقسائم الحسم الشهرية الخاصة.</p>
+                <h3 contenteditable="true" spellcheck="false" data-i18n="store_news_title">كن أول من يعرف بالمنتجات الجديدة</h3>
+                <p contenteditable="true" spellcheck="false" data-i18n="store_news_desc">اشترك في نشرتنا البريدية لتلقي تحديثات الإصدارات الجديدة، العروض الحصرية، وقسائم الحسم الشهرية الخاصة.</p>
                 <form class="store-news-form" onsubmit="return false;">
                   <input type="email" class="store-news-input" placeholder="عنوان بريدك الإلكتروني" data-i18n-placeholder="store_news_placeholder" required spellcheck="false">
-                  <button type="submit" class="web-btn web-btn-primary store-news-btn" contenteditable="true" spellcheck="false" data-i18n="store_news_btn">اشترك الآن</button>
+                  <button type="submit" class="web-btn web-btn-primary store-news-btn" data-i18n="store_news_btn" contenteditable="true" spellcheck="false">اشترك الآن</button>
                 </form>
-                <div class="store-news-success-msg" style="display: none;" data-i18n="store_news_success">✨ تم تسجيل اشتراكك بنجاح! شكرًا لانضمامك إلينا.</div>
+                <div class="store-news-success-msg" style="display: none;" data-i18n="store_news_success" contenteditable="true" spellcheck="false">✨ تم تسجيل اشتراكك بنجاح! شكرًا لانضمامك إلينا.</div>
               </div>
             </section>
 
@@ -1540,7 +1609,7 @@
             <!-- Slide-out Shopping Cart Drawer -->
             <div id="storeCartDrawer" class="store-cart-drawer">
               <div class="cart-drawer-header">
-                <h3 data-i18n-html="cart_drawer_title"><i class="fa-solid fa-basket-shopping"></i> سلة التسوق الخاصة بك</h3>
+                <h3 data-i18n-html="cart_drawer_title" contenteditable="true" spellcheck="false"><i class="fa-solid fa-basket-shopping"></i> سلة التسوق الخاصة بك</h3>
                 <button class="cart-drawer-close-btn" title="Close"><i class="fa-solid fa-xmark"></i></button>
               </div>
               <div class="cart-drawer-body">
@@ -1549,7 +1618,7 @@
                   <!-- Empty state placeholder -->
                   <div class="cart-empty-state" data-i18n-html="cart_empty_msg">
                     <i class="fa-solid fa-bag-shopping empty-icon"></i>
-                    <p>السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>
+                    <p contenteditable="true" spellcheck="false">السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>
                   </div>
                   
                   <!-- High fidelity items listing -->
@@ -1560,17 +1629,17 @@
               </div>
               <div class="cart-drawer-footer">
                 <div class="cart-summary-row">
-                  <span class="summary-label" data-i18n="cart_subtotal">المجموع الفرعي:</span>
-                  <span class="summary-value subtotal-amount">$0</span>
+                  <span class="summary-label" data-i18n="cart_subtotal" contenteditable="true" spellcheck="false">المجموع الفرعي:</span>
+                  <span class="summary-value subtotal-amount" contenteditable="true" spellcheck="false">$0</span>
                 </div>
                 <div class="cart-summary-row">
-                  <span class="summary-label" data-i18n="cart_shipping">الشحن والتسليم:</span>
-                  <span class="summary-value shipping-amount" data-i18n="cart_shipping_free">مجاني</span>
+                  <span class="summary-label" data-i18n="cart_shipping" contenteditable="true" spellcheck="false">الشحن والتسليم:</span>
+                  <span class="summary-value shipping-amount" data-i18n="cart_shipping_free" contenteditable="true" spellcheck="false">مجاني</span>
                 </div>
                 <div class="cart-summary-divider"></div>
                 <div class="cart-summary-row total-row">
-                  <span class="summary-label" data-i18n="cart_total">الإجمالي الكلي:</span>
-                  <span class="summary-value total-amount">$0</span>
+                  <span class="summary-label" data-i18n="cart_total" contenteditable="true" spellcheck="false">الإجمالي الكلي:</span>
+                  <span class="summary-value total-amount" contenteditable="true" spellcheck="false">$0</span>
                 </div>
                 <div class="cart-checkout-actions">
                   <button class="web-btn web-btn-primary cart-checkout-btn" contenteditable="true" spellcheck="false" data-i18n="cart_checkout_btn">إتمام عملية الشراء</button>
@@ -1582,54 +1651,372 @@
             <div id="storeCartBackdrop" class="store-cart-backdrop"></div>
           </div>
 
+          <div id="webContentNotion" class="web-template-content">
+            <div class="notion-shell">
+              <div class="notion-sidebar">
+                <div class="notion-sidebar-header">
+                  <div class="notion-sidebar-brand" data-i18n="notion_brand" contenteditable="true" spellcheck="false"></div>
+                  <div class="notion-sidebar-workspace">
+                    <span class="notion-sidebar-label" data-i18n="notion_workspace_label" contenteditable="true" spellcheck="false"></span>
+                    <span class="notion-sidebar-workspace-name" data-i18n="notion_workspace_name" contenteditable="true" spellcheck="false"></span>
+                  </div>
+                  <div class="notion-search">
+                    <input class="notion-search-input" data-i18n-placeholder="notion_search_placeholder" type="text">
+                  </div>
+                </div>
+                <div class="notion-sidebar-nav">
+                  <div class="notion-sidebar-section">
+                    <span class="notion-sidebar-label" data-i18n="notion_favorites_label" contenteditable="true" spellcheck="false"></span>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_nav_strategy_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_nav_strategy" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_nav_metrics_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_nav_metrics" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_nav_brand_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_nav_brand" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                  </div>
+                  <div class="notion-sidebar-section">
+                    <span class="notion-sidebar-label" data-i18n="notion_pages_label" contenteditable="true" spellcheck="false"></span>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_page_overview_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_page_overview" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_page_release_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_page_release" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_page_styleguide_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_page_styleguide" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                    <a class="notion-sidebar-link" href="#">
+                      <span class="notion-sidebar-icon" data-i18n="notion_page_archive_icon" contenteditable="true" spellcheck="false"></span>
+                      <span data-i18n="notion_page_archive" contenteditable="true" spellcheck="false"></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="notion-main">
+                <div class="notion-topbar">
+                  <div class="notion-breadcrumbs">
+                    <span class="notion-breadcrumb-item" data-i18n="notion_breadcrumb_workspace" contenteditable="true" spellcheck="false"></span>
+                    <span class="notion-breadcrumb-sep">/</span>
+                    <span class="notion-breadcrumb-item" data-i18n="notion_breadcrumb_docs" contenteditable="true" spellcheck="false"></span>
+                    <span class="notion-breadcrumb-sep">/</span>
+                    <span class="notion-breadcrumb-item notion-breadcrumb-current" data-i18n="notion_breadcrumb_current" contenteditable="true" spellcheck="false"></span>
+                  </div>
+                  <div class="notion-topbar-actions">
+                    <button class="notion-action-btn" data-i18n="notion_action_share" contenteditable="true" spellcheck="false"></button>
+                    <button class="notion-action-btn" data-i18n="notion_action_comment" contenteditable="true" spellcheck="false"></button>
+                    <span class="notion-action-dot" data-i18n="notion_action_updated" contenteditable="true" spellcheck="false"></span>
+                  </div>
+                </div>
+                <div class="notion-doc-header">
+                  <h1 class="notion-page-title" data-i18n="notion_doc_title" contenteditable="true" spellcheck="false"></h1>
+                  <div class="notion-meta-pills">
+                    <span class="notion-meta-pill"><span data-i18n="notion_meta_last_edit" contenteditable="true" spellcheck="false"></span></span>
+                    <span class="notion-meta-pill"><span data-i18n="notion_meta_owner" contenteditable="true" spellcheck="false"></span></span>
+                    <span class="notion-meta-pill"><span data-i18n="notion_meta_version" contenteditable="true" spellcheck="false"></span></span>
+                  </div>
+                </div>
+                <div class="notion-doc-body">
+                  <p class="notion-page-summary" data-i18n="notion_doc_summary" contenteditable="true" spellcheck="false"></p>
+                  <div class="notion-callout">
+                    <span class="notion-callout-icon" data-i18n="notion_callout_icon" contenteditable="true" spellcheck="false"></span>
+                    <div class="notion-callout-content">
+                      <span class="notion-callout-title" data-i18n="notion_callout_title" contenteditable="true" spellcheck="false"></span>
+                      <p class="notion-callout-body" data-i18n="notion_callout_body" contenteditable="true" spellcheck="false"></p>
+                    </div>
+                  </div>
+                  <div class="notion-checklist">
+                    <h3 class="notion-checklist-title" data-i18n="notion_checklist_title" contenteditable="true" spellcheck="false"></h3>
+                    <div class="notion-checklist-row completed">
+                      <span class="notion-checklist-check"></span>
+                      <span class="notion-checklist-text" data-i18n="notion_check_1" contenteditable="true" spellcheck="false"></span>
+                    </div>
+                    <div class="notion-checklist-row completed">
+                      <span class="notion-checklist-check"></span>
+                      <span class="notion-checklist-text" data-i18n="notion_check_2" contenteditable="true" spellcheck="false"></span>
+                    </div>
+                    <div class="notion-checklist-row">
+                      <span class="notion-checklist-check"></span>
+                      <span class="notion-checklist-text" data-i18n="notion_check_3" contenteditable="true" spellcheck="false"></span>
+                    </div>
+                    <div class="notion-checklist-row">
+                      <span class="notion-checklist-check"></span>
+                      <span class="notion-checklist-text" data-i18n="notion_check_4" contenteditable="true" spellcheck="false"></span>
+                    </div>
+                  </div>
+                  <div class="notion-table">
+                    <h3 class="notion-table-title" data-i18n="notion_table_title" contenteditable="true" spellcheck="false"></h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th data-i18n="notion_table_col_name" contenteditable="true" spellcheck="false"></th>
+                          <th data-i18n="notion_table_col_owner" contenteditable="true" spellcheck="false"></th>
+                          <th data-i18n="notion_table_col_status" contenteditable="true" spellcheck="false"></th>
+                          <th data-i18n="notion_table_col_eta" contenteditable="true" spellcheck="false"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td data-i18n="notion_row_1_name" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_1_owner" contenteditable="true" spellcheck="false"></td>
+                          <td class="notion-progress-pill" data-i18n="notion_row_1_status" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_1_eta" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                        <tr>
+                          <td data-i18n="notion_row_2_name" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_2_owner" contenteditable="true" spellcheck="false"></td>
+                          <td class="notion-progress-pill" data-i18n="notion_row_2_status" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_2_eta" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                        <tr>
+                          <td data-i18n="notion_row_3_name" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_3_owner" contenteditable="true" spellcheck="false"></td>
+                          <td class="notion-progress-pill" data-i18n="notion_row_3_status" contenteditable="true" spellcheck="false"></td>
+                          <td data-i18n="notion_row_3_eta" contenteditable="true" spellcheck="false"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="notion-rail">
+                <h3 class="notion-rail-heading" data-i18n="notion_rail_heading" contenteditable="true" spellcheck="false"></h3>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_1" contenteditable="true" spellcheck="false"></a>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_2" contenteditable="true" spellcheck="false"></a>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_3" contenteditable="true" spellcheck="false"></a>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_4" contenteditable="true" spellcheck="false"></a>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_5" contenteditable="true" spellcheck="false"></a>
+                <a class="notion-rail-link" href="#" data-i18n="notion_rail_link_6" contenteditable="true" spellcheck="false"></a>
+              </div>
+            </div>
+          </div>
+
+          <div id="webContentChat" class="web-template-content">
+            <div class="chat-shell">
+              <!-- Leftmost Server Icons Sidebar -->
+              <div class="chat-servers-sidebar">
+                <div class="chat-server-icon active" title="Spectrum Community">
+                  <i class="fa-brands fa-discord"></i>
+                </div>
+                <div class="chat-server-separator"></div>
+                <div class="chat-server-icon">
+                  <span contenteditable="true" spellcheck="false">SP</span>
+                </div>
+                <div class="chat-server-icon">
+                  <span contenteditable="true" spellcheck="false">FN</span>
+                </div>
+                <div class="chat-server-icon add-server">
+                  <i class="fa-solid fa-plus"></i>
+                </div>
+              </div>
+
+              <!-- Second Sidebar: Channels & User Status -->
+              <div class="chat-sidebar">
+                <div class="chat-sidebar-header">
+                  <div class="chat-sidebar-brand" data-i18n="chat_server_title" contenteditable="true" spellcheck="false">Spectrum Community</div>
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="chat-sidebar-search">
+                  <input class="chat-search-input" data-i18n-placeholder="chat_search_placeholder" type="text" placeholder="Find or start a conversation...">
+                </div>
+                <div class="chat-sidebar-nav">
+                  <div class="chat-channel-category">
+                    <span data-i18n="chat_category_text" contenteditable="true" spellcheck="false">Text Channels</span>
+                    <i class="fa-solid fa-plus"></i>
+                  </div>
+                  <div class="chat-channel-list">
+                    <a class="chat-channel-link active" href="#">
+                      <span class="chat-channel-hash">#</span>
+                      <span data-i18n="chat_channel_general" contenteditable="true" spellcheck="false">general</span>
+                    </a>
+                    <a class="chat-channel-link" href="#">
+                      <span class="chat-channel-hash">#</span>
+                      <span data-i18n="chat_channel_announcements" contenteditable="true" spellcheck="false">announcements</span>
+                    </a>
+                    <a class="chat-channel-link" href="#">
+                      <span class="chat-channel-hash">#</span>
+                      <span data-i18n="chat_channel_feedback" contenteditable="true" spellcheck="false">feedback</span>
+                    </a>
+                    <a class="chat-channel-link" href="#">
+                      <span class="chat-channel-hash">#</span>
+                      <span data-i18n="chat_channel_questions" contenteditable="true" spellcheck="false">questions</span>
+                    </a>
+                  </div>
+                </div>
+                <div class="chat-user-status-bar">
+                  <div class="chat-user-info">
+                    <div class="chat-avatar user-self" contenteditable="true" spellcheck="false">AM</div>
+                    <div class="chat-user-details">
+                      <span class="chat-username" data-i18n="chat_user_name" contenteditable="true" spellcheck="false">Ahmed Mohammed</span>
+                      <span class="chat-usertag" data-i18n="chat_user_tag" contenteditable="true" spellcheck="false">#2026</span>
+                    </div>
+                  </div>
+                  <div class="chat-user-actions">
+                    <button class="chat-action-icon-btn" title="Mute"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="chat-action-icon-btn" title="Deafen"><i class="fa-solid fa-headphones"></i></button>
+                    <button class="chat-action-icon-btn" title="User Settings"><i class="fa-solid fa-gear"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Chat Content Area -->
+              <div class="chat-main">
+                <div class="chat-topbar">
+                  <div class="chat-channel-name-header">
+                    <span class="chat-channel-hash">#</span>
+                    <span data-i18n="chat_channel_general" contenteditable="true" spellcheck="false">general</span>
+                  </div>
+                  <div class="chat-topbar-actions">
+                    <button class="chat-topbar-icon" title="Start Video Call"><i class="fa-solid fa-video"></i></button>
+                    <button class="chat-topbar-icon" title="Start Voice Call"><i class="fa-solid fa-phone"></i></button>
+                    <button class="chat-topbar-icon" title="Pinned Messages"><i class="fa-solid fa-thumbtack"></i></button>
+                    <button class="chat-topbar-icon" title="Member List"><i class="fa-solid fa-users"></i></button>
+                    <div class="chat-topbar-search">
+                      <input type="text" placeholder="Search">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="chat-feed-container">
+                  <div class="chat-message-feed">
+                    <!-- Message 1 -->
+                    <div class="chat-message">
+                      <div class="chat-avatar avatar-khalid" contenteditable="true" spellcheck="false">KH</div>
+                      <div class="chat-message-content">
+                        <div class="chat-message-header">
+                          <span class="chat-message-author" data-i18n="chat_message_1_user" contenteditable="true" spellcheck="false">Khalid</span>
+                          <span class="chat-message-time" contenteditable="true" spellcheck="false">Today at 10:14 AM</span>
+                        </div>
+                        <div class="chat-message-body" data-i18n="chat_message_1_text" contenteditable="true" spellcheck="false">Hello everyone! Welcome to our brand new Spectrum Chat interface.</div>
+                      </div>
+                    </div>
+                    <!-- Message 2 -->
+                    <div class="chat-message">
+                      <div class="chat-avatar avatar-sara" contenteditable="true" spellcheck="false">SA</div>
+                      <div class="chat-message-content">
+                        <div class="chat-message-header">
+                          <span class="chat-message-author" data-i18n="chat_message_2_user" contenteditable="true" spellcheck="false">Sara</span>
+                          <span class="chat-message-time" contenteditable="true" spellcheck="false">Today at 10:15 AM</span>
+                        </div>
+                        <div class="chat-message-body" data-i18n="chat_message_2_text" contenteditable="true" spellcheck="false">This looks super cool! The custom fonts look incredibly crisp in this layout.</div>
+                      </div>
+                    </div>
+                    <!-- Message 3 -->
+                    <div class="chat-message">
+                      <div class="chat-avatar avatar-noura" contenteditable="true" spellcheck="false">NO</div>
+                      <div class="chat-message-content">
+                        <div class="chat-message-header">
+                          <span class="chat-message-author" data-i18n="chat_message_3_user" contenteditable="true" spellcheck="false">Noura</span>
+                          <span class="chat-message-time" contenteditable="true" spellcheck="false">Today at 10:18 AM</span>
+                        </div>
+                        <div class="chat-message-body" data-i18n="chat_message_3_text" contenteditable="true" spellcheck="false">Indeed. Have you guys tried switching the preview theme to Premium Dark or Amber?</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                      <button class="chat-input-attach"><i class="fa-solid fa-circle-plus"></i></button>
+                      <input class="chat-input-field" data-i18n-placeholder="chat_message_input_placeholder" type="text" placeholder="Message #general">
+                      <div class="chat-input-buttons">
+                        <button class="chat-input-btn"><i class="fa-solid fa-gift"></i></button>
+                        <button class="chat-input-btn"><span contenteditable="true" spellcheck="false">GIF</span></button>
+                        <button class="chat-input-btn"><i class="fa-solid fa-face-smile"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rightmost Sidebar: Members List -->
+              <div class="chat-members-sidebar">
+                <div class="chat-member-group">
+                  <span class="chat-group-title" data-i18n="chat_members_online" contenteditable="true" spellcheck="false">Online — 4</span>
+                  <div class="chat-member-item">
+                    <div class="chat-avatar avatar-khalid" contenteditable="true" spellcheck="false">KH</div>
+                    <span class="chat-member-name" data-i18n="chat_message_1_user" contenteditable="true" spellcheck="false">Khalid</span>
+                    <span class="chat-member-badge admin" data-i18n="chat_member_admin" contenteditable="true" spellcheck="false">Admin Team</span>
+                  </div>
+                  <div class="chat-member-item">
+                    <div class="chat-avatar avatar-sara" contenteditable="true" spellcheck="false">SA</div>
+                    <span class="chat-member-name" data-i18n="chat_message_2_user" contenteditable="true" spellcheck="false">Sara</span>
+                  </div>
+                  <div class="chat-member-item">
+                    <div class="chat-avatar avatar-noura" contenteditable="true" spellcheck="false">NO</div>
+                    <span class="chat-member-name" data-i18n="chat_message_3_user" contenteditable="true" spellcheck="false">Noura</span>
+                  </div>
+                  <div class="chat-member-item">
+                    <div class="chat-avatar avatar-bot" contenteditable="true" spellcheck="false">BOT</div>
+                    <span class="chat-member-name" contenteditable="true" spellcheck="false">Spectrum Bot</span>
+                    <span class="chat-member-badge bot" data-i18n="chat_member_bot" contenteditable="true" spellcheck="false">BOT</span>
+                  </div>
+                </div>
+                <div class="chat-member-group">
+                  <span class="chat-group-title" data-i18n="chat_members_offline" contenteditable="true" spellcheck="false">Offline — 6</span>
+                  <div class="chat-member-item offline">
+                    <div class="chat-avatar" contenteditable="true" spellcheck="false">JD</div>
+                    <span class="chat-member-name" contenteditable="true" spellcheck="false">John Doe</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Arabic Dashboard Layout -->
           <div id="webContentDashboard" class="web-template-content">
             <!-- Sidebar Navigation (Right Side) -->
             <aside class="db-sidebar">
               <div class="db-sidebar-section">
-                <div class="db-sidebar-header" data-i18n="db_menu_title_general">عام</div>
+                <div class="db-sidebar-header" data-i18n="db_menu_title_general" contenteditable="true" spellcheck="false">عام</div>
                 <div class="db-sidebar-menu">
-                  <a class="db-menu-item active" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-house db-menu-icon"></i><span data-i18n="db_menu_home">الصفحة الرئيسية</span>
+                  <a class="db-menu-item active">
+                    <i class="fa-solid fa-house db-menu-icon"></i><span data-i18n="db_menu_home" contenteditable="true" spellcheck="false">الصفحة الرئيسية</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-list-check db-menu-icon"></i><span data-i18n="db_menu_tasks">المهام</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-list-check db-menu-icon"></i><span data-i18n="db_menu_tasks" contenteditable="true" spellcheck="false">المهام</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-chart-simple db-menu-icon"></i><span data-i18n="db_menu_analytics">التحاليل والأرقام</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-chart-simple db-menu-icon"></i><span data-i18n="db_menu_analytics" contenteditable="true" spellcheck="false">التحاليل والأرقام</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-wallet db-menu-icon"></i><span data-i18n="db_menu_finance">الطلبات المالية</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-wallet db-menu-icon"></i><span data-i18n="db_menu_finance" contenteditable="true" spellcheck="false">الطلبات المالية</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-circle-question db-menu-icon"></i><span data-i18n="db_menu_support">طلبات الدعم</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-circle-question db-menu-icon"></i><span data-i18n="db_menu_support" contenteditable="true" spellcheck="false">طلبات الدعم</span>
                   </a>
                 </div>
               </div>
 
               <div class="db-sidebar-section">
-                <div class="db-sidebar-header" data-i18n="db_menu_title_people">الأشخاص والتقارير</div>
+                <div class="db-sidebar-header" data-i18n="db_menu_title_people" contenteditable="true" spellcheck="false">الأشخاص والتقارير</div>
                 <div class="db-sidebar-menu">
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-users db-menu-icon"></i><span data-i18n="db_menu_employees">الموظفون</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-users db-menu-icon"></i><span data-i18n="db_menu_employees" contenteditable="true" spellcheck="false">الموظفون</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-file-lines db-menu-icon"></i><span data-i18n="db_menu_reports">التقارير</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-file-lines db-menu-icon"></i><span data-i18n="db_menu_reports" contenteditable="true" spellcheck="false">التقارير</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-envelope db-menu-icon"></i><span data-i18n="db_menu_messages">الرسائل</span> <span class="db-msg-badge">4</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-envelope db-menu-icon"></i><span data-i18n="db_menu_messages" contenteditable="true" spellcheck="false">الرسائل</span> <span class="db-msg-badge" contenteditable="true" spellcheck="false">4</span>
                   </a>
                 </div>
               </div>
 
               <div class="db-sidebar-section db-sidebar-footer">
-                <div class="db-sidebar-header" data-i18n="db_menu_title_support">الدعم</div>
+                <div class="db-sidebar-header" data-i18n="db_menu_title_support" contenteditable="true" spellcheck="false">الدعم</div>
                 <div class="db-sidebar-menu">
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-gear db-menu-icon"></i><span data-i18n="db_menu_settings">الإعدادات</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-gear db-menu-icon"></i><span data-i18n="db_menu_settings" contenteditable="true" spellcheck="false">الإعدادات</span>
                   </a>
-                  <a class="db-menu-item" contenteditable="true" spellcheck="false">
-                    <i class="fa-solid fa-circle-info db-menu-icon"></i><span data-i18n="db_menu_help">الدعم والمساعدة</span>
+                  <a class="db-menu-item">
+                    <i class="fa-solid fa-circle-info db-menu-icon"></i><span data-i18n="db_menu_help" contenteditable="true" spellcheck="false">الدعم والمساعدة</span>
                   </a>
                 </div>
               </div>
@@ -1668,11 +2055,11 @@
                 </div>
 
                 <div class="db-header-left">
-                  <button class="db-lang-btn">English</button>
+                  <button class="db-lang-btn"><span contenteditable="true" spellcheck="false">English</span></button>
                   <button class="db-icon-btn"><i class="fa-solid fa-bell"></i><span class="db-noti-dot"></span></button>
                   <button class="db-icon-btn"><i class="fa-solid fa-circle-user"></i></button>
                   <div class="db-user-info">
-                    <div class="db-user-avatar" data-i18n="db_user_initials">عم</div>
+                    <div class="db-user-avatar" contenteditable="true" spellcheck="false" data-i18n="db_user_initials">عم</div>
                     <div class="db-user-details">
                       <span class="db-user-name" contenteditable="true" spellcheck="false" data-i18n="db_user_name">عبدالمجيد مؤنس</span>
                       <span class="db-user-role" contenteditable="true" spellcheck="false" data-i18n="db_user_role">المدير التقني</span>
@@ -1758,12 +2145,12 @@
                         <div class="db-legend-item">
                           <span class="legend-dot dot-orange"></span>
                           <span contenteditable="true" data-i18n="db_performance_personal">المهام الشخصية</span>
-                          <span class="legend-val">87%</span>
+                          <span class="legend-val" contenteditable="true" spellcheck="false">87%</span>
                         </div>
                         <div class="db-legend-item">
                           <span class="legend-dot dot-green"></span>
                           <span contenteditable="true" data-i18n="db_performance_dept">مهام القسم</span>
-                          <span class="legend-val">70%</span>
+                          <span class="legend-val" contenteditable="true" spellcheck="false">70%</span>
                         </div>
                       </div>
                       <button class="db-gauge-btn" contenteditable="true" data-i18n="db_performance_btn">إضافة المزيد من المؤشرات</button>
@@ -1778,17 +2165,17 @@
                         <div class="db-card-header-titles">
                           <span class="db-card-title" contenteditable="true" data-i18n="db_heatmap_title">الطلبات حسب الوقت</span>
                           <div class="db-heatmap-subrow">
-                            <span class="db-heatmap-total">2,392</span>
+                            <span class="db-heatmap-total" contenteditable="true" spellcheck="false">2,392</span>
                             <span class="badge-green badge-mini" contenteditable="true" data-i18n="db_heatmap_sub">+1.4% أكثر من الشهر السابق</span>
                           </div>
                         </div>
                       </div>
-                      <span class="db-heatmap-time-range">20:00 - 02:00</span>
+                      <span class="db-heatmap-time-range" contenteditable="true" spellcheck="false">20:00 - 02:00</span>
                     </div>
                     <div class="db-heatmap-wrapper">
                       <div class="db-heatmap-grid">
                         <!-- Heatmap cells (rows of time slots x columns of days) -->
-                        <span class="db-heatmap-time-label">20:00</span>
+                        <span class="db-heatmap-time-label" contenteditable="true" spellcheck="false">20:00</span>
                         <div class="db-heatmap-cell cell-low"></div>
                         <div class="db-heatmap-cell cell-mid"></div>
                         <div class="db-heatmap-cell cell-low"></div>
@@ -1797,7 +2184,7 @@
                         <div class="db-heatmap-cell cell-low"></div>
                         <div class="db-heatmap-cell cell-low"></div>
 
-                        <span class="db-heatmap-time-label">21:00</span>
+                        <span class="db-heatmap-time-label" contenteditable="true" spellcheck="false">21:00</span>
                         <div class="db-heatmap-cell cell-mid"></div>
                         <div class="db-heatmap-cell cell-mid"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
@@ -1806,7 +2193,7 @@
                         <div class="db-heatmap-cell cell-low"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
 
-                        <span class="db-heatmap-time-label">22:00</span>
+                        <span class="db-heatmap-time-label" contenteditable="true" spellcheck="false">22:00</span>
                         <div class="db-heatmap-cell cell-empty"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
                         <div class="db-heatmap-cell cell-low"></div>
@@ -1815,7 +2202,7 @@
                         <div class="db-heatmap-cell cell-empty"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
 
-                        <span class="db-heatmap-time-label">00:00</span>
+                        <span class="db-heatmap-time-label" contenteditable="true" spellcheck="false">00:00</span>
                         <div class="db-heatmap-cell cell-empty"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
                         <div class="db-heatmap-cell cell-empty"></div>
@@ -1851,21 +2238,21 @@
                         <div class="db-progress-item">
                           <div class="db-progress-label">
                             <span contenteditable="true" data-i18n="db_devices_mobile">الهواتف المحمولة</span>
-                            <span class="db-progress-val">65%</span>
+                            <span class="db-progress-val" contenteditable="true" spellcheck="false">65%</span>
                           </div>
                           <div class="db-progress-bg"><div class="db-progress-fill" style="width: 65%;"></div></div>
                         </div>
                         <div class="db-progress-item">
                           <div class="db-progress-label">
                             <span contenteditable="true" data-i18n="db_devices_desktop">أجهزة الحاسوب</span>
-                            <span class="db-progress-val">25%</span>
+                            <span class="db-progress-val" contenteditable="true" spellcheck="false">25%</span>
                           </div>
                           <div class="db-progress-bg"><div class="db-progress-fill" style="width: 25%;"></div></div>
                         </div>
                         <div class="db-progress-item">
                           <div class="db-progress-label">
                             <span contenteditable="true" data-i18n="db_devices_tablet">الأجهزة اللوحية</span>
-                            <span class="db-progress-val">10%</span>
+                            <span class="db-progress-val" contenteditable="true" spellcheck="false">10%</span>
                           </div>
                           <div class="db-progress-bg"><div class="db-progress-fill" style="width: 10%;"></div></div>
                         </div>
@@ -1884,14 +2271,14 @@
                         <div class="db-member-stat">
                           <div class="db-member-icon icon-male"><i class="fa-solid fa-mars"></i></div>
                           <div class="db-member-info">
-                            <span class="db-member-val">1,246</span>
+                            <span class="db-member-val" contenteditable="true" spellcheck="false">1,246</span>
                             <span class="db-member-lbl" contenteditable="true" data-i18n="db_members_male">ذكور 82%</span>
                           </div>
                         </div>
                         <div class="db-member-stat">
                           <div class="db-member-icon icon-female"><i class="fa-solid fa-venus"></i></div>
                           <div class="db-member-info">
-                            <span class="db-member-val">274</span>
+                            <span class="db-member-val" contenteditable="true" spellcheck="false">274</span>
                             <span class="db-member-lbl" contenteditable="true" data-i18n="db_members_female">إناث 18%</span>
                           </div>
                         </div>
@@ -1925,48 +2312,48 @@
                           <td class="db-cell-title" contenteditable="true" data-i18n="db_row1_title">إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...</td>
                           <td>
                             <div class="db-table-user">
-                              <span class="db-table-avatar text-orange" data-i18n="db_user_initials">عم</span>
+                              <span class="db-table-avatar text-orange" contenteditable="true" spellcheck="false" data-i18n="db_user_initials">عم</span>
                               <span contenteditable="true" data-i18n="db_user_name">عبدالمجيد مؤنس</span>
                             </div>
                           </td>
                           <td class="text-secondary" contenteditable="true" data-i18n="db_dept_tech">التقني</td>
-                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td class="text-secondary"><span contenteditable="true" spellcheck="false">22/10/2024</span> <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
                           <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
                         </tr>
                         <tr>
                           <td class="db-cell-title" contenteditable="true" data-i18n="db_row2_title">إحصاء عدد المستخدمين للمنصة منذ تاريخ 1 يونيو 2024...</td>
                           <td>
                             <div class="db-table-user">
-                              <span class="db-table-avatar text-blue" data-i18n="db_user2_initials">رغ</span>
+                              <span class="db-table-avatar text-blue" contenteditable="true" spellcheck="false" data-i18n="db_user2_initials">رغ</span>
                               <span contenteditable="true" data-i18n="db_user2_name">رشيد الغالي محمد</span>
                             </div>
                           </td>
                           <td class="text-secondary" contenteditable="true" data-i18n="db_dept_finance">المالي</td>
-                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td class="text-secondary"><span contenteditable="true" spellcheck="false">22/10/2024</span> <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
                           <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
                         </tr>
                         <tr>
                           <td class="db-cell-title" contenteditable="true" data-i18n="db_row3_title">إصلاح مشكلة التحقق الثنائي لمستخدمي أندرويد من طراز 6.2...</td>
                           <td>
                             <div class="db-table-user">
-                              <span class="db-table-avatar text-red" data-i18n="db_user3_initials">مب</span>
+                              <span class="db-table-avatar text-red" contenteditable="true" spellcheck="false" data-i18n="db_user3_initials">مب</span>
                               <span contenteditable="true" data-i18n="db_user3_name">مصطفى البنوني</span>
                             </div>
                           </td>
                           <td class="text-secondary" contenteditable="true" data-i18n="db_dept_tech">التقني</td>
-                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td class="text-secondary"><span contenteditable="true" spellcheck="false">22/10/2024</span> <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
                           <td><span class="status-pill status-cancelled" contenteditable="true" data-i18n="db_status_cancelled">CANCELLED</span></td>
                         </tr>
                         <tr>
                           <td class="db-cell-title" contenteditable="true" data-i18n="db_row4_title">إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...</td>
                           <td>
                             <div class="db-table-user">
-                              <span class="db-table-avatar text-green" data-i18n="db_user4_initials">جب</span>
+                              <span class="db-table-avatar text-green" contenteditable="true" spellcheck="false" data-i18n="db_user4_initials">جب</span>
                               <span contenteditable="true" data-i18n="db_user4_name">جلهارير بارياكوساد</span>
                             </div>
                           </td>
                           <td class="text-secondary" contenteditable="true" data-i18n="db_dept_sales">المبيعات</td>
-                          <td class="text-secondary">22/10/2024 <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
+                          <td class="text-secondary"><span contenteditable="true" spellcheck="false">22/10/2024</span> <i class="fa-solid fa-clock-rotate-left table-time-icon"></i></td>
                           <td><span class="status-pill status-completed" contenteditable="true" data-i18n="db_status_completed">COMPLETED</span></td>
                         </tr>
                       </tbody>
@@ -1977,122 +2364,42 @@
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
-<!-- FAQ & SEO Section -->
-      <section class="faq-section">
-        <div class="faq-header">
-          <h2 class="faq-title" data-i18n="faq_title">الأسئلة الشائعة ودليل الاستخدام</h2>
-          <p class="faq-subtitle" data-i18n="faq_subtitle">كل ما تود معرفته عن كيفية استخدام محرر الخطوط لتحسين وتجربة خطوطك.</p>
-        </div>
-        
-        <div class="faq-list">
-          <!-- FAQ Item 1 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q1">ما هو موقع محرر الخطوط؟ وكيف يساعدني؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a1">
-                محرر الخطوط هو أفضل أداة مجانية تفاعلية لتجربة واختبار الخطوط العربية والإنجليزية أونلاين مباشرة عبر المتصفح. يتيح للمصممين وعشاق التايبوغرافي كتابة النصوص الشعرية بالتشكيل، وتصميم المخطوطات والاقتباسات، وتنسيقها مع تغيير أحجامها وسماكتها وإضافة نقوش وزخارف، ثم تصديرها كصورة عالية الدقة بخلفية شفافة جاهزة لبرامج التصميم.
-              </div>
-            </div>
-          </div>
 
-          <!-- FAQ Item 6 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q6">هل يمكنني كتابة وتنسيق مستندات أو نصوص طويلة؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a6">
-                نعم! يحتوي الموقع على <strong>وضع المستند (Word)</strong> والذي يُعد بديلاً ذكياً لكتابة وتنسيق مستندات بالخطوط العربية الجميلة. يمكنك كتابة صفحات كاملة، وتنسيق النص، واختيار نوع الورق، وتصدير الملف بصيغة Word أو مستند PDF جاهز للطباعة.
-              </div>
-            </div>
+      <!-- ============================================================ -->
+      <!-- MOBILE PREVIEW -->
+      <!-- ============================================================ -->
+      <div class="mobile-preview-wrapper" id="mobilePreviewWrapper" style="display: none;">
+        <div class="iphone-frame">
+          <div class="iphone-notch">
+            <div class="notch-sensor"></div>
+            <div class="notch-camera"></div>
           </div>
-
-          <!-- FAQ Item 7 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q7">هل يمكنني عمل أكثر من صورة أو تصميم عدة صفحات معاً؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a7">
-                نعم، يمكنك استخدام ميزة <strong>الصفحات المتعددة (Carousel)</strong> الموجودة في الشريط العلوي لإضافة عدة بطاقات، وتصميم كل صفحة على حدة، ثم تحميلها دفعة واحدة كملف مضغوط (ZIP) أو دمجها في ملف PDF واحد.
-              </div>
+          <div class="iphone-volume-up"></div>
+          <div class="iphone-volume-down"></div>
+          <div class="iphone-power"></div>
+          
+          <div class="iphone-screen">
+            <!-- Screen Content Goes Here -->
+            <div style="display:flex; justify-content:center; align-items:center; height:100%; background:#000; color:#fff; font-family:sans-serif;">
+              شاشة الهاتف
             </div>
           </div>
           
-          <!-- FAQ Item 2 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q2">هل يمكنني رفع خطوطي الخاصة (OTF, TTF, WOFF) واختبارها هنا؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a2">
-                نعم بالتأكيد! يعتبر موقعنا منصة مثالية لتجربة الخطوط قبل تحميلها واستخدامها. يدعم المحرر سحب وإفلات أي ملف خط مخصص من جهازك بالصيغ الشائعة: <strong>TTF, OTF, WOFF, WOFF2</strong>. يتم استعراض الخط محلياً في متصفحك بشكل آمن 100% لتصميم مخطوطاتك بسرعة ودون الحاجة لتثبيت برامج.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 3 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q3">ما هي الأوزان والخطوط المتغيرة (Variable Fonts)؟ وهل يدعمها الموقع؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a3">
-                الخطوط المتغيرة هي خطوط ويب حديثة تدمج جميع الأوزان وسماكات الحروف في ملف واحد. يدعم موقعنا هذه التقنية بشكل كامل، حيث يتيح لك اختيار سمك الخط بدقة من الخفيف (300) إلى السميك جداً (900) عبر القائمة المنسدلة في الإعدادات المتقدمة.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 8 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q8">هل يدعم المحرر تغيير لون النص والتشكيل العربي؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a8">
-                بالتأكيد! من خلال الإعدادات المتقدمة يمكنك التحكم الكامل في التايبوغرافي وتغيير لون النص. كما يمكنك إخفاء الحركات بضغطة زر (لشبك الحروف العربية الكلاسيكية بسلاسة) أو تلوين التشكيل بلون مختلف عن النص الأساسي لإخراج مخطوطة فنية احترافية.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 4 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q4">لماذا تظهر بعض الخطوط العربية مقطوعة أو متداخلة مع الزخارف؟ وكيف أحل ذلك؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a4">
-                بعض الخطوط العربية الكلاسيكية (مثل الديواني والثلث) تحتوي على حروف صاعدة أو هابطة ممتدة بشكل كبير. لحل تداخلها، يمكنك استخدام خيار <strong>تباعد الأسطر (Line Height)</strong> في قائمة التنسيق لزيادة المسافة الرأسية، أو ضبط حجم الخط ليتناسب تماماً مع أبعاد البطاقة.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 5 -->
-          <div class="faq-item">
-            <button class="faq-trigger">
-              <span class="faq-question" data-i18n="faq_q5">هل الخطوط التي أرفعها يتم حفظها أو مشاركتها مع أي جهة؟</span>
-              <i class="fa-solid fa-chevron-down faq-icon"></i>
-            </button>
-            <div class="faq-content">
-              <div class="faq-answer-inner" data-i18n-html="faq_a5">
-                خصوصيتك هي أولويتنا القصوى. جميع عمليات معالجة وتحميل الخطوط والملفات التي تقوم برفعها تتم بالكامل <strong>داخل متصفح جهازك فقط (Client-side)</strong>. لا نقوم بحفظ أي ملفات على خوادمنا، مما يضمن أمان وخصوصية ملفاتك وخطوطك التجارية.
-              </div>
-            </div>
-          </div>
-
+          <div class="iphone-home-indicator"></div>
         </div>
-      </section>
+      </div>
+
+
+
+      
+
+
+      <!-- FAQ & SEO Section -->
+      <section class="faq-section">
       
       <footer class="app-footer">
         <p data-i18n="app_footer_desc">محرر الخطوط - أداة تفاعلية لتصميم واختبار الخطوط العربية والإنجليزية. اكتب نصوصك، جرب مختلف الأنماط، ونسق تصاميمك بدقة واحترافية.</p>
