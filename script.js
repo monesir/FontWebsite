@@ -99,6 +99,28 @@ const btnReset = document.getElementById('btnReset');
 const tabDesignMode = document.getElementById('tabDesignMode');
 const tabDocMode = document.getElementById('tabDocMode');
 const tabWebMode = document.getElementById('tabWebMode');
+const tabMobileMode = document.getElementById('tabMobileMode');
+const mobilePreviewWrapper = document.getElementById('mobilePreviewWrapper');
+const designCanvasContainer = document.getElementById('designCanvasContainer');
+const previewModal = document.getElementById('previewModal');
+
+// --- Mobile Preview Mode Elements ---
+
+const tabMobileTemplateSettings = document.getElementById('tabMobileTemplateSettings');
+const tabMobileTemplateSocial = document.getElementById('tabMobileTemplateSocial');
+const tabMobileTemplateChat = document.getElementById('tabMobileTemplateChat');
+const tabMobileTemplateMusic = document.getElementById('tabMobileTemplateMusic');
+
+const btnMobileThemeDark = document.getElementById('btnMobileThemeDark');
+const btnMobileThemeLight = document.getElementById('btnMobileThemeLight');
+const btnMobileThemeAmber = document.getElementById('btnMobileThemeAmber');
+
+const mobileContentSettings = document.getElementById('mobileContentSettings');
+const mobileContentHome = document.getElementById('mobileContentHome');
+const mobileContentSocial = document.getElementById('mobileContentSocial');
+const mobileContentChat = document.getElementById('mobileContentChat');
+const mobileContentMusic = document.getElementById('mobileContentMusic');
+
 const btnToggleGrid = document.getElementById('btnToggleGrid');
 const btnSaveDocAsBtn = document.getElementById('btnSaveDocAsBtn');
 const btnSaveDocDropdownTrigger = document.getElementById('btnSaveDocDropdownTrigger');
@@ -122,6 +144,9 @@ const btnWebTemplateStore = document.getElementById('btnWebTemplateStore');
 const tabWebTemplateSaas = document.getElementById('tabWebTemplateSaas');
 const tabWebTemplateStore = document.getElementById('tabWebTemplateStore');
 const tabWebTemplateDashboard = document.getElementById('tabWebTemplateDashboard');
+const tabWebTemplateNotion = document.getElementById('tabWebTemplateNotion');
+const tabWebTemplateChat = document.getElementById('tabWebTemplateChat');
+
 const btnWebThemeDark = document.getElementById('btnWebThemeDark');
 const btnWebThemeLight = document.getElementById('btnWebThemeLight');
 const btnWebThemeAmber = document.getElementById('btnWebThemeAmber');
@@ -254,6 +279,7 @@ const HistoryManager = {
 
   getCurrentState: function() {
     const activeMode = document.body.classList.contains('view-mode-web') ? 'web' :
+                       document.body.classList.contains('view-mode-mobile') ? 'mobile' :
                        document.body.classList.contains('view-mode-document') ? 'document' : 'design';
     
     const state = {
@@ -393,7 +419,9 @@ const HistoryManager = {
           webContent.innerHTML = state.webHTML;
         }
       } else if (state.mode === 'document') {
-        if (tabWebMode) tabWebMode.classList.remove('active');
+        if (tabMobileMode) tabMobileMode.classList.remove('active');
+    if (tabMobileMode) tabMobileMode.classList.remove('active');
+    if (tabWebMode) tabWebMode.classList.remove('active');
         if (tabDesignMode) tabDesignMode.classList.remove('active');
         if (tabDocMode) tabDocMode.classList.add('active');
         if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
@@ -405,7 +433,8 @@ const HistoryManager = {
           docBody.innerHTML = state.docHTML;
         }
       } else if (state.mode === 'design') {
-        if (tabWebMode) tabWebMode.classList.remove('active');
+        if (tabMobileMode) tabMobileMode.classList.remove('active');
+    if (tabWebMode) tabWebMode.classList.remove('active');
         if (tabDesignMode) tabDesignMode.classList.add('active');
         if (tabDocMode) tabDocMode.classList.remove('active');
         if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
@@ -2147,6 +2176,45 @@ function setupEventListeners() {
   if (tabWebMode) {
     tabWebMode.addEventListener('click', () => switchViewMode('web'));
   }
+  if (tabMobileMode) {
+    tabMobileMode.addEventListener('click', () => switchViewMode('mobile'));
+  }
+
+  
+//   if (tabMobileMode) {
+//     tabMobileMode.addEventListener('click', () => switchViewMode('mobile'));
+//   }
+//   if (tabMobileTemplateSettings) {
+//     tabMobileTemplateSettings.addEventListener('click', () => setMobileTemplate('settings'));
+//   }
+//   if (tabMobileTemplateSocial) {
+//     tabMobileTemplateSocial.addEventListener('click', () => setMobileTemplate('social'));
+//   }
+//   if (tabMobileTemplateChat) {
+//     tabMobileTemplateChat.addEventListener('click', () => setMobileTemplate('chat'));
+//   }
+//   if (tabMobileTemplateMusic) {
+//     tabMobileTemplateMusic.addEventListener('click', () => setMobileTemplate('music'));
+//   }
+  
+  // Set up Home Indicator listeners
+  document.querySelectorAll('.iphone-home-indicator').forEach(indicator => {
+    indicator.addEventListener('click', () => {
+      setMobileTemplate('home');
+    });
+    // Add interactive class to indicate it's clickable when not on home screen
+    indicator.classList.add('interactive');
+  });
+
+//   if (btnMobileThemeDark) {
+//     btnMobileThemeDark.addEventListener('click', () => setMobileTheme('dark'));
+//   }
+//   if (btnMobileThemeLight) {
+//     btnMobileThemeLight.addEventListener('click', () => setMobileTheme('light'));
+//   }
+//   if (btnMobileThemeAmber) {
+//     btnMobileThemeAmber.addEventListener('click', () => setMobileTheme('amber'));
+//   }
 
   // Web Mode Template Event Listeners
   if (btnWebTemplateSaas) btnWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
@@ -2154,6 +2222,9 @@ function setupEventListeners() {
   if (tabWebTemplateSaas) tabWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
   if (tabWebTemplateStore) tabWebTemplateStore.addEventListener('click', () => setWebTemplate('store'));
   if (tabWebTemplateDashboard) tabWebTemplateDashboard.addEventListener('click', () => setWebTemplate('dashboard'));
+  if (tabWebTemplateNotion) tabWebTemplateNotion.addEventListener('click', () => setWebTemplate('notion'));
+  if (tabWebTemplateChat) tabWebTemplateChat.addEventListener('click', () => setWebTemplate('chat'));
+
 
   // Web Mode Theme Event Listeners
   if (btnWebThemeDark) btnWebThemeDark.addEventListener('click', () => setWebTheme('dark'));
@@ -3122,103 +3193,57 @@ function setupEventListeners() {
 function switchViewMode(mode) {
   if (canvasWrapper) {
     canvasWrapper.scrollTop = 0;
-    // Trigger scroll event manually or check FAQ state directly to make sure FAQ is hidden initially
     const faqSection = document.querySelector('.faq-section');
     if (faqSection) faqSection.classList.remove('faq-visible');
   }
-  if (mode === 'web') {
+
+  // Remove active classes
+  if (tabDesignMode) tabDesignMode.classList.remove('active');
+  if (tabDocMode) tabDocMode.classList.remove('active');
+  if (tabWebMode) if (tabWebMode) tabWebMode.classList.remove('active');
+  if (tabMobileMode) tabMobileMode.classList.remove('active');
+
+  // Hide all wrappers
+  if (designCanvasContainer) designCanvasContainer.style.display = 'none';
+  if (previewModal) previewModal.style.display = 'none';
+  if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
+  if (mobilePreviewWrapper) mobilePreviewWrapper.style.display = 'none';
+
+  document.body.classList.remove('view-mode-document', 'view-mode-design', 'view-mode-web', 'view-mode-mobile');
+
+  if (mode === 'mobile') {
+    document.body.classList.add('view-mode-mobile');
+    if (tabMobileMode) tabMobileMode.classList.add('active');
+    if (mobilePreviewWrapper) mobilePreviewWrapper.style.display = 'flex';
+  } 
+  else if (mode === 'web') {
     document.body.classList.add('view-mode-web');
-    document.body.classList.remove('view-mode-document', 'view-mode-design');
     if (tabWebMode) tabWebMode.classList.add('active');
-    if (tabDesignMode) tabDesignMode.classList.remove('active');
-    if (tabDocMode) tabDocMode.classList.remove('active');
     if (webPreviewWrapper) webPreviewWrapper.style.display = 'flex';
     
-    // Apply default web preview settings
     const savedTemplate = localStorage.getItem('diwan-web-template') || 'saas';
     const savedTheme = localStorage.getItem('diwan-web-theme') || 'dark';
     const savedTarget = localStorage.getItem('diwan-web-target') || 'all';
     
-    setWebTemplate(savedTemplate);
-    setWebTheme(savedTheme);
-    setWebTarget(savedTarget);
-    setWebPreviewZoom(webPreviewZoom);
-
-    // Restore multi-font settings
-    if (chkWebMultipleFonts) {
-      const savedMulti = localStorage.getItem('diwan-web-multiple-fonts');
-      const isMulti = savedMulti !== null ? savedMulti === 'true' : true;
-      chkWebMultipleFonts.checked = isMulti;
-      
-      if (selectWebFontHeadings) {
-        const savedHead = localStorage.getItem('diwan-web-headings-font');
-        if (savedHead) selectWebFontHeadings.value = savedHead;
-      }
-      if (selectWebFontBody) {
-        const savedBody = localStorage.getItem('diwan-web-body-font');
-        if (savedBody) selectWebFontBody.value = savedBody;
-      }
-      if (selectWebFontButtons) {
-        const savedButtons = localStorage.getItem('diwan-web-buttons-font');
-        if (savedButtons) selectWebFontButtons.value = savedButtons;
-      }
-      if (selectWebFontSingle) {
-        const savedSingle = localStorage.getItem('diwan-poetry-font') || 'ArabicPoetry';
-        selectWebFontSingle.value = savedSingle;
-      }
-
-      updateWebMultipleFontsMode();
-      updateWebUploadedFontsList();
-    }
-  } else if (mode === 'document') {
-    document.body.classList.add('view-mode-document');
-    document.body.classList.remove('view-mode-design', 'view-mode-web');
-    if (tabDocMode) tabDocMode.classList.add('active');
-    if (tabDesignMode) tabDesignMode.classList.remove('active');
-    if (tabWebMode) tabWebMode.classList.remove('active');
-    if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
+    if (typeof setWebTemplate === 'function') setWebTemplate(savedTemplate);
+    if (typeof setWebTheme === 'function') setWebTheme(savedTheme);
+    if (typeof setWebTarget === 'function') setWebTarget(savedTarget);
+    if (typeof setWebPreviewZoom === 'function' && typeof webPreviewZoom !== 'undefined') setWebPreviewZoom(webPreviewZoom);
     
-    if (editableText) {
-      editableText.setAttribute('placeholder', currentSiteLang === 'ar' ? 'اكتب مستندك هنا مثل الـ Word...' : 'Start typing your document here like Microsoft Word...');
-    }
-
-    // Apply default paper class if none are set
-    const savedStyle = localStorage.getItem('diwan-paper-style') || 'blank';
-    const savedTheme = localStorage.getItem('diwan-paper-theme') || 'dark';
-    setPaperStyle(savedStyle);
-    setPaperTheme(savedTheme);
-  } else {
-    document.body.classList.remove('view-mode-document', 'view-mode-web');
+  } 
+  else if (mode === 'document') {
+    document.body.classList.add('view-mode-document');
+    if (tabDocMode) tabDocMode.classList.add('active');
+    if (previewModal) previewModal.style.display = 'flex';
+  } 
+  else { // design
     document.body.classList.add('view-mode-design');
     if (tabDesignMode) tabDesignMode.classList.add('active');
-    if (tabDocMode) tabDocMode.classList.remove('active');
-    if (tabWebMode) tabWebMode.classList.remove('active');
-    if (webPreviewWrapper) webPreviewWrapper.style.display = 'none';
-    
-    if (editableText) {
-      editableText.removeAttribute('placeholder');
-    }
-
-    // Cleanup paper classes from card
-    if (poetryCard) {
-      poetryCard.classList.remove('paper-white', 'paper-cream', 'paper-dark', 'paper-style-blank', 'paper-style-lined', 'paper-style-grid');
-    }
+    if (designCanvasContainer) designCanvasContainer.style.display = 'flex';
   }
-  localStorage.setItem('diwan-view-mode', mode);
-
-  applyDividers();
-  wrapTashkeel(editableText);
-
-  // Track event in Google Analytics if loaded
-  if (typeof gtag === 'function') {
-    gtag('event', 'switch_view_mode', {
-      'view_mode': mode
-    });
-  }
-  HistoryManager.saveState();
 }
 
-// Clear Web Preview Inline Font Sizes and Cache
+
 function clearWebPreviewFonts() {
   const previewContent = document.querySelector('.web-preview-content');
   if (previewContent) {
@@ -3236,8 +3261,9 @@ function clearWebPreviewFonts() {
 // Set Web Preview Template
 function setWebTemplate(template) {
   if (!webPreviewWrapper) return;
+  if (webPreviewWrapper.classList.contains(`web-tpl-${template}`)) return;
   clearWebPreviewFonts();
-  webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-store', 'web-tpl-dashboard');
+  webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-store', 'web-tpl-dashboard', 'web-tpl-notion', 'web-tpl-chat', 'web-tpl-mobile');
   webPreviewWrapper.classList.add(`web-tpl-${template}`);
   
   // Update active state on template toggle buttons
@@ -3277,6 +3303,9 @@ function setWebPreviewZoom(zoomVal) {
   const previewContent = document.querySelector('.web-preview-content');
   if (!previewContent) return;
   
+  previewContent.classList.add('no-transition');
+  void previewContent.offsetHeight;
+
   const elements = previewContent.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, a, button, li, label, .web-logo, [contenteditable="true"]');
   elements.forEach(el => {
     // If the element is individually customized via context menu
@@ -3313,6 +3342,8 @@ function setWebPreviewZoom(zoomVal) {
     const newSize = Math.round(origSize * webPreviewZoom);
     el.style.setProperty('font-size', `${newSize}px`, 'important');
   });
+
+  previewContent.classList.remove('no-transition');
 }
 
 function updateWebFontProperties(headingsFont, bodyFont, buttonsFont) {
@@ -4930,8 +4961,8 @@ const uiTranslations = {
     store_news_placeholder: "عنوان بريدك الإلكتروني",
     store_news_btn: "اشترك الآن",
     store_news_success: "✨ تم تسجيل اشتراكك بنجاح! شكرًا لانضمامك إلينا.",
-    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> سلة التسوق الخاصة بك",
-    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p>السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>",
+    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> <span contenteditable=\"true\" spellcheck=\"false\">سلة التسوق الخاصة بك</span>",
+    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p contenteditable=\"true\" spellcheck=\"false\">السلة فارغة حالياً. أضف بعض المنتجات الرائعة للبدء!</p>",
     cart_subtotal: "المجموع الفرعي:",
     cart_shipping: "الشحن والتسليم:",
     cart_shipping_free: "مجاني",
@@ -5029,7 +5060,92 @@ const uiTranslations = {
     db_row1_title: "إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...",
     db_row2_title: "إحصاء عدد المستخدمين للمنصة منذ تاريخ 1 يونيو 2024...",
     db_row3_title: "إصلاح مشكلة التحقق الثنائي لمستخدمي أندرويد من طراز 6.2...",
-    db_row4_title: "إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم..."
+    db_row4_title: "إنشاء استبيان للمستخدمين للبحث عن مدى رضاهم عن خدماتنا الم...",
+    web_template_notion: "مستندات",
+    web_template_chat: "ديسكورد",
+    chat_server_title: "مجتمع سبيكترم",
+    chat_search_placeholder: "ابحث عن محادثة...",
+    chat_category_text: "القنوات النصية",
+    chat_channel_general: "العام",
+    chat_channel_announcements: "الإعلانات",
+    chat_channel_feedback: "الآراء والملاحظات",
+    chat_channel_questions: "الأسئلة الشائعة",
+    chat_user_name: "أحمد محمد",
+    chat_user_tag: "#2026",
+    chat_members_online: "نشط الآن — ٤",
+    chat_members_offline: "غير متصل — ٦",
+    chat_member_admin: "طاقم الإدارة",
+    chat_member_bot: "بوت سبيكترم",
+    chat_message_1_user: "خالد",
+    chat_message_1_text: "أهلاً بالجميع! مرحباً بكم في واجهة محادثة سبيكترم الجديدة.",
+    chat_message_2_user: "سارة",
+    chat_message_2_text: "تبدو رائعة جداً! الخطوط المخصصة تظهر بوضوح ممتاز في هذا التصميم.",
+    chat_message_3_user: "نورة",
+    chat_message_3_text: "بالتأكيد. هل جربتم تغيير سمة المعاينة إلى الداكن الفاخر أو الكهرماني؟",
+    chat_message_input_placeholder: "اكتب رسالة في #العام",
+    notion_brand: "نوشن",
+    notion_workspace_label: "مساحة العمل",
+    notion_workspace_name: "سبيكترم",
+    notion_search_placeholder: "بحث...",
+    notion_favorites_label: "المفضلة",
+    notion_nav_strategy_icon: "♟️",
+    notion_nav_strategy: "الاستراتيجية",
+    notion_nav_metrics_icon: "📊",
+    notion_nav_metrics: "المؤشرات",
+    notion_nav_brand_icon: "⬡",
+    notion_nav_brand: "العلامة التجارية",
+    notion_pages_label: "الصفحات",
+    notion_page_overview_icon: "📋",
+    notion_page_overview: "نظرة عامة",
+    notion_page_release_icon: "🚀",
+    notion_page_release: "الإصدارات",
+    notion_page_styleguide_icon: "🎨",
+    notion_page_styleguide: "دليل الأسلوب",
+    notion_page_archive_icon: "📦",
+    notion_page_archive: "الأرشيف",
+    notion_breadcrumb_workspace: "مساحة العمل",
+    notion_breadcrumb_docs: "المستندات",
+    notion_breadcrumb_current: "الحالي",
+    notion_action_share: "مشاركة",
+    notion_action_comment: "تعليق",
+    notion_action_updated: "تم التحديث منذ 3 ساعات",
+    notion_doc_title: "عنوان المستند",
+    notion_meta_last_edit: "آخر تعديل: 12 مايو 2026",
+    notion_meta_owner: "المالك: أحمد محمد",
+    notion_meta_version: "الإصدار v2.1.4",
+    notion_doc_summary: "يغطي هذا المستند Product Roadmap Q4 ويتضمن 14 مبادرة رئيسية موزعة على 3 فرق. آخر تحديث رئيسي كان في 8 مايو 2026 بعد مراجعة Team Alpha للجدول الزمني.",
+    notion_callout_icon: "💡",
+    notion_callout_title: "ملاحظة هامة",
+    notion_callout_body: "هذا النص تجريبي يُستخدم لاختبار مظهر الخط وتناسق التنسيق في واجهة المستخدم. يمكن استبداله لاحقًا بأي محتوى آخر.",
+    notion_checklist_title: "قائمة المهام",
+    notion_check_1: "مراجعة خطة العمل للربع الثالث",
+    notion_check_2: "تجهيز العرض التقديمي لاجتماع مجلس الإدارة القادم",
+    notion_check_3: "تدقيق الحسابات",
+    notion_check_4: "قراءة التقارير",
+    notion_table_title: "ملفات المشروع",
+    notion_table_col_name: "الملف",
+    notion_table_col_owner: "المالك",
+    notion_table_col_status: "الحالة",
+    notion_table_col_eta: "التسليم المتوقع",
+    notion_row_1_name: "إعادة تصميم لوحة التحكم",
+    notion_row_1_owner: "نورة",
+    notion_row_1_status: "قيد المراجعة",
+    notion_row_1_eta: "١٢ يونيو",
+    notion_row_2_name: "توثيق واجهة API",
+    notion_row_2_owner: "خالد",
+    notion_row_2_status: "قيد التنفيذ",
+    notion_row_2_eta: "٥ أغسطس",
+    notion_row_3_name: "ترقية حزمة التصميم",
+    notion_row_3_owner: "سارة",
+    notion_row_3_status: "مكتمل",
+    notion_row_3_eta: "١٨ مايو",
+    notion_rail_heading: "روابط سريعة",
+    notion_rail_link_1: "سجل التغييرات",
+    notion_rail_link_2: "دليل الأسلوب",
+    notion_rail_link_3: "مكتبة المكونات",
+    notion_rail_link_4: "سجلات الإصدارات",
+    notion_rail_link_5: "قاعدة المعرفة",
+    notion_rail_link_6: "إعدادات الفريق"
   },
   en: {
     logo_title: "Font Editor",
@@ -5356,8 +5472,8 @@ const uiTranslations = {
     store_news_placeholder: "Your email address",
     store_news_btn: "Subscribe Now",
     store_news_success: "✨ Subscribed successfully! Thank you for joining us.",
-    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> Your Shopping Cart",
-    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p>Your cart is empty. Add some amazing products to start shopping!</p>",
+    cart_drawer_title: "<i class=\"fa-solid fa-basket-shopping\"></i> <span contenteditable=\"true\" spellcheck=\"false\">Your Shopping Cart</span>",
+    cart_empty_msg: "<i class=\"fa-solid fa-bag-shopping empty-icon\"></i><p contenteditable=\"true\" spellcheck=\"false\">Your cart is empty. Add some amazing products to start shopping!</p>",
     cart_subtotal: "Subtotal:",
     cart_shipping: "Shipping & Handling:",
     cart_shipping_free: "Free",
@@ -5455,7 +5571,92 @@ const uiTranslations = {
     db_row1_title: "Create a user satisfaction survey to evaluate our digital services...",
     db_row2_title: "Audit the total platform user count starting from June 1st, 2024...",
     db_row3_title: "Fix the 2FA issue for Android users running model version 6.2...",
-    db_row4_title: "Create a user satisfaction survey to evaluate our digital services..."
+    db_row4_title: "Create a user satisfaction survey to evaluate our digital services...",
+    web_template_notion: "Docs",
+    web_template_chat: "Chat",
+    chat_server_title: "Spectrum Community",
+    chat_search_placeholder: "Find or start a conversation...",
+    chat_category_text: "Text Channels",
+    chat_channel_general: "general",
+    chat_channel_announcements: "announcements",
+    chat_channel_feedback: "feedback",
+    chat_channel_questions: "questions",
+    chat_user_name: "Ahmed Mohammed",
+    chat_user_tag: "#2026",
+    chat_members_online: "Online — 4",
+    chat_members_offline: "Offline — 6",
+    chat_member_admin: "Admin Team",
+    chat_member_bot: "Spectrum Bot",
+    chat_message_1_user: "Khalid",
+    chat_message_1_text: "Hello everyone! Welcome to our brand new Spectrum Chat interface.",
+    chat_message_2_user: "Sara",
+    chat_message_2_text: "This looks super cool! The custom fonts look incredibly crisp in this layout.",
+    chat_message_3_user: "Noura",
+    chat_message_3_text: "Indeed. Have you guys tried switching the preview theme to Premium Dark or Amber?",
+    chat_message_input_placeholder: "Message #general",
+    notion_brand: "Notion",
+    notion_workspace_label: "Workspace",
+    notion_workspace_name: "Spectrum",
+    notion_search_placeholder: "Search...",
+    notion_favorites_label: "Favorites",
+    notion_nav_strategy_icon: "♟️",
+    notion_nav_strategy: "Strategy",
+    notion_nav_metrics_icon: "📊",
+    notion_nav_metrics: "Metrics",
+    notion_nav_brand_icon: "⬡",
+    notion_nav_brand: "Brand",
+    notion_pages_label: "Pages",
+    notion_page_overview_icon: "📋",
+    notion_page_overview: "Overview",
+    notion_page_release_icon: "🚀",
+    notion_page_release: "Releases",
+    notion_page_styleguide_icon: "🎨",
+    notion_page_styleguide: "Style Guide",
+    notion_page_archive_icon: "📦",
+    notion_page_archive: "Archive",
+    notion_breadcrumb_workspace: "Workspace",
+    notion_breadcrumb_docs: "Docs",
+    notion_breadcrumb_current: "Current",
+    notion_action_share: "Share",
+    notion_action_comment: "Comment",
+    notion_action_updated: "Updated 3h ago",
+    notion_doc_title: "Document Title",
+    notion_meta_last_edit: "Last edit: May 12, 2026",
+    notion_meta_owner: "Owner: Ahmed Mohammed",
+    notion_meta_version: "Version v2.1.4",
+    notion_doc_summary: "This document covers the Product Roadmap Q4 with 14 key initiatives across 3 squads. The last major revision was on May 8, 2026 following Team Alpha's timeline review.",
+    notion_callout_icon: "💡",
+    notion_callout_title: "Important Note",
+    notion_callout_body: "This is sample placeholder text used for testing typography, alignment, and rendering consistency in the UI.",
+    notion_checklist_title: "Task Checklist",
+    notion_check_1: "Review Q3 strategic plan",
+    notion_check_2: "Prepare slides for upcoming board meeting",
+    notion_check_3: "Audit expense reports",
+    notion_check_4: "Read quarterly brief",
+    notion_table_title: "Project Files",
+    notion_table_col_name: "File",
+    notion_table_col_owner: "Owner",
+    notion_table_col_status: "Status",
+    notion_table_col_eta: "ETA",
+    notion_row_1_name: "Dashboard redesign",
+    notion_row_1_owner: "Noura",
+    notion_row_1_status: "In review",
+    notion_row_1_eta: "Jun 12",
+    notion_row_2_name: "API documentation",
+    notion_row_2_owner: "Khalid",
+    notion_row_2_status: "In progress",
+    notion_row_2_eta: "Aug 5",
+    notion_row_3_name: "Design system upgrade",
+    notion_row_3_owner: "Sara",
+    notion_row_3_status: "Done",
+    notion_row_3_eta: "May 18",
+    notion_rail_heading: "Quick links",
+    notion_rail_link_1: "Changelog",
+    notion_rail_link_2: "Style guide",
+    notion_rail_link_3: "Component library",
+    notion_rail_link_4: "Release notes",
+    notion_rail_link_5: "Knowledge base",
+    notion_rail_link_6: "Team settings"
   }
 };
 
@@ -6047,12 +6248,12 @@ function renderCart() {
           ${graphicHtml}
         </div>
         <div class="cart-item-details">
-          <h4 class="cart-item-title">${displayTitle}</h4>
-          <span class="cart-item-price">$${item.price}</span>
+          <h4 class="cart-item-title" contenteditable="true" spellcheck="false">${displayTitle}</h4>
+          <span class="cart-item-price" contenteditable="true" spellcheck="false">$${item.price}</span>
           <div class="cart-item-actions">
             <div class="cart-qty-selector">
               <button class="qty-btn qty-minus-btn" data-id="${item.id}"><i class="fa-solid fa-minus"></i></button>
-              <span class="qty-val">${item.qty}</span>
+              <span class="qty-val" contenteditable="true" spellcheck="false">${item.qty}</span>
               <button class="qty-btn qty-plus-btn" data-id="${item.id}"><i class="fa-solid fa-plus"></i></button>
             </div>
             <button class="cart-item-remove-btn" data-id="${item.id}" title="${lang === 'ar' ? 'حذف' : 'Remove'}">
@@ -6104,4 +6305,26 @@ function filterProducts(filter) {
     }
   });
 }
+
+
+// --- Mobile Mode Functions ---
+
+
+function setMobileTheme(theme) {
+//   if (!mobilePreviewWrapper) return;
+//   mobilePreviewWrapper.classList.remove('mobile-theme-dark', 'mobile-theme-light', 'mobile-theme-amber');
+//   mobilePreviewWrapper.classList.add('mobile-theme-' + theme);
+  
+  // Update buttons
+  [btnMobileThemeDark, btnMobileThemeLight, btnMobileThemeAmber].forEach(btn => {
+    if (btn) btn.classList.remove('active');
+  });
+  
+//   if (theme === 'dark' && btnMobileThemeDark) btnMobileThemeDark.classList.add('active');
+//   if (theme === 'light' && btnMobileThemeLight) btnMobileThemeLight.classList.add('active');
+//   if (theme === 'amber' && btnMobileThemeAmber) btnMobileThemeAmber.classList.add('active');
+  
+  localStorage.setItem('diwan-mobile-theme', theme);
+}
+
 
