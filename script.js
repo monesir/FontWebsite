@@ -3269,6 +3269,9 @@ function clearWebPreviewFonts() {
 // Set Web Preview Template
 function setWebTemplate(template) {
   if (!webPreviewWrapper) return;
+  if (template === 'mobile') {
+    template = 'saas';
+  }
   if (webPreviewWrapper.classList.contains(`web-tpl-${template}`)) return;
   clearWebPreviewFonts();
   webPreviewWrapper.classList.remove('web-tpl-saas', 'web-tpl-store', 'web-tpl-dashboard', 'web-tpl-notion', 'web-tpl-chat', 'web-tpl-mobile');
@@ -3283,11 +3286,6 @@ function setWebTemplate(template) {
   document.querySelectorAll('.browser-tab').forEach(tab => tab.classList.remove('active'));
   const activeTab = document.getElementById(`tabWebTemplate${template.charAt(0).toUpperCase() + template.slice(1)}`);
   if (activeTab) activeTab.classList.add('active');
-
-  if (template === 'mobile') {
-    const savedMobileTemplate = localStorage.getItem('diwan-mobile-template') || 'settings';
-    setMobileTemplate(savedMobileTemplate);
-  }
 
   localStorage.setItem('diwan-web-template', template);
   setWebPreviewZoom(webPreviewZoom);
