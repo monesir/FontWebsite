@@ -9929,73 +9929,319 @@ html[dir="rtl"] .chat-shell {
   background: transparent;
 }
 
-
 /* ==========================================================================
-   MOBILE PREVIEW (Minimal Structure)
+   MOBILE PREVIEW - COMPLETE REWRITE FROM SCRATCH
    ========================================================================== */
+
+/* The wrapper - hidden by default, JS shows it */
 .mobile-preview-wrapper {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: #0a0a0a;
+  width: 100%;
+  min-height: calc(100vh - 56px);
+  padding: 50px 20px;
+  box-sizing: border-box;
+}
+
+/* Template content blocks */
+.mobile-tpl-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: var(--bg-primary);
-  position: relative;
 }
 
+/* === iPhone Hardware Frame === */
 .iphone-frame {
+  width: 375px;
+  height: 812px;
+  background: #000;
+  border-radius: 54px;
   position: relative;
-  width: 320px;
-  height: 650px;
-  background-color: #111;
-  border-radius: 40px;
-  box-shadow: 0 0 0 10px #2a2a2a, 0 0 0 11px #111, 0 20px 40px rgba(0,0,0,0.5);
-  margin: 20px auto;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    inset 0 0 0 2px #444,
+    0 0 0 6px #1a1a1a,
+    0 0 0 8px #333,
+    0 0 0 9px #111,
+    0 30px 60px rgba(0,0,0,0.6);
 }
 
+/* Dynamic Island / Notch */
 .iphone-notch {
   position: absolute;
-  top: 0;
+  top: 12px;
   left: 50%;
   transform: translateX(-50%);
   width: 120px;
-  height: 25px;
-  background-color: #2a2a2a;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  height: 35px;
+  background: #000;
+  border-radius: 20px;
   z-index: 100;
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  padding: 0 12px;
 }
-
 .notch-sensor, .notch-camera {
-  background-color: #000;
+  width: 11px;
+  height: 11px;
+  background: #111;
   border-radius: 50%;
 }
-.notch-sensor { width: 40px; height: 6px; border-radius: 3px; }
-.notch-camera { width: 10px; height: 10px; }
-
-.iphone-screen {
-  width: 100%;
-  height: 100%;
-  background-color: #000;
-  border-radius: 40px;
-  overflow: hidden;
-  position: relative;
+.notch-camera {
+  box-shadow: inset 1px 1px 2px rgba(60,60,120,0.3);
 }
 
-.iphone-home-indicator {
+/* Side Buttons */
+.iphone-volume-up, .iphone-volume-down, .iphone-power {
+  position: absolute;
+  background: #2a2a2a;
+  border-radius: 3px;
+  z-index: 5;
+}
+.iphone-volume-up   { width: 3px; height: 55px; left: -10px; top: 175px; }
+.iphone-volume-down { width: 3px; height: 55px; left: -10px; top: 245px; }
+.iphone-power       { width: 3px; height: 80px; right: -10px; top: 195px; }
+
+/* Screen */
+.iphone-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background: #f2f2f7;
+  border-radius: 46px;
+  margin: 8px;
+}
+.mobile-theme-dark .iphone-screen { background: #000; }
+.mobile-theme-amber .iphone-screen { background: #1a1200; }
+
+/* Status Bar */
+.iphone-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  z-index: 90;
+}
+.mobile-theme-dark .iphone-statusbar { color: #fff; }
+.music-app .iphone-statusbar { color: #fff; }
+.statusbar-icons { display: flex; gap: 6px; font-size: 13px; }
+.statusbar-time { /* just for editability */ }
+
+/* Scrollable Area */
+.iphone-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 30px;
+  scrollbar-width: none;
+}
+.iphone-scroll::-webkit-scrollbar { display: none; }
+
+/* Home Bar */
+.iphone-home-bar {
   position: absolute;
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 2px;
+  width: 120px;
+  height: 5px;
+  background: #000;
+  border-radius: 100px;
   z-index: 100;
+  opacity: 0.6;
 }
+.mobile-theme-dark .iphone-home-bar { background: #fff; }
+.music-app .iphone-home-bar { background: #fff; }
+
+/* App Header */
+.iphone-app-header {
+  padding: 0;
+}
+.ios-large-title {
+  font-size: 34px;
+  font-weight: 700;
+  padding: 8px 20px;
+  margin: 0;
+  color: #000;
+  letter-spacing: -0.4px;
+}
+.mobile-theme-dark .ios-large-title { color: #fff; }
+
+/* === iOS Settings Components === */
+.ios-card {
+  margin: 0 16px 16px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px;
+}
+.mobile-theme-dark .ios-card { background: #1c1c1e; }
+
+.ios-profile-card { display: flex; align-items: center; gap: 14px; }
+.ios-profile-avatar img { width: 60px; height: 60px; border-radius: 50%; }
+.ios-profile-info { flex: 1; }
+.ios-profile-name { font-size: 20px; font-weight: 600; margin: 0; color: #000; }
+.mobile-theme-dark .ios-profile-name { color: #fff; }
+.ios-profile-sub { font-size: 13px; color: #8e8e93; margin: 2px 0 0; }
+
+.ios-list-group {
+  margin: 0 16px 16px;
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.mobile-theme-dark .ios-list-group { background: #1c1c1e; }
+
+.ios-list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  position: relative;
+}
+.ios-list-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 54px; right: 0;
+  height: 0.5px;
+  background: rgba(0,0,0,0.08);
+}
+.mobile-theme-dark .ios-list-item:not(:last-child)::after { background: rgba(255,255,255,0.08); }
+
+.ios-icon-box {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  display: flex; justify-content: center; align-items: center;
+  color: #fff; font-size: 15px;
+  margin-inline-end: 12px;
+  flex-shrink: 0;
+}
+.bg-orange { background: linear-gradient(135deg, #FF9500, #FF5E3A); }
+.bg-green  { background: linear-gradient(135deg, #4CD964, #34C759); }
+.bg-blue   { background: linear-gradient(135deg, #5AC8FA, #007AFF); }
+.bg-pink   { background: linear-gradient(135deg, #FF2D55, #FF3B30); }
+.bg-red    { background: linear-gradient(135deg, #FF3B30, #FF2D55); }
+.bg-purple { background: linear-gradient(135deg, #C644FC, #5856D6); }
+.bg-indigo { background: linear-gradient(135deg, #5856D6, #007AFF); }
+.bg-gray   { background: linear-gradient(135deg, #8E8E93, #636366); }
+
+.ios-item-text { flex: 1; font-size: 17px; color: #000; }
+.mobile-theme-dark .ios-item-text { color: #fff; }
+.ios-item-detail { font-size: 15px; color: #8e8e93; margin-inline-end: 8px; }
+.ios-chevron { font-size: 13px; color: #c7c7cc; }
+.ios-badge { background: #ff3b30; color: #fff; font-size: 13px; padding: 1px 7px; border-radius: 10px; margin-inline-end: 8px; }
+.ios-toggle { width: 44px; height: 26px; background: #e9e9eb; border-radius: 13px; position: relative; }
+.ios-toggle-knob { width: 22px; height: 22px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+/* === Chat App === */
+.chat-app { background: #fff; }
+.mobile-theme-dark .chat-app { background: #000; }
+
+.chat-topbar {
+  display: flex; align-items: center; padding: 8px 14px;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  position: absolute; top: 38px; left: 0; right: 0; z-index: 10;
+}
+.mobile-theme-dark .chat-topbar { background: rgba(20,20,20,0.92); border-bottom-color: rgba(255,255,255,0.05); }
+.chat-back { display: flex; align-items: center; gap: 4px; font-size: 16px; color: #007AFF; }
+.chat-contact-info { display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
+.chat-avatar { width: 30px; height: 30px; border-radius: 50%; }
+.chat-contact-name { font-size: 15px; font-weight: 600; color: #000; }
+.mobile-theme-dark .chat-contact-name { color: #fff; }
+.chat-contact-status { font-size: 11px; color: #8e8e93; }
+.chat-actions { display: flex; gap: 14px; font-size: 17px; color: #007AFF; }
+
+.chat-messages { padding: 68px 14px 80px !important; display: flex; flex-direction: column; gap: 10px; }
+.msg-bubble { max-width: 78%; padding: 9px 13px; border-radius: 18px; font-size: 15px; line-height: 1.4; }
+.msg-received { align-self: flex-start; background: #e9e9eb; color: #000; border-bottom-right-radius: 4px; }
+.mobile-theme-dark .msg-received { background: #262628; color: #fff; }
+.msg-sent { align-self: flex-end; background: linear-gradient(135deg, #007AFF, #00C6FF); color: #fff; border-bottom-left-radius: 4px; box-shadow: 0 4px 12px rgba(0,122,255,0.25); }
+.msg-time { font-size: 11px; color: rgba(0,0,0,0.35); margin-top: 3px; text-align: right; }
+.mobile-theme-dark .msg-time { color: rgba(255,255,255,0.35); }
+.msg-sent .msg-time { color: rgba(255,255,255,0.7); }
+
+.chat-input-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  display: flex; align-items: center; padding: 10px 14px 26px; gap: 10px;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0,0,0,0.05); z-index: 10;
+}
+.mobile-theme-dark .chat-input-bar { background: rgba(20,20,20,0.92); border-top-color: rgba(255,255,255,0.05); }
+.chat-textfield { flex: 1; background: rgba(0,0,0,0.05); padding: 7px 14px; border-radius: 18px; font-size: 15px; color: #8e8e93; }
+.mobile-theme-dark .chat-textfield { background: rgba(255,255,255,0.1); color: #aaa; }
+.chat-input-bar i { font-size: 20px; color: #8e8e93; }
+
+/* === Social App === */
+.social-app { background: #fff; color: #000; }
+.mobile-theme-dark .social-app { background: #000; color: #fff; }
+.social-topbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 18px; }
+.social-logo { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+.social-icons { display: flex; gap: 18px; font-size: 22px; }
+.social-feed { padding: 0 !important; }
+.social-post { margin-bottom: 20px; }
+.post-header { display: flex; align-items: center; padding: 10px 14px; gap: 10px; }
+.post-avatar { width: 34px; height: 34px; border-radius: 50%; }
+.post-user-info { flex: 1; }
+.post-username { font-size: 14px; font-weight: 700; }
+.post-location { font-size: 12px; color: #8e8e93; }
+.post-image { width: 100%; aspect-ratio: 4/5; background: linear-gradient(135deg, #f0f0f0, #e0e0e0); display: flex; align-items: center; justify-content: center; font-size: 50px; color: #ccc; }
+.mobile-theme-dark .post-image { background: linear-gradient(135deg, #1a1a1a, #111); }
+.post-actions { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 24px; }
+.post-actions-left { display: flex; gap: 14px; }
+.post-likes { padding: 0 14px; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.post-caption { padding: 0 14px; font-size: 14px; line-height: 1.5; margin-bottom: 6px; }
+.caption-user { font-weight: 700; margin-inline-end: 5px; }
+.post-comment-count { padding: 0 14px; font-size: 13px; color: #8e8e93; }
+.post-timestamp { padding: 0 14px; font-size: 11px; color: #8e8e93; margin-top: 4px; }
+.social-tabbar {
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 10px 0 24px; border-top: 0.5px solid rgba(0,0,0,0.08);
+  font-size: 24px; color: #8e8e93;
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+}
+.mobile-theme-dark .social-tabbar { border-top-color: rgba(255,255,255,0.08); background: rgba(0,0,0,0.95); }
+.social-tabbar .active { color: #000; }
+.mobile-theme-dark .social-tabbar .active { color: #fff; }
+
+/* === Music App === */
+.music-app { background: #000; color: #fff; position: relative; overflow: hidden; }
+.music-bg {
+  position: absolute; inset: -50%;
+  background: radial-gradient(circle, #4a192c, #1a0f14 50%, #000);
+  background-size: 200% 200%;
+  animation: musicGradient 12s ease infinite alternate;
+  z-index: 0; filter: blur(30px);
+}
+@keyframes musicGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 50% 100%; }
+}
+.music-scroll { position: relative; z-index: 1; padding: 12px 22px !important; display: flex; flex-direction: column; }
+.music-header { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; opacity: 0.7; margin: 8px 0 30px; letter-spacing: 1px; text-transform: uppercase; }
+.music-artwork { width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #ff7e5f, #feb47b); border-radius: 14px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 35px; display: flex; align-items: center; justify-content: center; font-size: 80px; color: rgba(255,255,255,0.3); }
+.music-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+.music-title { font-size: 24px; font-weight: 800; margin: 0; }
+.music-artist { font-size: 16px; opacity: 0.7; margin: 4px 0 0; }
+.music-heart { font-size: 24px; opacity: 0.8; }
+.music-progress { margin-bottom: 30px; }
+.progress-track { height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; position: relative; margin-bottom: 8px; }
+.progress-fill { width: 35%; height: 100%; background: #fff; border-radius: 3px; }
+.progress-knob { width: 10px; height: 10px; background: #fff; border-radius: 50%; position: absolute; top: -2.5px; left: 35%; }
+.progress-times { display: flex; justify-content: space-between; font-size: 11px; opacity: 0.6; font-weight: 600; }
+.music-controls { display: flex; justify-content: space-between; align-items: center; font-size: 26px; margin-bottom: 40px; opacity: 0.85; }
+.play-btn { width: 66px; height: 66px; background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; padding-left: 5px; }
+.lyrics-card { background: rgba(255,255,255,0.08); backdrop-filter: blur(15px); border-radius: 18px; padding: 22px; margin-bottom: 35px; border: 1px solid rgba(255,255,255,0.08); }
+.lyrics-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; opacity: 0.85; }
+.lyrics-body { font-size: 24px; line-height: 1.7; font-weight: 700; opacity: 0.9; }

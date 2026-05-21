@@ -2372,26 +2372,231 @@
       <!-- ============================================================ -->
       <!-- MOBILE PREVIEW -->
       <!-- ============================================================ -->
-      <div class="mobile-preview-wrapper" id="mobilePreviewWrapper" style="display: none;">
-        <div class="iphone-frame">
-          <div class="iphone-notch">
-            <div class="notch-sensor"></div>
-            <div class="notch-camera"></div>
-          </div>
-          <div class="iphone-volume-up"></div>
-          <div class="iphone-volume-down"></div>
-          <div class="iphone-power"></div>
-          
-          <div class="iphone-screen">
-            <!-- Screen Content Goes Here -->
-            <div style="display:flex; justify-content:center; align-items:center; height:100%; background:#000; color:#fff; font-family:sans-serif;">
-              شاشة الهاتف
+
+      <!-- ============================================================ -->
+      <!-- MOBILE PREVIEW (Complete Rewrite) -->
+      <!-- ============================================================ -->
+      <div class="mobile-preview-wrapper mobile-tpl-settings mobile-theme-light" id="mobilePreviewWrapper">
+        
+        <!-- Settings Template -->
+        <div id="mobileContentSettings" class="mobile-tpl-content" data-template="settings">
+          <div class="iphone-frame">
+            <div class="iphone-notch">
+              <div class="notch-sensor"></div>
+              <div class="notch-camera"></div>
+            </div>
+            <div class="iphone-volume-up"></div>
+            <div class="iphone-volume-down"></div>
+            <div class="iphone-power"></div>
+            <div class="iphone-screen">
+              <div class="iphone-statusbar">
+                <span class="statusbar-time" contenteditable="true" spellcheck="false">9:41</span>
+                <div class="statusbar-icons">
+                  <i class="fa-solid fa-signal"></i>
+                  <i class="fa-solid fa-wifi"></i>
+                  <i class="fa-solid fa-battery-full"></i>
+                </div>
+              </div>
+              <div class="iphone-app-header">
+                <h1 class="ios-large-title" contenteditable="true" data-i18n="mobile_profile">الإعدادات</h1>
+              </div>
+              <div class="iphone-scroll">
+                <!-- Profile Card -->
+                <div class="ios-card ios-profile-card">
+                  <div class="ios-profile-avatar">
+                    <img src="https://ui-avatars.com/api/?name=مجد&background=0D8ABC&color=fff&size=100" alt="Profile">
+                  </div>
+                  <div class="ios-profile-info">
+                    <h2 class="ios-profile-name" contenteditable="true" data-i18n="mobile_name">مجد الدين</h2>
+                    <p class="ios-profile-sub" contenteditable="true">Apple Account, iCloud+</p>
+                  </div>
+                  <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                </div>
+                <!-- List Group 1 -->
+                <div class="ios-list-group">
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-orange"><i class="fa-solid fa-plane"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_airplane">نمط الطيران</span>
+                    <div class="ios-toggle"><div class="ios-toggle-knob"></div></div>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-blue"><i class="fa-solid fa-wifi"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_wifi">Wi-Fi</span>
+                    <span class="ios-item-detail" contenteditable="true">Home Network</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-blue"><i class="fa-brands fa-bluetooth-b"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_bluetooth">البلوتوث</span>
+                    <span class="ios-item-detail" contenteditable="true">متصل</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-green"><i class="fa-solid fa-signal"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_cellular">خلوي</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                </div>
+                <!-- List Group 2 -->
+                <div class="ios-list-group">
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-red"><i class="fa-regular fa-bell"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_notif">الإشعارات</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-pink"><i class="fa-solid fa-volume-high"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_sound">الأصوات والحس اللمسي</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-purple"><i class="fa-solid fa-moon"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_focus">التركيز</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-indigo"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_screentime">مدة استخدام الجهاز</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                </div>
+                <!-- List Group 3 -->
+                <div class="ios-list-group">
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-gray"><i class="fa-solid fa-gear"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_general">عام</span>
+                    <div class="ios-badge">1</div>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                  <div class="ios-list-item">
+                    <div class="ios-icon-box bg-blue"><i class="fa-solid fa-text-height"></i></div>
+                    <span class="ios-item-text" contenteditable="true" data-i18n="mobile_fonts">الخطوط والتخصيص</span>
+                    <i class="fa-solid fa-chevron-right ios-chevron"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="iphone-home-bar"></div>
             </div>
           </div>
-          
-          <div class="iphone-home-indicator"></div>
         </div>
+
+        <!-- Chat Template -->
+        <div id="mobileContentChat" class="mobile-tpl-content" data-template="chat" style="display:none;">
+          <div class="iphone-frame">
+            <div class="iphone-notch"><div class="notch-sensor"></div><div class="notch-camera"></div></div>
+            <div class="iphone-volume-up"></div><div class="iphone-volume-down"></div><div class="iphone-power"></div>
+            <div class="iphone-screen chat-app">
+              <div class="iphone-statusbar"><span>9:41</span><div class="statusbar-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div></div>
+              <div class="chat-topbar">
+                <div class="chat-back"><i class="fa-solid fa-chevron-left"></i> <span contenteditable="true" style="font-family:var(--font-web-headings)">الدردشات</span></div>
+                <div class="chat-contact-info">
+                  <img class="chat-avatar" src="https://ui-avatars.com/api/?name=Ali&background=0D8ABC&color=fff&size=50" alt="">
+                  <div>
+                    <div class="chat-contact-name" contenteditable="true" style="font-family:var(--font-web-headings)">علي محمد</div>
+                    <div class="chat-contact-status" contenteditable="true" style="font-family:var(--font-web-body)">متصل الآن</div>
+                  </div>
+                </div>
+                <div class="chat-actions"><i class="fa-solid fa-video"></i> <i class="fa-solid fa-phone"></i></div>
+              </div>
+              <div class="iphone-scroll chat-messages">
+                <div class="msg-bubble msg-received"><span contenteditable="true" style="font-family:var(--font-web-body)">السلام عليكم، كيف حالك اليوم؟ هل أنهيت تصميم الخط؟</span><div class="msg-time" style="font-family:var(--font-web-body)">10:20 ص</div></div>
+                <div class="msg-bubble msg-sent"><span contenteditable="true" style="font-family:var(--font-web-body)">وعليكم السلام! نعم، أنا أقوم باختباره الآن على واجهات الهواتف المحمولة للتأكد من سهولة القراءة.</span><div class="msg-time" style="font-family:var(--font-web-body)">10:22 ص <i class="fa-solid fa-check-double" style="color:#34b7f1;"></i></div></div>
+                <div class="msg-bubble msg-received"><span contenteditable="true" style="font-family:var(--font-web-body)">ممتاز جداً! الخط يبدو أنيقاً وعصرياً في الرسائل النصية.</span><div class="msg-time" style="font-family:var(--font-web-body)">10:25 ص</div></div>
+              </div>
+              <div class="chat-input-bar">
+                <i class="fa-solid fa-plus"></i>
+                <div class="chat-textfield" contenteditable="true" style="font-family:var(--font-web-body)">اكتب رسالة...</div>
+                <i class="fa-solid fa-camera"></i>
+                <i class="fa-solid fa-microphone"></i>
+              </div>
+              <div class="iphone-home-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Social Template -->
+        <div id="mobileContentSocial" class="mobile-tpl-content" data-template="social" style="display:none;">
+          <div class="iphone-frame">
+            <div class="iphone-notch"><div class="notch-sensor"></div><div class="notch-camera"></div></div>
+            <div class="iphone-volume-up"></div><div class="iphone-volume-down"></div><div class="iphone-power"></div>
+            <div class="iphone-screen social-app">
+              <div class="iphone-statusbar"><span>9:41</span><div class="statusbar-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div></div>
+              <div class="social-topbar">
+                <div class="social-logo" contenteditable="true" style="font-family:var(--font-web-headings)">SocialApp</div>
+                <div class="social-icons"><i class="fa-regular fa-heart"></i> <i class="fa-brands fa-facebook-messenger"></i></div>
+              </div>
+              <div class="iphone-scroll social-feed">
+                <div class="social-post">
+                  <div class="post-header">
+                    <img class="post-avatar" src="https://ui-avatars.com/api/?name=MD&background=E53E3E&color=fff&size=50" alt="">
+                    <div class="post-user-info">
+                      <div class="post-username" contenteditable="true" style="font-family:var(--font-web-headings)">majd_design</div>
+                      <div class="post-location" contenteditable="true" style="font-family:var(--font-web-body)">Riyadh, Saudi Arabia</div>
+                    </div>
+                    <i class="fa-solid fa-ellipsis"></i>
+                  </div>
+                  <div class="post-image"><i class="fa-regular fa-image"></i></div>
+                  <div class="post-actions"><div class="post-actions-left"><i class="fa-regular fa-heart"></i><i class="fa-regular fa-comment"></i><i class="fa-regular fa-paper-plane"></i></div><i class="fa-regular fa-bookmark"></i></div>
+                  <div class="post-likes" contenteditable="true" style="font-family:var(--font-web-headings)">1,024 تسجيل إعجاب</div>
+                  <div class="post-caption"><span class="caption-user" contenteditable="true" style="font-family:var(--font-web-headings)">majd_design</span> <span contenteditable="true" style="font-family:var(--font-web-body)">الخط العربي الجديد يعكس الأصالة بلمسة عصرية 🎨✨ #تصميم #خطوط</span></div>
+                  <div class="post-comment-count" contenteditable="true" style="font-family:var(--font-web-body)">عرض كل التعليقات (128)</div>
+                  <div class="post-timestamp" contenteditable="true" style="font-family:var(--font-web-body)">قبل ساعتين</div>
+                </div>
+              </div>
+              <div class="social-tabbar">
+                <i class="fa-solid fa-house active"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-solid fa-square-plus"></i>
+                <i class="fa-solid fa-clapperboard"></i>
+                <i class="fa-regular fa-user"></i>
+              </div>
+              <div class="iphone-home-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Music Template -->
+        <div id="mobileContentMusic" class="mobile-tpl-content" data-template="music" style="display:none;">
+          <div class="iphone-frame">
+            <div class="iphone-notch"><div class="notch-sensor"></div><div class="notch-camera"></div></div>
+            <div class="iphone-volume-up"></div><div class="iphone-volume-down"></div><div class="iphone-power"></div>
+            <div class="iphone-screen music-app">
+              <div class="music-bg"></div>
+              <div class="iphone-statusbar"><span>9:41</span><div class="statusbar-icons"><i class="fa-solid fa-signal"></i><i class="fa-solid fa-wifi"></i><i class="fa-solid fa-battery-full"></i></div></div>
+              <div class="iphone-scroll music-scroll">
+                <div class="music-header" style="font-family:var(--font-web-headings)">
+                  <i class="fa-solid fa-chevron-down"></i>
+                  <span contenteditable="true">ألبوم اليوم</span>
+                  <i class="fa-solid fa-ellipsis"></i>
+                </div>
+                <div class="music-artwork"><i class="fa-solid fa-music"></i></div>
+                <div class="music-info">
+                  <div><h2 class="music-title" contenteditable="true" style="font-family:var(--font-web-headings)">أغنية الحنين</h2><p class="music-artist" contenteditable="true" style="font-family:var(--font-web-body)">فنان عربي</p></div>
+                  <i class="fa-regular fa-heart music-heart"></i>
+                </div>
+                <div class="music-progress">
+                  <div class="progress-track"><div class="progress-fill"></div><div class="progress-knob"></div></div>
+                  <div class="progress-times" style="font-family:var(--font-web-body)"><span>1:23</span><span>-2:45</span></div>
+                </div>
+                <div class="music-controls">
+                  <i class="fa-solid fa-shuffle"></i>
+                  <i class="fa-solid fa-backward-step"></i>
+                  <div class="play-btn"><i class="fa-solid fa-play"></i></div>
+                  <i class="fa-solid fa-forward-step"></i>
+                  <i class="fa-solid fa-repeat"></i>
+                </div>
+                <div class="lyrics-card">
+                  <div class="lyrics-title" contenteditable="true" style="font-family:var(--font-web-headings)">كلمات الأغنية</div>
+                  <div class="lyrics-body" contenteditable="true" style="font-family:var(--font-web-body)">يا ليل الصبّ متى غده<br>أقيام الساعة موعده</div>
+                </div>
+              </div>
+              <div class="iphone-home-bar"></div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
 
 
 

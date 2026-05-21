@@ -2181,24 +2181,21 @@ function setupEventListeners() {
   }
 
   
-//   if (tabMobileMode) {
-//     tabMobileMode.addEventListener('click', () => switchViewMode('mobile'));
-//   }
-//   if (tabMobileTemplateSettings) {
-//     tabMobileTemplateSettings.addEventListener('click', () => setMobileTemplate('settings'));
-//   }
-//   if (tabMobileTemplateSocial) {
-//     tabMobileTemplateSocial.addEventListener('click', () => setMobileTemplate('social'));
-//   }
-//   if (tabMobileTemplateChat) {
-//     tabMobileTemplateChat.addEventListener('click', () => setMobileTemplate('chat'));
-//   }
-//   if (tabMobileTemplateMusic) {
-//     tabMobileTemplateMusic.addEventListener('click', () => setMobileTemplate('music'));
-//   }
+  if (tabMobileTemplateSettings) {
+    tabMobileTemplateSettings.addEventListener('click', () => setMobileTemplate('settings'));
+  }
+  if (tabMobileTemplateSocial) {
+    tabMobileTemplateSocial.addEventListener('click', () => setMobileTemplate('social'));
+  }
+  if (tabMobileTemplateChat) {
+    tabMobileTemplateChat.addEventListener('click', () => setMobileTemplate('chat'));
+  }
+  if (tabMobileTemplateMusic) {
+    tabMobileTemplateMusic.addEventListener('click', () => setMobileTemplate('music'));
+  }
   
   // Set up Home Indicator listeners
-  document.querySelectorAll('.iphone-home-indicator').forEach(indicator => {
+  document.querySelectorAll('.iphone-home-bar, .iphone-home-indicator').forEach(indicator => {
     indicator.addEventListener('click', () => {
       setMobileTemplate('home');
     });
@@ -2206,15 +2203,15 @@ function setupEventListeners() {
     indicator.classList.add('interactive');
   });
 
-//   if (btnMobileThemeDark) {
-//     btnMobileThemeDark.addEventListener('click', () => setMobileTheme('dark'));
-//   }
-//   if (btnMobileThemeLight) {
-//     btnMobileThemeLight.addEventListener('click', () => setMobileTheme('light'));
-//   }
-//   if (btnMobileThemeAmber) {
-//     btnMobileThemeAmber.addEventListener('click', () => setMobileTheme('amber'));
-//   }
+  if (btnMobileThemeDark) {
+    btnMobileThemeDark.addEventListener('click', () => setMobileTheme('dark'));
+  }
+  if (btnMobileThemeLight) {
+    btnMobileThemeLight.addEventListener('click', () => setMobileTheme('light'));
+  }
+  if (btnMobileThemeAmber) {
+    btnMobileThemeAmber.addEventListener('click', () => setMobileTheme('amber'));
+  }
 
   // Web Mode Template Event Listeners
   if (btnWebTemplateSaas) btnWebTemplateSaas.addEventListener('click', () => setWebTemplate('saas'));
@@ -3191,6 +3188,8 @@ function setupEventListeners() {
 
 // Switch View Mode (Design Card vs Word Document vs Web Landing Page Preview)
 function switchViewMode(mode) {
+  localStorage.setItem('diwan-view-mode', mode);
+
   if (canvasWrapper) {
     canvasWrapper.scrollTop = 0;
     const faqSection = document.querySelector('.faq-section');
@@ -3215,6 +3214,13 @@ function switchViewMode(mode) {
     document.body.classList.add('view-mode-mobile');
     if (tabMobileMode) tabMobileMode.classList.add('active');
     if (mobilePreviewWrapper) mobilePreviewWrapper.style.display = 'flex';
+
+    // Auto-load template and theme from localStorage
+    const savedTemplate = localStorage.getItem('diwan-mobile-template') || 'settings';
+    const savedTheme = localStorage.getItem('diwan-mobile-theme') || 'light';
+    
+    if (typeof setMobileTemplate === 'function') setMobileTemplate(savedTemplate);
+    if (typeof setMobileTheme === 'function') setMobileTheme(savedTheme);
   } 
   else if (mode === 'web') {
     document.body.classList.add('view-mode-web');
@@ -6309,22 +6315,59 @@ function filterProducts(filter) {
 
 // --- Mobile Mode Functions ---
 
-
 function setMobileTheme(theme) {
-//   if (!mobilePreviewWrapper) return;
-//   mobilePreviewWrapper.classList.remove('mobile-theme-dark', 'mobile-theme-light', 'mobile-theme-amber');
-//   mobilePreviewWrapper.classList.add('mobile-theme-' + theme);
+  if (!mobilePreviewWrapper) return;
+  mobilePreviewWrapper.classList.remove('mobile-theme-dark', 'mobile-theme-light', 'mobile-theme-amber');
+  mobilePreviewWrapper.classList.add('mobile-theme-' + theme);
   
   // Update buttons
   [btnMobileThemeDark, btnMobileThemeLight, btnMobileThemeAmber].forEach(btn => {
     if (btn) btn.classList.remove('active');
   });
   
-//   if (theme === 'dark' && btnMobileThemeDark) btnMobileThemeDark.classList.add('active');
-//   if (theme === 'light' && btnMobileThemeLight) btnMobileThemeLight.classList.add('active');
-//   if (theme === 'amber' && btnMobileThemeAmber) btnMobileThemeAmber.classList.add('active');
+  if (theme === 'dark' && btnMobileThemeDark) btnMobileThemeDark.classList.add('active');
+  if (theme === 'light' && btnMobileThemeLight) btnMobileThemeLight.classList.add('active');
+  if (theme === 'amber' && btnMobileThemeAmber) btnMobileThemeAmber.classList.add('active');
   
   localStorage.setItem('diwan-mobile-theme', theme);
+}
+
+function setMobileTemplate(template) {
+  const wrapper = document.getElementById('mobilePreviewWrapper');
+  if (!wrapper) return;
+  
+  // If 'home' is clicked, we return to 'settings'
+  const actualTemplate = template === 'home' ? 'settings' : template;
+  
+  localStorage.setItem('diwan-mobile-template', actualTemplate);
+  
+  wrapper.classList.remove('mobile-tpl-settings', 'mobile-tpl-social', 'mobile-tpl-chat', 'mobile-tpl-music');
+  wrapper.classList.add('mobile-tpl-' + actualTemplate);
+  
+  const allTemplates = wrapper.querySelectorAll('.mobile-tpl-content');
+  allTemplates.forEach(t => t.style.display = 'none');
+  
+  const targets = {
+    'settings': 'mobileContentSettings',
+    'chat': 'mobileContentChat',
+    'social': 'mobileContentSocial',
+    'music': 'mobileContentMusic'
+  };
+  
+  const targetId = targets[actualTemplate];
+  if (targetId) {
+    const el = document.getElementById(targetId);
+    if (el) el.style.display = 'flex';
+  }
+  
+  // Update active states on sidebar buttons
+  [tabMobileTemplateSettings, tabMobileTemplateChat, tabMobileTemplateSocial, tabMobileTemplateMusic].forEach(btn => {
+    if (btn) btn.classList.remove('active');
+  });
+  
+  const activeBtnId = 'tabMobileTemplate' + actualTemplate.charAt(0).toUpperCase() + actualTemplate.slice(1);
+  const activeBtn = document.getElementById(activeBtnId);
+  if (activeBtn) activeBtn.classList.add('active');
 }
 
 
