@@ -6400,3 +6400,44 @@ function setMobileTemplate(template) {
 }
 
 
+
+
+
+// === iOS Home Screen Navigation ===
+function openMobileApp(appId) {
+  // Hide home screen
+  document.getElementById('iosHomeScreen').classList.remove('active');
+  
+  // Hide all apps
+  const apps = document.querySelectorAll('.ios-app');
+  apps.forEach(app => app.classList.remove('active'));
+  
+  // Show target app
+  const targetApp = document.getElementById('app-' + appId);
+  if (targetApp) {
+    targetApp.classList.add('active');
+  }
+}
+
+function closeMobileApp() {
+  // Hide all apps
+  const apps = document.querySelectorAll('.ios-app');
+  apps.forEach(app => app.classList.remove('active'));
+  
+  // Show home screen
+  document.getElementById('iosHomeScreen').classList.add('active');
+}
+
+// Intercept existing sidebar buttons to work with new logic
+document.addEventListener('DOMContentLoaded', () => {
+  const tplButtons = document.querySelectorAll('[data-action="setMobileTemplate"]');
+  tplButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      // Prevent default logic if possible or just piggyback
+      const target = btn.getAttribute('data-target');
+      if(target) {
+        openMobileApp(target);
+      }
+    });
+  });
+});
