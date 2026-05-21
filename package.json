@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@iconify-icons/bi": "^1.2.19",
     "vite": "^5.2.0"
   },
   "dependencies": {

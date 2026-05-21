@@ -6441,3 +6441,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// iOS Status Bar Dynamic Time
+function updateStatusBarTime() {
+    const timeElement = document.getElementById('dynamic-time');
+    if (!timeElement) return;
+    
+    const now = new Date();
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    
+    // Convert to 12-hour format without AM/PM text (like in the screenshot)
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    
+    // Add leading zero to minutes
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    
+    timeElement.textContent = hours + ':' + minutes;
+}
+
+// Update immediately, then every second
+document.addEventListener('DOMContentLoaded', () => {
+    updateStatusBarTime();
+    setInterval(updateStatusBarTime, 1000);
+});

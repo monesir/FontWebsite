@@ -1504,8 +1504,8 @@ html[lang="ar"] .arabic-ui-only {
     inset: 9px;
   }
   
-  .corner.top-right { top: 10px; right: 10px; }
-  .corner.top-left { top: 10px; left: 10px; }
+  .corner.top-right { top: 14px; /* Adjusted to detach from the edge */ right: 10px; }
+  .corner.top-left { top: 14px; /* Adjusted to detach from the edge */ left: 10px; }
   .corner.bottom-right { bottom: 10px; right: 10px; }
   .corner.bottom-left { bottom: 10px; left: 10px; }
   
@@ -1695,7 +1695,7 @@ html[lang="ar"] .arabic-ui-only {
 
 /* Carousel Manager styling */
 .carousel-manager {
-  margin-top: 10px;
+  margin-top: 14px; /* Adjusted to detach from the edge */
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border-ui);
   border-radius: 8px;
@@ -4094,7 +4094,7 @@ html[dir="rtl"] .web-tpl-store .search-icon {
 
 .web-tpl-store .css-headphone-arch {
   position: absolute;
-  top: 10px;
+  top: 14px; /* Adjusted to detach from the edge */
   left: 30px;
   width: 160px;
   height: 120px;
@@ -4142,7 +4142,7 @@ html[dir="rtl"] .web-tpl-store .search-icon {
 
 .web-tpl-store .css-cup-housing {
   position: absolute;
-  top: 10px;
+  top: 14px; /* Adjusted to detach from the edge */
   width: 46px;
   height: 70px;
   background: linear-gradient(135deg, #1f2833, #0b0c10);
@@ -4396,7 +4396,7 @@ html[dir="rtl"] .web-tpl-store .store-product-badge {
 
 .web-tpl-store .mini-band {
   position: absolute;
-  top: 10px;
+  top: 14px; /* Adjusted to detach from the edge */
   left: 20px;
   width: 70px;
   height: 50px;
@@ -4885,7 +4885,7 @@ html[dir="ltr"] .web-tpl-store .store-product-specs li::before {
   gap: 10px;
   width: 100%;
   max-width: 500px;
-  margin-top: 10px;
+  margin-top: 14px; /* Adjusted to detach from the edge */
 }
 
 .web-tpl-store .store-news-input {
@@ -7357,7 +7357,7 @@ html[dir="rtl"] .web-preview-wrapper.web-theme-amber .store-cart-drawer {
   overflow: hidden;
   width: 100%;
   position: relative;
-  margin-top: 10px;
+  margin-top: 14px; /* Adjusted to detach from the edge */
   padding: 10px 0;
   -webkit-mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 15%, #000 85%, transparent);
@@ -10285,7 +10285,7 @@ html[dir="rtl"] .chat-shell {
   row-gap: 24px;
   column-gap: 12px;
   justify-items: center;
-  margin-top: 10px;
+  margin-top: 14px; /* Adjusted to detach from the edge */
 }
 
 .ios-app-icon-wrapper {
@@ -10460,3 +10460,400 @@ html[dir="rtl"] .chat-shell {
 }
 
 .mobile-tpl-content { display: none; }
+
+
+/* ==============================================================
+   iOS 26 Mathematical Glass (Pure CSS Light Path)
+   ============================================================== */
+
+/* 1. Reset any old borders */
+.ios-app-icon, .ios-dock, .ios-search-pill {
+    border: none !important;
+}
+
+/* 2. Glass Base & Refraction (Blur & Saturation) */
+.ios-app-icon, .ios-dock, .ios-search-pill {
+    backdrop-filter: blur(25px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(130%) !important;
+    
+    /* Very dark, highly transparent base color so the blur does the work */
+    background-color: rgba(15, 15, 18, 0.3) !important;
+    
+    /* The Light Path: Surface sheen hitting top-left and fading */
+    background-image: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.02) 40%, 
+        rgba(0, 0, 0, 0.1) 100%
+    ) !important;
+}
+
+/* 3. Edge Calculation (Bevel) & Depth (Shadow) */
+.ios-app-icon, .ios-search-pill {
+    box-shadow: 
+        /* Top/Left bright edge (Light reflection) */
+        inset 0.5px 1px 1px rgba(255, 255, 255, 0.25),
+        /* Bottom/Right dark edge (Glass thickness) */
+        inset -0.5px -0.5px 1px rgba(0, 0, 0, 0.5),
+        /* Ambient Drop Shadow (Elevation) */
+        0 10px 25px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* The dock gets slightly different math because it's a larger flat surface */
+.ios-dock {
+    /* Slightly less sheen, more ambient darkness */
+    background-color: rgba(10, 10, 12, 0.4) !important;
+    background-image: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.08) 0%, 
+        rgba(0, 0, 0, 0.05) 50%, 
+        rgba(0, 0, 0, 0.2) 100%
+    ) !important;
+    
+    box-shadow: 
+        /* Distinct top glass edge */
+        inset 0 1px 1px rgba(255, 255, 255, 0.2),
+        /* Very deep shadow to anchor it */
+        0 -2px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Ensure inner icons pop and aren't muddied by the glass */
+.ios-app-icon i, .ios-search-pill i {
+    /* Give the inner FontAwesome icon a tiny lift off the glass */
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.4)) !important;
+}
+
+/* Fix inner icons in the dock */
+.ios-dock .ios-app-icon {
+    /* Reset surface for icons nested inside the dock so we don't get double-glass */
+    background-color: rgba(30, 30, 35, 0.2) !important;
+    background-image: linear-gradient(
+        135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        rgba(255, 255, 255, 0.0) 50%
+    ) !important;
+    box-shadow: 
+        inset 0.5px 0.5px 1px rgba(255, 255, 255, 0.15),
+        inset -0.5px -0.5px 1px rgba(0, 0, 0, 0.3) !important;
+}
+
+
+
+/* ==============================================================
+   Custom User Image for Dock
+   ============================================================== */
+.ios-dock {
+    /* Set the downloaded image as the exact background */
+    background-image: url('/assets/dock.jpeg') !important;
+    background-size: 100% 100% !important; /* Stretch to fit dock exactly */
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    
+    /* Remove mathematical glass and blur from the dock itself since the image has it */
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    
+    /* Remove artificial shadows, let the user's image shine */
+    box-shadow: none !important;
+    border: none !important;
+}
+
+
+/* ==============================================================
+   Modern iOS Status Bar & Dynamic Island
+   ============================================================== */
+
+/* Hide old notch completely just in case */
+.iphone-notch { display: none !important; }
+
+.iphone-dynamic-island {
+    position: absolute;
+    top: 14px; /* Adjusted to detach from the edge */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 35px;
+    background-color: #000;
+    border-radius: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
+}
+
+.island-camera {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #111;
+    box-shadow: inset 0 0 2px rgba(255,255,255,0.2), 0 0 2px rgba(255,255,255,0.1);
+}
+
+.island-sensor {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #1a1a1a;
+    opacity: 0.8;
+}
+
+.iphone-statusbar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 25px 0 25px !important;
+    height: 44px !important;
+    color: white !important; /* Ensure it stays white on the dark background */
+    z-index: 999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    letter-spacing: -0.2px !important;
+}
+
+.statusbar-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+}
+
+.statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ios-signal { height: 11px; margin-right: 2px; }
+.ios-wifi { height: 12px; margin-right: 2px; }
+.ios-battery { height: 12px; }
+
+
+/* ==============================================================
+   Arabic iOS Status Bar (RTL) - Custom Matching
+   ============================================================== */
+.arabic-ios {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 25px 0 25px !important;
+    height: 44px !important;
+    color: white !important;
+    z-index: 999;
+}
+
+.statusbar-left-rtl {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.statusbar-right-rtl {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 50px;
+}
+
+.statusbar-time-rtl {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    letter-spacing: -0.3px !important;
+}
+
+/* Custom Battery with Percentage */
+.ios-battery-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.battery-percentage {
+    position: absolute;
+    left: 4px;
+    font-size: 9px;
+    font-weight: 800;
+    color: #000; /* Black text inside the white battery fill */
+    z-index: 2;
+    font-family: -apple-system, sans-serif;
+}
+
+.ios-battery-icon {
+    height: 12px;
+    width: 25px;
+}
+
+.ios-wifi-rtl {
+    height: 11px;
+}
+
+/* Dual SIM Dots (4x2 grid) */
+.ios-dual-sim {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    margin-right: 2px;
+}
+
+.sim-row {
+    display: flex;
+    gap: 1.5px;
+}
+
+.sim-pill {
+    width: 3.5px;
+    height: 3.5px;
+    border-radius: 1px;
+}
+
+.sim-pill.filled {
+    background-color: white;
+}
+
+.sim-pill.empty {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+/* ==============================================================
+   Standard Layout Status Bar (Fixing the Squished Icons)
+   ============================================================== */
+.iphone-statusbar {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 12px 25px 0 25px !important;
+    height: 44px !important;
+    color: white !important;
+    z-index: 999;
+}
+
+.statusbar-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 60px; /* Give the time enough room */
+}
+
+.statusbar-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 7px; /* Excellent spacing between icons */
+    width: 80px; /* Enough room for dual sim, wifi, battery */
+}
+
+.statusbar-time {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    letter-spacing: -0.3px !important;
+}
+
+/* Ensure battery text is legible and centered correctly */
+.battery-percentage {
+    position: absolute;
+    left: 4px; /* Adjust according to the battery fill */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 9px;
+    font-weight: 800;
+    color: #000;
+    z-index: 2;
+    font-family: -apple-system, sans-serif;
+}
+
+.ios-battery-icon {
+    height: 12px;
+    width: 25px;
+}
+
+.ios-wifi {
+    height: 11px;
+}
+
+.ios-dual-sim {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5px;
+    margin-right: 2px;
+}
+
+
+/* ==============================================================
+   Perfect iOS Status Bar Alignment
+   ============================================================== */
+.iphone-statusbar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 54px !important; /* Standard Dynamic Island status bar height */
+    padding: 0 25px !important; /* Perfect side margins */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    z-index: 999;
+}
+
+/* Make sure the icons are perfectly aligned */
+.statusbar-left {
+    display: flex;
+    align-items: center;
+    margin-top: 4px; /* Tiny optical adjustment */
+}
+
+.statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px; /* Tiny optical adjustment */
+}
+
+.ios-battery-icon {
+    height: 13px !important;
+    width: 27px !important;
+}
+
+.battery-percentage {
+    font-size: 10px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    letter-spacing: -0.5px;
+    left: 4.5px !important;
+}
+
+/* Clean iOS Icons Styling */
+.ios-icon {
+    margin-left: 5px;
+    height: 12px;
+}
+.ios-icon.battery {
+    height: 13px;
+    margin-left: 7px;
+}
+/* Ensure the status bar looks normal and flush to the top */
+.iphone-statusbar {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 48px !important;
+    padding: 0 32px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    z-index: 999;
+    box-sizing: border-box;
+}
+.statusbar-time {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.3px !important;
+}
+.iphone-dynamic-island {
+    top: 12px !important; /* Proper distance from top */
+}
