@@ -146,6 +146,7 @@ const tabWebTemplateStore = document.getElementById('tabWebTemplateStore');
 const tabWebTemplateDashboard = document.getElementById('tabWebTemplateDashboard');
 const tabWebTemplateNotion = document.getElementById('tabWebTemplateNotion');
 const tabWebTemplateChat = document.getElementById('tabWebTemplateChat');
+const tabWebTemplateMobile = document.getElementById('tabWebTemplateMobile');
 
 const btnWebThemeDark = document.getElementById('btnWebThemeDark');
 const btnWebThemeLight = document.getElementById('btnWebThemeLight');
@@ -2221,6 +2222,7 @@ function setupEventListeners() {
   if (tabWebTemplateDashboard) tabWebTemplateDashboard.addEventListener('click', () => setWebTemplate('dashboard'));
   if (tabWebTemplateNotion) tabWebTemplateNotion.addEventListener('click', () => setWebTemplate('notion'));
   if (tabWebTemplateChat) tabWebTemplateChat.addEventListener('click', () => setWebTemplate('chat'));
+  if (tabWebTemplateMobile) tabWebTemplateMobile.addEventListener('click', () => setWebTemplate('mobile'));
 
 
   // Web Mode Theme Event Listeners
@@ -3282,6 +3284,11 @@ function setWebTemplate(template) {
   const activeTab = document.getElementById(`tabWebTemplate${template.charAt(0).toUpperCase() + template.slice(1)}`);
   if (activeTab) activeTab.classList.add('active');
 
+  if (template === 'mobile') {
+    const savedMobileTemplate = localStorage.getItem('diwan-mobile-template') || 'settings';
+    setMobileTemplate(savedMobileTemplate);
+  }
+
   localStorage.setItem('diwan-web-template', template);
   setWebPreviewZoom(webPreviewZoom);
 }
@@ -3291,6 +3298,10 @@ function setWebTheme(theme) {
   if (!webPreviewWrapper) return;
   webPreviewWrapper.classList.remove('web-theme-dark', 'web-theme-light', 'web-theme-amber');
   webPreviewWrapper.classList.add(`web-theme-${theme}`);
+  
+  // Keep mobile mirroring theme synchronized
+  webPreviewWrapper.classList.remove('mobile-theme-dark', 'mobile-theme-light', 'mobile-theme-amber');
+  webPreviewWrapper.classList.add(`mobile-theme-${theme}`);
   
   // Update active state on theme toggle buttons
   document.querySelectorAll('.chrome-theme-btn').forEach(btn => btn.classList.remove('active'));
@@ -6358,6 +6369,26 @@ function setMobileTemplate(template) {
   if (targetId) {
     const el = document.getElementById(targetId);
     if (el) el.style.display = 'flex';
+  }
+  
+  // Mirror templates inside the web preview (macOS Sequoia)
+  const webContentMobile = document.getElementById('webContentMobile');
+  if (webContentMobile) {
+    const webMirrorTemplates = webContentMobile.querySelectorAll('.mobile-tpl-content');
+    webMirrorTemplates.forEach(t => t.style.display = 'none');
+    
+    const webMirrorTargets = {
+      'settings': 'webMobileContentSettings',
+      'chat': 'webMobileContentChat',
+      'social': 'webMobileContentSocial',
+      'music': 'webMobileContentMusic'
+    };
+    
+    const webMirrorTargetId = webMirrorTargets[actualTemplate];
+    if (webMirrorTargetId) {
+      const el = document.getElementById(webMirrorTargetId);
+      if (el) el.style.display = 'flex';
+    }
   }
   
   // Update active states on sidebar buttons
