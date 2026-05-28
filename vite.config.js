@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  plugins: [],
   base: './', // Use relative paths so the built site works perfectly on GitHub Pages subdirectories
   esbuild: false, // Disable esbuild transpiler to save memory in sandbox environments
   build: {
