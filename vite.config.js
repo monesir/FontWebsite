@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 export default defineConfig({
-  plugins: [],
+  plugins: [cloudflare()],
   base: './', // Use relative paths so the built site works perfectly on GitHub Pages subdirectories
   esbuild: false, // Disable esbuild transpiler to save memory in sandbox environments
   build: {
